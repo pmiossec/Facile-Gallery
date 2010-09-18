@@ -1,8 +1,26 @@
 <?php 
 require("conf.php");
 
-//error_reporting(E_ALL); // afficher les erreurs
-error_reporting(0); // ne pas afficher les erreurs
+error_reporting(E_ALL); // afficher les erreurs
+//error_reporting(0); // ne pas afficher les erreurs
+///////////////////////////////////////////////////////////////////////
+//fonction qui extrait et met en forme une donnée IPTC
+///////////////////////////////////////////////////////////////////////
+    function extract_iptc_data($iptcs, $iptc_entry_code, $label){
+          	if(!array_key_exists($iptc_entry_code, $iptcs) || count($iptcs[$iptc_entry_code])==0)
+          	   return "";
+          	   
+          	$display_string = "";
+          	
+            for ($i=0;$i < count($iptcs[$iptc_entry_code]); $i++) {
+                if($i != 0)
+                {
+                  $display_string = $display_string . ", ";
+                }
+                $display_string = $display_string . $iptcs[$iptc_entry_code][$i];
+            } 
+      return $label . $display_string;
+    }
 
 ///////////////////////////////////////////////////////////////////////
 //fonction qui renomme les dossiers comprenant des caractères interdits
@@ -573,7 +591,7 @@ $separateurs = array('_', '-', '.');
 	</td><td>
 		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 		  <tr class="tddeco">
-		    <td width="<?php echo $dim + 18; ?>" height="<?php echo $dim + 18; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
+		    <td align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 			<?php if ($photo != "") { ?>
         <a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
 				<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> border="0" class="imageborder">
@@ -584,6 +602,54 @@ $separateurs = array('_', '-', '.');
 		  <tr>
 		    <td align="center"><span class="Style2"> 
 			<?php
+		$size = getimagesize($dir.'/'.$listFile[$photo], $info);
+    if (isset($info["APP13"])) {
+      $iptc = iptcparse($info["APP13"]);
+    //echo "Légende : ".$iptc['2#120'][0]."<br/>\n";
+    //echo "Tags : ";
+    	//for ($i=0;$i < count($iptc['2#025']); $i++) {
+      //   echo $iptc['2#025'][$i].",";
+      //  }
+      echo extract_iptc_data($iptc, '2#120',"Légende : ")."<br/>\n";
+      echo extract_iptc_data($iptc, '2#025',"Tags : ")."<br/>\n";
+      echo extract_iptc_data($iptc, '2#122',"Auteur : ")."<br/>\n";
+    //echo "Headline : ".$iptc["Headline"]."\n";
+    //echo "Copyright Notice : ".$iptc["Copyright Notice"]."\n";
+    //echo "Credit : ".$iptc["Credit"]."\n";
+/*2#122	Auteur		
+2#120	Légende / résumé		2000
+2#118	Contact	tableau à plusieurs cases	
+2#116	Copyright		128
+2#115	Source		32
+2#110	Crédit		32
+2#105	Titre		256
+2#103	Référence à la transmission		
+2#101	Pays		64
+2#100	Code du pays		3
+2#095	Province / état		32
+2#092	Région		
+2#090	Ville		32
+2#085	Titre du créateur		
+2#080	Créateur		64
+2#075	Cycle de l'objet	3 valeurs possibles : 
+a = matin, b = après midi, c = soir	1
+2#070	Version du programme		
+2#065	Programme		15
+2#060	Heure de création	HHMMSS	
+2#055	Date de création		16
+2#040	Instruction spéciale		256
+2#035	Heure de sortie / disponibilité	HHMMSS	
+2#030	Date de sortie / disponibilité		16
+2#026	Location		
+2#025	Mots clés	tableau à plusieurs cases	64 par mots clé
+2#022	Identifiant		
+2#020	Catégorie supplémentaire	tableau à plusieurs cases	
+2#015	Catégorie		3
+2#010	Priorité	valeurs de 0 à 8 :
+0 aucun, 1 = haut, 8 = faible	1
+2#007	Statut éditorial		
+2#005	Nom de l'objet		64
+*/
 		if (exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_PNG && exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_GIF) {
 				 ?><hr size="1" noshade><?php
 	 			$exif = read_exif_data($dir.'/'.$listFile[$photo], 0, true);
@@ -593,8 +659,11 @@ $separateurs = array('_', '-', '.');
 		   if (isset($exif["EXIF"]["ISOSpeedRatings"])) echo "ISO : ".$exif["EXIF"]["ISOSpeedRatings"]."<br>";
 		   if (isset($exif["COMPUTED"]["ApertureFNumber"])) echo "Ouverture de la focale : ".$exif["COMPUTED"]["ApertureFNumber"]." || ";
 		   if (isset($exif["EXIF"]["FocalLength"])) echo "Longueur de la focale : ".$exif["EXIF"]["FocalLength"]."\n";
+		   if (isset($exif["EXIF"]["GPS Latitude"]) && isset($exif["EXIF"]["GPS Longitude"])) echo "GPS : ".$exif["EXIF"]["GPS Latitude"].",".$exif["EXIF"]["GPS Longitude"]."\n";
+		   if (isset($exif["EXIF"]["Latitude"]) && isset($exif["EXIF"]["Longitude"])) echo "GPS : ".$exif["EXIF"]["Latitude"].",".$exif["EXIF"]["Longitude"]."\n";
 		}
-			 ?>
+    }
+     ?>
 			</span>
 			</td>
 		  </tr>
