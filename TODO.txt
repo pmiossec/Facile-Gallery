@@ -1,0 +1,10 @@
+A faire :
+
+- supprimer le thumbs.db dans les comptages de fichiers.
+- tenter de faire un chmod sur les fichiers et dossiers.
+
+
+- mettre sur http:prog.atelier-r.net.
+- Créer un gestionnaire de texte pour le descriptif de chaque album.
+- Créer un système pour uploader les fichiers.
+- Créer un mode diapo.

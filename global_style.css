@@ -1,0 +1,53 @@
+.Style1 {
+	font-size: 11;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+a.Style1 {
+	text-decoration: underline;
+}
+a.Style1:hover {
+	text-decoration: none;
+}
+.Style2 {
+	font-size: xx-small;
+	color: #FFFFFF;
+}
+a.Style2 {
+	text-decoration: underline;
+}
+a.Style2:hover {
+	text-decoration: none;
+}
+.txtrouge {
+	font-size: xx-small;
+	color: #FF0000;
+	font-weight: bold;
+}
+body,td,th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+td.tdover {
+	border: 1px solid #FFFFFF;
+	background-color: #FFFFFF;
+}
+td.tdover:hover {
+	border: 1px solid #666666;
+}
+.fdgris {
+	background-color: #666666;
+	padding: 4px;
+}
+.fdcolor1 {
+	background-color: #99CCCC;
+	padding: 4px;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.imageborder {
+	border: 1px solid #666666;
+}
