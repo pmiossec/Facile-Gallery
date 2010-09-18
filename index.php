@@ -21,6 +21,21 @@ error_reporting(E_ALL); // afficher les erreurs
             } 
       return $label . $display_string;
     }
+    
+///////////////////////////////////////////////////////////////////////
+//fonction qui retourne un nombre correspondant à une donnée GPS
+///////////////////////////////////////////////////////////////////////
+function divide_gps_coordinates($a)
+  {
+  // evaluate the string fraction and return a float //	
+    $e = explode('/', $a);
+  // prevent division by zero //
+    if (!$e[0] || !$e[1]) {
+      return 0;
+    }	else{
+    return $e[0] / $e[1];
+    }
+  }
 
 ///////////////////////////////////////////////////////////////////////
 //fonction qui renomme les dossiers comprenant des caractères interdits
@@ -659,8 +674,38 @@ a = matin, b = après midi, c = soir	1
 		   if (isset($exif["EXIF"]["ISOSpeedRatings"])) echo "ISO : ".$exif["EXIF"]["ISOSpeedRatings"]."<br>";
 		   if (isset($exif["COMPUTED"]["ApertureFNumber"])) echo "Ouverture de la focale : ".$exif["COMPUTED"]["ApertureFNumber"]." || ";
 		   if (isset($exif["EXIF"]["FocalLength"])) echo "Longueur de la focale : ".$exif["EXIF"]["FocalLength"]."\n";
-		   if (isset($exif["EXIF"]["GPS Latitude"]) && isset($exif["EXIF"]["GPS Longitude"])) echo "GPS : ".$exif["EXIF"]["GPS Latitude"].",".$exif["EXIF"]["GPS Longitude"]."\n";
-		   if (isset($exif["EXIF"]["Latitude"]) && isset($exif["EXIF"]["Longitude"])) echo "GPS : ".$exif["EXIF"]["Latitude"].",".$exif["EXIF"]["Longitude"]."\n";
+		   if (isset($exif["EXIF"]["Description"])) echo "Description : ".$exif["EXIF"]["Description"]."\n";
+
+//Degrés:
+$deg=divide_gps_coordinates($exif["GPS"]["GPSLatitude"][0]);
+
+//Minutes:
+$min=divide_gps_coordinates($exif["GPS"]["GPSLatitude"][1]);
+
+//Secondes:
+$sec=divide_gps_coordinates($exif["GPS"]["GPSLatitude"][2]);
+
+//Hémisphère (N, S, W ou E):
+$hem=$exif["GPS"]["GPSLatitudeRef"];
+
+///Altitude:
+$alt=$exif["GPS"]["GPSAltitude"][0];
+        echo "GPSLatitude:". 	$deg ."°".	$min ."'".	$sec ."''".	$hem."<br/>";
+        
+If ($hem === "N") {
+$gpslatref2 = -1;
+}
+If ($hem === "E") {
+$gpslongref2 = -1;
+}
+$decimallat = $gpslatref2 *($deg + $min / 60 + $sec/3600) ;        
+        echo "GPSLatitude:". 	$decimallat."<br/>";
+          
+       /*$keys = array_keys($exif["EXIF"]);
+       for ($i=0;$i < count($keys); $i++) {
+          echo $keys[$i] . " :" . $exif["EXIF"][$keys[$i]] . "<br/>";
+       }     */
+		   
 		}
     }
      ?>
