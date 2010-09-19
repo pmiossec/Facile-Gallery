@@ -691,21 +691,21 @@ a = matin, b = après midi, c = soir	1
             
             ///Altitude:
             //$alt=$exif["GPS"]["GPSAltitude"][0];
-                    echo "GPSLatitude:". 	$deg ."°".	$min ."'".	$sec ."''".	$hem."<br/>";
+            //echo "GPSLatitude:". 	$deg ."°".	$min ."'".	$sec ."''".	$hem."<br/>";
                     
-            If ($hem === "N") {
+            if ($hem === "N" || $hem === "E") {
+            $gps_ref2 = 1;
+            }
+            else {
             $gps_ref2 = -1;
             }
-            If ($hem === "E") {
-            $gps_ref2 = -1;
-            }
-            return $decimallat = $gps_ref2 *($deg + $min / 60 + $sec/3600) ;        
+            return $gps_ref2 *($deg + $min / 60 + $sec/3600) ;        
        
        }
+        echo "<br/>";
        $decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
-        echo "GPSLatitude:". 	$decimal_lat."<br/>";
        $decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
-        echo "GPSLongitude:". 	$decimal_long."<br/>";
+        echo "GPS: ". $decimal_lat."," . $decimal_long."<br/>";
           
        /*$keys = array_keys($exif["EXIF"]);
        for ($i=0;$i < count($keys); $i++) {
