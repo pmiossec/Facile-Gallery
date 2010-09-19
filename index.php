@@ -705,10 +705,13 @@ a = matin, b = après midi, c = soir	1
        
        }
         echo "<br/>";
-       $decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
-       $decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
-        echo "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&spn=0.01,0.01&q=". $decimal_lat."," . $decimal_long."&hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a><br/>";
-          
+        if(isset($exif["EXIF"]["GPSLatitude"])
+        && isset($exif["EXIF"]["GPSLongitude"]))
+        {
+           $decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
+           $decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
+           echo "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&spn=0.01,0.01&q=". $decimal_lat."," . $decimal_long."&hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a><br/>";
+        } 
        /*$keys = array_keys($exif["EXIF"]);
        for ($i=0;$i < count($keys); $i++) {
           echo $keys[$i] . " :" . $exif["EXIF"][$keys[$i]] . "<br/>";
