@@ -7,7 +7,7 @@ define('PHOTOS_DIR', 'photos'); //nom du répertoire un seront stockés les sous r
 define('THUMBS_DIR', 'miniatures'); // nom des répertoires contenant les fichiers de miniatures
 define('ICO_FILENAME', '_icon.jpg'); // nom de l'icone créée à partir de la 1ère image de chaque répertoire
 define('ICO_WIDTH', '250'); // largeur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
-define('ICO_HEIGHT', '85'); // hauteur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
+define('ICO_HEIGHT', '200'); // hauteur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
 define('MINIATURE_MAXDIM', '120'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('GLOBAL_JPG_QUALITY', '80'); // taux de compression des jpg créés
 /* 

@@ -51,3 +51,7 @@ body {
 .imageborder {
 	border: 1px solid #666666;
 }
+.legend{
+	font-weight: bold;
+  
+}

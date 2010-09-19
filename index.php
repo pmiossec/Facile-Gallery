@@ -625,7 +625,9 @@ $separateurs = array('_', '-', '.');
     	//for ($i=0;$i < count($iptc['2#025']); $i++) {
       //   echo $iptc['2#025'][$i].",";
       //  }
-      echo extract_iptc_data($iptc, '2#120',"Légende : ")."<br/>\n";
+      echo "<span class=\"legend\">";
+      echo str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
+      echo "</span><br/>\n";
       echo extract_iptc_data($iptc, '2#025',"Tags : ")."<br/>\n";
       echo extract_iptc_data($iptc, '2#122',"Auteur : ")."<br/>\n";
     //echo "Headline : ".$iptc["Headline"]."\n";
@@ -705,7 +707,7 @@ a = matin, b = après midi, c = soir	1
         echo "<br/>";
        $decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
        $decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
-        echo "GPS: ". $decimal_lat."," . $decimal_long."<br/>";
+        echo "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&spn=0.01,0.01&q=". $decimal_lat."," . $decimal_long."&hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a><br/>";
           
        /*$keys = array_keys($exif["EXIF"]);
        for ($i=0;$i < count($keys); $i++) {
