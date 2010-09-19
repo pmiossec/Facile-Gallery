@@ -675,31 +675,37 @@ a = matin, b = après midi, c = soir	1
 		   if (isset($exif["COMPUTED"]["ApertureFNumber"])) echo "Ouverture de la focale : ".$exif["COMPUTED"]["ApertureFNumber"]." || ";
 		   if (isset($exif["EXIF"]["FocalLength"])) echo "Longueur de la focale : ".$exif["EXIF"]["FocalLength"]."\n";
 		   if (isset($exif["EXIF"]["Description"])) echo "Description : ".$exif["EXIF"]["Description"]."\n";
-
-//Degrés:
-$deg=divide_gps_coordinates($exif["GPS"]["GPSLatitude"][0]);
-
-//Minutes:
-$min=divide_gps_coordinates($exif["GPS"]["GPSLatitude"][1]);
-
-//Secondes:
-$sec=divide_gps_coordinates($exif["GPS"]["GPSLatitude"][2]);
-
-//Hémisphère (N, S, W ou E):
-$hem=$exif["GPS"]["GPSLatitudeRef"];
-
-///Altitude:
-$alt=$exif["GPS"]["GPSAltitude"][0];
-        echo "GPSLatitude:". 	$deg ."°".	$min ."'".	$sec ."''".	$hem."<br/>";
-        
-If ($hem === "N") {
-$gpslatref2 = -1;
-}
-If ($hem === "E") {
-$gpslongref2 = -1;
-}
-$decimallat = $gpslatref2 *($deg + $min / 60 + $sec/3600) ;        
-        echo "GPSLatitude:". 	$decimallat."<br/>";
+       function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
+       {
+            //Degrés:
+            $deg=divide_gps_coordinates($exif_deg);
+            
+            //Minutes:
+            $min=divide_gps_coordinates($exif_min);
+            
+            //Secondes:
+            $sec=divide_gps_coordinates($exif_sec);
+            
+            //Hémisphère (N, S, W ou E):
+            $hem=$exif_hem;
+            
+            ///Altitude:
+            //$alt=$exif["GPS"]["GPSAltitude"][0];
+                    echo "GPSLatitude:". 	$deg ."°".	$min ."'".	$sec ."''".	$hem."<br/>";
+                    
+            If ($hem === "N") {
+            $gps_ref2 = -1;
+            }
+            If ($hem === "E") {
+            $gps_ref2 = -1;
+            }
+            return $decimallat = $gps_ref2 *($deg + $min / 60 + $sec/3600) ;        
+       
+       }
+       $decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
+        echo "GPSLatitude:". 	$decimal_lat."<br/>";
+       $decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
+        echo "GPSLongitude:". 	$decimal_long."<br/>";
           
        /*$keys = array_keys($exif["EXIF"]);
        for ($i=0;$i < count($keys); $i++) {
