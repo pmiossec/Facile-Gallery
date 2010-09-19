@@ -72,7 +72,7 @@ function scan_invalid_char($dir2scan) {
 					$newfilename = eregi_replace("[ÌÍÎÏìíîï]", "i", $newfilename);
 					$newfilename = eregi_replace("[ÒÓÔÕÖòóôõö]", "o", $newfilename);
 					$newfilename = eregi_replace("[ÙÚÛÜùúûü]", "u", $newfilename);
-				   rename($dir2scan.'/'.$file, $dir2scan.'/'.$newfilename);
+					rename($dir2scan.'/'.$file, $dir2scan.'/'.$newfilename);
 			}
 		}
 		closedir($handle);
@@ -130,11 +130,11 @@ function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2
 	$file_prefixe = ($file_prefixe ? $file_prefixe : "");
 	list($width, $height, $type, $attr) = getimagesize($dir."/".$file2miniaturize);//on liste les valeur de l'image
 	if ($width >= $height) {
-	$newwidth = $dimensionmax;
-	$newheight = ($dimensionmax*$height)/$width;
+		$newwidth = $dimensionmax;
+		$newheight = ($dimensionmax*$height)/$width;
 	} else {
-	$newwidth = ($dimensionmax*$width)/$height;
-	$newheight = $dimensionmax;
+		$newwidth = ($dimensionmax*$width)/$height;
+		$newheight = $dimensionmax;
 	}
 	$miniature = imagecreatetruecolor($newwidth, $newheight);
 	if ($type == 1) {
