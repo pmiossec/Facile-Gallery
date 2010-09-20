@@ -744,23 +744,90 @@ case ('detail'):
 <?php
 break;
 case 'map':
-/*
-if(!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . //TODO)) {
+	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
+	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien ?>
+		<table border="0" align="center" cellpadding="28" cellspacing="0">
+			<tr>
+				<td align="center"><span class="txtrouge">Vous devez spécifier un répertoire photo !</span>
+					<p>
+					<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
+			</td>
+		</tr>
+	</table>
+	<?php
+	break;
+	}
+	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
+	$photodir = preg_replace("/\\\\/", "", $photodir);
+	$str2clean = array("." => "", "/" => "");
+	$photodir = strtr($photodir, $str2clean);
+	$dir = PHOTOS_DIR . "/" . $photodir; //chemin vers le répertoire qui contient les miniatures
+		if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien ?>
+			<table border="0" align="center" cellpadding="28" cellspacing="0">
+				<tr>
+					<td align="center"><span class="txtrouge">Ce r&eacute;pertoire photo n'existe pas !</span>
+					<p>
+					<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
+				</td>
+			</tr>
+		</table>
+		<?php
+		break;
+	}
+	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
+	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
+	$dir = PHOTOS_DIR . "/" . $photodir;
+	if ($handle = opendir($dir)) {
+		$cFile = 1;
+		while (false !== ($file = readdir($handle))) {
+			if($file != "." && $file != ".."){
+				if(is_file($dir . "/" . $file) && $file != ICO_FILENAME){
+					$listFile[$cFile] = $file;
+					$cFile++;
+				}
+			}
+		}
+		closedir($handle);
+	}
+	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml"  ;
+	echo $kml_path ;
+if(!file_exists($kml_path)) {
 //Creer le fichier .kml
-	$kml_file = "<?xml version= \"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document>";
+	$kml_file = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>';
 
-	for(//TODO){
-		$kml_file = $kml_file . "<Placemark><name>" . $name . "</name><description><![CDATA[";
-		$kml_file = $kml_file . $html_code;
-		$kml_file = $kml_file . "]]></description><Point><coordinates>" . $gps_coord . "</coordinates></Point></Placemark>";
+	for ($i=0;$i < count($listFile); $i++) {
+		$file_to_add = $listFile[$i];
+		$exif = read_exif_data($dir.'/'.$listFile[$photo], 0, true);
+		if(isset($exif["GPS"]["GPSLatitude"][0])
+			&& isset($exif["GPS"]["GPSLongitude"][0]))
+		{
+			$name= $file_to_add;
+			$size = getimagesize($dir.'/'.$listFile[$photo], $info);
+			if (isset($info["APP13"])) {
+				$iptc = iptcparse($info["APP13"]);
+				$html_code = "<span class=\"legend\">";
+				$html_code = $html_code . str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
+				$html_code = $html_code . "</span><br/>\n";
+				$html_code = $html_code . extract_iptc_data($iptc, '2#025',"Tags : ")."<br/>\n";
+			}
+			$decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
+			$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
+			$gps_coord = ". $decimal_lat."," . $decimal_long;
+			$kml_file = $kml_file . "<Placemark><name>" . $name . "</name><description><![CDATA[";
+			$kml_file = $kml_file . $html_code;
+			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $gps_coord . "</coordinates></Point></Placemark>";
+		}
 	}
 	$kml_file = $kml_file . "</Document></kml>";
 //Ecrire le fichier
 	//TODO
+	$fh = fopen($kml_path, 'w') or die("can't open file");
+	fwrite($fh, $kml_file);
+	fclose($fh);
 
 
 
-} */
+}
 //Afficher une carte google map
 ?>
 <div id="map_canvas" style="width:500px; height:300px"></div>
@@ -777,7 +844,7 @@ function initialize() {
 
 		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-		var ctaLayer = new google.maps.KmlLayer(<?php echo "\"http://". $_SERVER['SERVER_NAME'] . "/photos/photos/photos.kml\""?>);
+		var ctaLayer = new google.maps.KmlLayer(<?php echo "\"http://". $_SERVER['SERVER_NAME'] . "/photos/photos/". $photodir.".kml\""?>);
 		ctaLayer.setMap(map);
   }
 </script>
