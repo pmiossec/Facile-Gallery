@@ -3,6 +3,9 @@ require("conf.php");
 
 error_reporting(E_ALL); // afficher les erreurs
 //error_reporting(0); // ne pas afficher les erreurs
+
+$separateurs = array('_', '-', '.');
+
 ///////////////////////////////////////////////////////////////////////
 //fonction qui convertit les données GPS de degrés, minutes, secondes en decimal
 ///////////////////////////////////////////////////////////////////////
@@ -252,7 +255,6 @@ default:
 	<table border="0" align="center" cellpadding="8" cellspacing="0">
 		<tr>
 	<?php
-	$separateurs = array('_', '-', '.');
 	$k=0;
 	for ($i = (ICO_PER_PAGE*$page_num) - ICO_PER_PAGE; $i < ($total_icons > (ICO_PER_PAGE*($page_num)) ? ICO_PER_PAGE*$page_num : $total_icons); $i++) {
 		if ($listDir[$i] != "." && $listDir[$i] != ".." && $listDir[$i] != THUMBS_DIR && $listDir[$i] != IMAGE_STDDIM && $listDir[$i] != IMAGE_400 && $listDir[$i] != IMAGE_800 && is_dir(PHOTOS_DIR . "/" . $listDir[$i]) == true) {
@@ -452,10 +454,9 @@ case ('list'):
 	}
 
 	$total_files = count($listvalidimg);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
-	$separateurs = array('_', '-', '.');
 	?>
 	<div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?>  / photos <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> à <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?>  sur <?php echo $total_files; ?> </span>
-	<span class="Style2"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2">Afficher la carte</a></span></div>
+	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2">Afficher la carte</a></span></div>
 
 	<div class="fdcolor1" align="center">
 		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num-1) ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
@@ -620,7 +621,6 @@ case ('detail'):
 	if ($photo < $total_images && !file_exists(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" . $listFile[$photo+1])) {
 		create_newimage($photodir, $listFile[$photo+1], MINIATURE_MAXDIM, THUMBS_DIR, "__");
 	}
-	$separateurs = array('_', '-', '.');
 ?>
 <div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; photo : <?php echo $listFile[$photo]; ?> / n&deg;<?php echo $photo; ?> sur <?php echo $total_images; ?></span></div>
 <br>
@@ -774,6 +774,9 @@ case 'map':
 		<?php
 		break;
 	}
+?>
+<div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span></div>
+<?php
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
 	$dir = PHOTOS_DIR . "/" . $photodir;
@@ -790,18 +793,15 @@ case 'map':
 		closedir($handle);
 	}
 	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml";
-	echo $kml_path ;
+	//echo $kml_path ;
 //if(!file_exists($kml_path)) {
 	if(true){
-	echo "im here";
-//Creer le fichier .kml
+	//Creer le fichier .kml
 	$kml_file = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>';
-
-	echo "count" . count($listFile);
+	$at_least_one = false;
 	for ($i=0;$i < count($listFile); $i++) {
 	
 		$file_to_add = $listFile[$i];
-		echo $dir.'/'.$listFile[$i];
 		$exif = read_exif_data($dir.'/'.$listFile[$i], 0, true);
 		if(isset($exif["GPS"]["GPSLatitude"][0])
 			&& isset($exif["GPS"]["GPSLongitude"][0]))
@@ -810,7 +810,8 @@ case 'map':
 			$size = getimagesize($dir.'/'.$listFile[$i], $info);
 			if (isset($info["APP13"])) {
 				$iptc = iptcparse($info["APP13"]);
-				$html_code = "<span class=\"legend\">";
+				$html_code = "<img src=\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir. "/". THUMBS_DIR . "/__" . $file_to_add ."\"><br/>";
+				$html_code = $html_code . "<span class=\"legend\">";
 				$html_code = $html_code . str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
 				$html_code = $html_code . "</span><br/>\n";
 				$html_code = $html_code . extract_iptc_data($iptc, '2#025',"Tags : ")."<br/>\n";
@@ -819,40 +820,48 @@ case 'map':
 			$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
 			$kml_file = $kml_file . "<Placemark><name>" . $name . "</name><description><![CDATA[";
 			$kml_file = $kml_file . $html_code;
-			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_lat."," . $decimal_long . ",0</coordinates></Point></Placemark>";
+			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+			$at_least_one = true;
 		}
 	}
 	$kml_file = $kml_file . "</Document></kml>";
-//Ecrire le fichier
-	//TODO
-	$fh = fopen($kml_path, 'w') or die("can't open file");
-	fwrite($fh, $kml_file);
-	fclose($fh);
-
-
-
+	//Ecrire le fichier
+	if($at_least_one){
+		$fh = fopen($kml_path, 'w') or die("can't open file");
+		fwrite($fh, $kml_file);
+		fclose($fh);
+	}
 }
 //Afficher une carte google map
+if(file_exists($kml_path)) {
 ?>
-<div id="map_canvas" style="width:500px; height:300px"></div>
+<div id="map_canvas" style="width:800px; height:600px"></div>
 <script type="text/javascript">
 //DOC : http://code.google.com/intl/fr/apis/maps/documentation/javascript/v2/services.html#XML_Overlays
 //http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 function initialize() {
-		var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
-		var myOptions = {
-		  zoom: 11,
-		  center: myLatlng,
-		  mapTypeId: google.maps.MapTypeId.ROADMAP
-		}
+	var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
+	var myOptions = {
+		zoom: 11,
+		center: myLatlng,
+		mapTypeId: google.maps.MapTypeId.HYBRID
+	}
 
-		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-		var ctaLayer = new google.maps.KmlLayer(<?php echo "\"http://". $_SERVER['SERVER_NAME'] . "/photos/photos/". $photodir.".kml\""?>);
-		ctaLayer.setMap(map);
-  }
+	var ctaLayer = new google.maps.KmlLayer(<?php echo "\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir.".kml\""?>);
+	ctaLayer.setMap(map);
+}
 </script>
 <?php
+}
+else
+{
+?>
+<div style="text-align:center; margin: auto; height: 50px;">Aucune photo ne contient de données GPS à afficher</div>
+<?php
+
+}
 break;
 //fin du switch
 }
