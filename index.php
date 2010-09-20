@@ -164,11 +164,15 @@ function wordTruncate($str) {
 	}
 }
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>PHP Photo module 0.2.3</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <link href="global_style.css" rel="stylesheet" type="text/css">
+    <script src="http://maps.google.com/maps/api/js?key=<?php echo GOOGLEMAP_KEY ?>&sensor=false"
+            type="text/javascript"></script>
 <SCRIPT LANGUAGE=Javascript>
 <!--
 function inCell(cell, newcolor) {
@@ -184,8 +188,13 @@ function outCell(cell, newcolor) {
 }
 //-->
 </SCRIPT>
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
+</style>
 </head>
-<body>
+<body onload="initialize()">
 <?php 
 $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 ini_set('max_execution_time', 120); //2 mn max
@@ -445,7 +454,9 @@ case ('list'):
 	$total_files = count($listvalidimg);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
 	$separateurs = array('_', '-', '.');
 	?>
-	<div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?>  / photos <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> à <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?>  sur <?php echo $total_files; ?> </span></div>
+	<div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?>  / photos <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> à <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?>  sur <?php echo $total_files; ?> </span>
+	<span class="Style2"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2">Afficher la carte</a></span></div>
+
 	<div class="fdcolor1" align="center">
 		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num-1) ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
 		$l =1;
@@ -730,6 +741,46 @@ case ('detail'):
 	</tr>
 </table>
 
+<?php
+break;
+case 'map':
+/*
+if(!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . //TODO)) {
+//Creer le fichier .kml
+	$kml_file = "<?xml version= \"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document>";
+
+	for(//TODO){
+		$kml_file = $kml_file . "<Placemark><name>" . $name . "</name><description><![CDATA[";
+		$kml_file = $kml_file . $html_code;
+		$kml_file = $kml_file . "]]></description><Point><coordinates>" . $gps_coord . "</coordinates></Point></Placemark>";
+	}
+	$kml_file = $kml_file . "</Document></kml>";
+//Ecrire le fichier
+	//TODO
+
+
+
+} */
+//Afficher une carte google map
+?>
+<div id="map_canvas" style="width:500px; height:300px"></div>
+<script type="text/javascript">
+//DOC : http://code.google.com/intl/fr/apis/maps/documentation/javascript/v2/services.html#XML_Overlays
+//http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
+function initialize() {
+		var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
+		var myOptions = {
+		  zoom: 11,
+		  center: myLatlng,
+		  mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+
+		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+		var ctaLayer = new google.maps.KmlLayer(<?php echo "\"http://". $_SERVER['SERVER_NAME'] . "/photos/photos/photos.kml\""?>);
+		ctaLayer.setMap(map);
+  }
+</script>
 <?php
 break;
 //fin du switch
