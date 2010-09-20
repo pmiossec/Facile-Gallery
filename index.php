@@ -778,7 +778,7 @@ case 'map':
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
 	$dir = PHOTOS_DIR . "/" . $photodir;
 	if ($handle = opendir($dir)) {
-		$cFile = 1;
+		$cFile = 0;
 		while (false !== ($file = readdir($handle))) {
 			if($file != "." && $file != ".."){
 				if(is_file($dir . "/" . $file) && $file != ICO_FILENAME){
@@ -789,20 +789,25 @@ case 'map':
 		}
 		closedir($handle);
 	}
-	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml"  ;
+	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml";
 	echo $kml_path ;
-if(!file_exists($kml_path)) {
+//if(!file_exists($kml_path)) {
+	if(true){
+	echo "im here";
 //Creer le fichier .kml
 	$kml_file = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>';
 
+	echo "count" . count($listFile);
 	for ($i=0;$i < count($listFile); $i++) {
+	
 		$file_to_add = $listFile[$i];
-		$exif = read_exif_data($dir.'/'.$listFile[$photo], 0, true);
+		echo $dir.'/'.$listFile[$i];
+		$exif = read_exif_data($dir.'/'.$listFile[$i], 0, true);
 		if(isset($exif["GPS"]["GPSLatitude"][0])
 			&& isset($exif["GPS"]["GPSLongitude"][0]))
 		{
 			$name= $file_to_add;
-			$size = getimagesize($dir.'/'.$listFile[$photo], $info);
+			$size = getimagesize($dir.'/'.$listFile[$i], $info);
 			if (isset($info["APP13"])) {
 				$iptc = iptcparse($info["APP13"]);
 				$html_code = "<span class=\"legend\">";
@@ -812,10 +817,9 @@ if(!file_exists($kml_path)) {
 			}
 			$decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
 			$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
-			$gps_coord = ". $decimal_lat."," . $decimal_long;
 			$kml_file = $kml_file . "<Placemark><name>" . $name . "</name><description><![CDATA[";
 			$kml_file = $kml_file . $html_code;
-			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $gps_coord . "</coordinates></Point></Placemark>";
+			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_lat."," . $decimal_long . ",0</coordinates></Point></Placemark>";
 		}
 	}
 	$kml_file = $kml_file . "</Document></kml>";
