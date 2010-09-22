@@ -26,4 +26,20 @@ define('IMAGE_800', '1024'); // largeur de l'image de miniature en pixel / ne pa
 define('PHOTONAME_MAXCHAR', 17); // Nb max de caractères pour un nom de photo
 define('GOOGLEMAP_KEY', 'ABQIAAAABx5vCKtNDJk_FQsgjJNJLRRUKmS4dCwRnBAOqX9EW63ghWPLRxQZLcfc8gFjCYowIb2YgpiSB_vv2w'); // Clé Google Map
 define('GOOGLEMAP_ACTIVATE', 'true'); // Clé Google Map
+
+/***********************************************
+ *******************Translation*****************
+ **********************************************/
+
+define('PHOTO_DIR_NEEDED','Vous devez sp&eacute;cifier un r&eacute;pertoire photo !');
+define('BACK','Retour');
+define('PHOTO_DIR_NOT_EXISTING','Ce r&eacute;pertoire photo n\'existe pas !');
+define('DISPLAY_MAP','Afficher la carte');
+define('NO_PHOTO_TO_DISPLAY','Il n\'y a aucune photo à afficher !');
+define('NO_PHOTO_WITH_GPS_DATA','Aucune photo ne contient de données GPS à afficher');
+//define('','');
+//define('','');
+
+
+
 ?>

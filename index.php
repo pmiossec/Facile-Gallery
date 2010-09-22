@@ -100,7 +100,7 @@ function create_icon($dir2iconize) {
 	closedir($handle);
 	}
 	//$extract = scandir($dir);//scan des "array" du répertoire
-	$first_dir_item = $listFile[0]; // on extrait la valeur du premier fichier du répertoire (après"." et "..")
+	$first_dir_item = $listFile[0]; // on extrait la valeur du premier fichier du répertoire (après "." et "..")
 	list($width, $height, $type, $attr) = getimagesize($dir."/".$first_dir_item);//on liste les valeur de l'image
 	$miniature = imagecreatetruecolor(ICO_WIDTH, ICO_HEIGHT);
 	if ($type == 1) {
@@ -170,7 +170,7 @@ function wordTruncate($str) {
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : "Mes Photos");?></title>
+	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <link href="global_style.css" rel="stylesheet" type="text/css">
@@ -338,9 +338,9 @@ case ('list'):
 		if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien ?>
 			<table border="0" align="center" cellpadding="28" cellspacing="0">
 				<tr>
-					<td align="center"><span class="txtrouge">Vous devez spécifier un répertoire photo !</span>
+					<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NEEDED ?></span>
 					<p>
-				<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
+				<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK ?>" onClick="history.go(-1)"></form>
 				</td>
 			</tr>
 		</table>
@@ -356,9 +356,9 @@ case ('list'):
 		if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien ?>
 			<table border="0" align="center" cellpadding="28" cellspacing="0">
 				<tr>
-					<td align="center"><span class="txtrouge">Ce r&eacute;pertoire photo n'existe pas !</span>
+					<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NOT_EXISTING ?></span>
 					<p>
-				<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
+				<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK ?>" onClick="history.go(-1)"></form>
 				</td>
 			</tr>
 		</table>
@@ -461,8 +461,8 @@ case ('list'):
 
 	$total_files = count($listvalidimg);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
 	?>
-	<div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?>  / photos <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> à <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?>  sur <?php echo $total_files; ?> </span>
-	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2">Afficher la carte</a></span></div>
+	<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?>  / photos <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> à <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?>  sur <?php echo $total_files; ?> </span>
+	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span></div>
 
 	<div class="fdcolor1" align="center">
 		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num-1) ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
@@ -550,9 +550,9 @@ case ('detail'):
 	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien ?>
 		<table border="0" align="center" cellpadding="28" cellspacing="0">
 			<tr>
-				<td align="center"><span class="txtrouge">Vous devez spécifier un répertoire photo !</span>
+				<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NEEDED; ?></span>
 					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
+					<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK; ?>" onClick="history.go(-1)"></form>
 			</td>
 		</tr>
 	</table>
@@ -567,9 +567,9 @@ case ('detail'):
 		if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien ?>
 			<table border="0" align="center" cellpadding="28" cellspacing="0">
 				<tr>
-					<td align="center"><span class="txtrouge">Ce r&eacute;pertoire photo n'existe pas !</span>
+					<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NOT_EXISTING; ?></span>
 					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
+					<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK; ?>" onClick="history.go(-1)"></form>
 				</td>
 			</tr>
 		</table>
@@ -605,9 +605,9 @@ case ('detail'):
 	if (!isset($_GET['photo']) || $_GET['photo'] == "" || !isset($listFile[$photo])) {//on vérifie que la photo existe bien ?>
 		<table border="0" align="center" cellpadding="28" cellspacing="0">
 			<tr>
-				<td align="center"><span class="txtrouge">Il n'y a aucune photo à afficher !</span>
+				<td align="center"><span class="txtrouge"><?php echo NO_PHOTO_TO_DISPLAY; ?></span>
 					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
+					<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK; ?>" onClick="history.go(-1)"></form>
 				</td>
 			</tr>
 		</table>
@@ -628,7 +628,7 @@ case ('detail'):
 		create_newimage($photodir, $listFile[$photo+1], MINIATURE_MAXDIM, THUMBS_DIR, "__");
 	}
 ?>
-<div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; photo : <?php echo $listFile[$photo]; ?> / n&deg;<?php echo $photo; ?> sur <?php echo $total_images; ?></span></div>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; photo : <?php echo $listFile[$photo]; ?> / n&deg;<?php echo $photo; ?> sur <?php echo $total_images; ?></span></div>
 <br>
 <table border="0" align="center" cellpadding="8" cellspacing="0">
 	<tr>
@@ -651,7 +651,7 @@ case ('detail'):
 				<a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
 				<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> border="0" class="imageborder">
 			<?php if ($photo < $total_images) { ?></a><?php } 
-			} else { echo "<span class=\"txtrouge\">Il n'y a aucune photo à afficher</span>"; } ?>
+			} else { echo "<span class=\"txtrouge\">". NO_PHOTO_TO_DISPLAY ."</span>"; } ?>
 				</td>
 			</tr>
 			<tr>
@@ -781,7 +781,7 @@ case 'map':
 		break;
 	}
 ?>
-<div class="fdgris"><span class="Style1">////// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span></div>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span></div>
 <?php
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
@@ -800,7 +800,7 @@ case 'map':
 	}
 	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml";
 	//echo $kml_path ;
-//if(!file_exists($kml_path)) {
+//if(!file_exists($kml_path)) {   //TODO
 	if(true){
 	//Creer le fichier .kml
 	$kml_file = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>';
@@ -864,7 +864,7 @@ function initialize() {
 else
 {
 ?>
-<div style="text-align:center; margin: auto; height: 50px;">Aucune photo ne contient de données GPS à afficher</div>
+<div style="text-align:center; margin: auto; height: 50px;"><?php echo NO_PHOTO_WITH_GPS_DATA; ?></div>
 <?php
 
 }
