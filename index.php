@@ -642,42 +642,11 @@ case ('detail'):
 						echo '<span class="legend">';
 						echo str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
 						echo '</span><br/>';
-						echo extract_iptc_data($iptc, '2#025',"Tags : ")."<br/>\n";
-						echo extract_iptc_data($iptc, '2#122',"Auteur : ")."<br/>\n";
-						/*2#122	Auteur
-						2#120	Légende / résumé		2000
-						2#118	Contact	tableau à plusieurs cases
-						2#116	Copyright		128
-						2#115	Source		32
-						2#110	Crédit		32
-						2#105	Titre		256
-						2#103	Référence à la transmission
-						2#101	Pays		64
-						2#100	Code du pays		3
-						2#095	Province / état		32
-						2#092	Région
-						2#090	Ville		32
-						2#085	Titre du créateur
-						2#080	Créateur		64
-						2#075	Cycle de l'objet	3 valeurs possibles :
-						a = matin, b = après midi, c = soir	1
-						2#070	Version du programme
-						2#065	Programme		15
-						2#060	Heure de création	HHMMSS
-						2#055	Date de création		16
-						2#040	Instruction spéciale		256
-						2#035	Heure de sortie / disponibilité	HHMMSS
-						2#030	Date de sortie / disponibilité		16
-						2#026	Location
-						2#025	Mots clés	tableau à plusieurs cases	64 par mots clé
-						2#022	Identifiant
-						2#020	Catégorie supplémentaire	tableau à plusieurs cases
-						2#015	Catégorie		3
-						2#010	Priorité	valeurs de 0 à 8 :
-						0 aucun, 1 = haut, 8 = faible	1
-						2#007	Statut éditorial
-						2#005	Nom de l'objet		64
-						*/
+						for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
+						{
+						   list($code,$label,$isValueAnArray)= $iptc_to_display[$i_iptc];
+							echo extract_iptc_data($iptc, $code, $label . ' : ')."<br/>\n";
+						}
 					}
 					if (exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_PNG && exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_GIF) {
 						?><hr size="1" noshade><?php
