@@ -1,8 +1,8 @@
 <?php 
 require("conf.php");
 
-error_reporting(E_ALL); // afficher les erreurs
-//error_reporting(0); // ne pas afficher les erreurs
+//error_reporting(E_ALL); // afficher les erreurs
+error_reporting(0); // ne pas afficher les erreurs
 
 $separateurs = array('_', '-', '.');
 
@@ -170,7 +170,7 @@ function wordTruncate($str) {
 <!DOCTYPE html>
 <html>
 <head>
-	<title>PHP Photo module 0.2.3</title>
+	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : "Mes Photos");?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <link href="global_style.css" rel="stylesheet" type="text/css">
@@ -197,9 +197,15 @@ function outCell(cell, newcolor) {
   #map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
 </style>
 </head>
-<body onload="initialize()">
-<?php 
+<?php
 $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
+if($show_heading =="map"){
+	echo "<body onload=\"initialize()\">";
+}
+else
+{
+	echo "<body>";
+}
 ini_set('max_execution_time', 120); //2 mn max
 switch ($show_heading) {
 ///////////////////////////////////////////////////////////////
@@ -810,7 +816,7 @@ case 'map':
 			$size = getimagesize($dir.'/'.$listFile[$i], $info);
 			if (isset($info["APP13"])) {
 				$iptc = iptcparse($info["APP13"]);
-				$html_code = "<img src=\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir. "/". THUMBS_DIR . "/__" . $file_to_add ."\"><br/>";
+				$html_code = "<a href=\"./" . PHOTOS_DIR . "/". $photodir. "/" . $file_to_add ."\"><img src=\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir. "/". THUMBS_DIR . "/__" . $file_to_add ."\"></a><br/>";
 				$html_code = $html_code . "<span class=\"legend\">";
 				$html_code = $html_code . str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
 				$html_code = $html_code . "</span><br/>\n";
