@@ -6,6 +6,40 @@ error_reporting(0); // ne pas afficher les erreurs
 
 $separateurs = array('_', '-', '.');
 
+function verify_directories()
+{
+	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
+	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien
+		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
+			<tr>
+				<td align="center"><span class="txtrouge">' . PHOTO_DIR_NEEDED . '</span>
+				<p>
+			<form method="post"><INPUT TYPE="button" VALUE="' . BACK . '" onClick="history.go(-1)"></form>
+			</td>
+		</tr>
+	</table>';
+	return array (false, '', '');
+	}
+	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
+	$photodir = preg_replace("/\\\\/", "", $photodir);
+	$str2clean = array("." => "", "/" => "");
+	$photodir = strtr($photodir, $str2clean);
+	$dir = PHOTOS_DIR . "/" . $photodir; //chemin vers le répertoire qui contient les miniatures
+	if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien
+		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
+			<tr>
+				<td align="center"><span class="txtrouge">' . PHOTO_DIR_NOT_EXISTING . '</span>
+				<p>
+			<form method="post"><INPUT TYPE="button" VALUE="' . BACK . '" onClick="history.go(-1)"></form>
+			</td>
+		</tr>
+	</table>';
+	return array (false, '', '');
+	}
+	return array (true, $photodir, $dir);
+}
+
+
 ///////////////////////////////////////////////////////////////////////
 //fonction qui convertit les données GPS de degrés, minutes, secondes en decimal
 ///////////////////////////////////////////////////////////////////////
@@ -334,37 +368,9 @@ default:
 //listing des miniatures dans un répertoire photo spécifié
 //////////////////////////////////////////////////////////
 case ('list'):
-	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
-		if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien ?>
-			<table border="0" align="center" cellpadding="28" cellspacing="0">
-				<tr>
-					<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NEEDED ?></span>
-					<p>
-				<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK ?>" onClick="history.go(-1)"></form>
-				</td>
-			</tr>
-		</table>
-		<?php
-		break;
-		}
-	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
-	$photodir = preg_replace("/\\\\/", "", $photodir);
-	$str2clean = array("." => "", "/" => "");
-	$photodir = strtr($photodir, $str2clean);
+	list($continue, $photodir, $dir) = verify_directories();
+	if(!$continue) {break;}
 	$page_num = (isset($_GET['page_num']) ? $_GET['page_num'] : "1");//vérification que le numéro de page existe bien
-	$dir = PHOTOS_DIR . "/" . $photodir; //chemin vers le répertoire qui contient les miniatures
-		if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien ?>
-			<table border="0" align="center" cellpadding="28" cellspacing="0">
-				<tr>
-					<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NOT_EXISTING ?></span>
-					<p>
-				<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK ?>" onClick="history.go(-1)"></form>
-				</td>
-			</tr>
-		</table>
-		<?php
-		break;
-		}
 		//création du répertoire miniatures et images
 		if (!file_exists($dir . "/" . THUMBS_DIR)) {
 			create_folder($photodir, THUMBS_DIR);
@@ -546,36 +552,8 @@ case ('list'):
 //détail de la photo
 ////////////////////
 case ('detail'):
-	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
-	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien ?>
-		<table border="0" align="center" cellpadding="28" cellspacing="0">
-			<tr>
-				<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NEEDED; ?></span>
-					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK; ?>" onClick="history.go(-1)"></form>
-			</td>
-		</tr>
-	</table>
-	<?php	
-	break;
-	}
-	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
-	$photodir = preg_replace("/\\\\/", "", $photodir);
-	$str2clean = array("." => "", "/" => "");
-	$photodir = strtr($photodir, $str2clean);
-	$dir = PHOTOS_DIR . "/" . $photodir; //chemin vers le répertoire qui contient les miniatures
-		if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien ?>
-			<table border="0" align="center" cellpadding="28" cellspacing="0">
-				<tr>
-					<td align="center"><span class="txtrouge"><?php echo PHOTO_DIR_NOT_EXISTING; ?></span>
-					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK; ?>" onClick="history.go(-1)"></form>
-				</td>
-			</tr>
-		</table>
-		<?php
-		break;
-	}
+	list($continue, $photodir, $dir) = verify_directories();
+	if(!$continue) {break;}
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
 	$dir = PHOTOS_DIR . "/" . $photodir;
@@ -750,36 +728,8 @@ case ('detail'):
 <?php
 break;
 case 'map':
-	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
-	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien ?>
-		<table border="0" align="center" cellpadding="28" cellspacing="0">
-			<tr>
-				<td align="center"><span class="txtrouge">Vous devez spécifier un répertoire photo !</span>
-					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
-			</td>
-		</tr>
-	</table>
-	<?php
-	break;
-	}
-	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
-	$photodir = preg_replace("/\\\\/", "", $photodir);
-	$str2clean = array("." => "", "/" => "");
-	$photodir = strtr($photodir, $str2clean);
-	$dir = PHOTOS_DIR . "/" . $photodir; //chemin vers le répertoire qui contient les miniatures
-		if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien ?>
-			<table border="0" align="center" cellpadding="28" cellspacing="0">
-				<tr>
-					<td align="center"><span class="txtrouge">Ce r&eacute;pertoire photo n'existe pas !</span>
-					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="Retour" onClick="history.go(-1)"></form>
-				</td>
-			</tr>
-		</table>
-		<?php
-		break;
-	}
+	list($continue, $photodir, $dir) = verify_directories();
+	if(!$continue) {break;}
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span></div>
 <?php
