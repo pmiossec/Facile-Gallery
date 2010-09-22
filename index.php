@@ -644,7 +644,7 @@ case ('detail'):
 						echo '</span><br/>';
 						for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
 						{
-						   list($code,$label,$isValueAnArray)= $iptc_to_display[$i_iptc];
+						   list($code,$label)= $iptc_to_display[$i_iptc];
 							echo extract_iptc_data($iptc, $code, $label . ' : ')."<br/>\n";
 						}
 					}

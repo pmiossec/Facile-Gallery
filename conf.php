@@ -31,42 +31,41 @@ define('GOOGLEMAP_ACTIVATE', 'true'); // Clé Google Map
  ***************IPTC tags to display************
  **********************************************/
 //Reorder and comment/uncomment, change label to display the iptc you want
-//ex: array(code , 'Label', isValueAnArray)
+//ex: array(code , 'Label')
 // code : don't touch!
 // Label : do want you want :)
-// isValueAnArray : don't touch!
 $iptc_to_display = array(
-array('2#025' , 'Tags', true),//tableau à plusieurs cases' , '64 par mots clé'),
-array('2#122' , 'Auteur', false),
-//array('2#120' , 'Légende / résumé', false),//2000
-//array('2#118' , 'Contact', true),
-//array('2#116' , 'Copyright', false),//128'),
-//array('2#115' , 'Source', false),//32'),
-//array('2#110' , 'Crédit', false),//32'),
-//array('2#105' , 'Titre', false),//256'),
-//array('2#103' , 'Référence à la transmission', false),
-//array('2#101' , 'Pays', false),//64'),
-//array('2#100' , 'Code du pays', false),//3'),
-//array('2#095' , 'Province / état', false),//32'),
-//array('2#092' , 'Région', false),
-//array('2#090' , 'Ville', false),//32'),
-//array('2#085' , 'Titre du créateur', false),
-//array('2#080' , 'Créateur', false),//64'),
-//array('2#075' , 'Cycle de l\'objet', false),//3 valeurs possibles : a = matin, b = après midi, c = soir' , '1'),
-//array('2#070' , 'Version du programme', false),
-//array('2#065' , 'Programme', false),//15'),
-//array('2#060' , 'Heure de création', false),//HHMMSS'),
-//array('2#055' , 'Date de création', false),//16'),
-//array('2#040' , 'Instruction spéciale', false),//256'),
-//array('2#035' , 'Heure de sortie / disponibilité', false),//HHMMSS'),
-//array('2#030' , 'Date de sortie / disponibilité', false),//16'),
-//array('2#026' , 'Location', false),
-//array('2#022' , 'Identifiant', false),
-//array('2#020' , 'Catégorie supplémentaire', false),//tableau à plusieurs cases'),
-//array('2#015' , 'Catégorie', false),//3'),
-//array('2#010' , 'Priorité', false),//valeurs de 0 à 8 : 0 aucun, 1 = haut, 8 = faible' , '1'),
-//array('2#007' , 'Statut éditorial', false),
-//array('2#005' , 'Nom de l\'objet', false),//64'),
+array('2#025' , 'Tags'),//tableau à plusieurs cases' , '64 par mots clé'),
+array('2#122' , 'Auteur'),
+//array('2#120' , 'Légende / résumé'),//2000
+//array('2#118' , 'Contact'),
+//array('2#116' , 'Copyright'),//128'),
+//array('2#115' , 'Source'),//32'),
+//array('2#110' , 'Crédit'),//32'),
+//array('2#105' , 'Titre'),//256'),
+//array('2#103' , 'Référence à la transmission'),
+//array('2#101' , 'Pays'),//64'),
+//array('2#100' , 'Code du pays'),//3'),
+//array('2#095' , 'Province / état'),//32'),
+//array('2#092' , 'Région'),
+//array('2#090' , 'Ville'),//32'),
+//array('2#085' , 'Titre du créateur'),
+//array('2#080' , 'Créateur'),//64'),
+//array('2#075' , 'Cycle de l\'objet'),//3 valeurs possibles : a = matin, b = après midi, c = soir' , '1'),
+//array('2#070' , 'Version du programme'),
+//array('2#065' , 'Programme'),//15'),
+//array('2#060' , 'Heure de création'),//HHMMSS'),
+//array('2#055' , 'Date de création'),//16'),
+//array('2#040' , 'Instruction spéciale'),//256'),
+//array('2#035' , 'Heure de sortie / disponibilité'),//HHMMSS'),
+//array('2#030' , 'Date de sortie / disponibilité'),//16'),
+//array('2#026' , 'Location'),
+//array('2#022' , 'Identifiant'),
+//array('2#020' , 'Catégorie supplémentaire'),//tableau à plusieurs cases'),
+//array('2#015' , 'Catégorie'),//3'),
+//array('2#010' , 'Priorité'),//valeurs de 0 à 8 : 0 aucun, 1 = haut, 8 = faible' , '1'),
+//array('2#007' , 'Statut éditorial'),
+//array('2#005' , 'Nom de l\'objet'),//64'),
 );
 
 
