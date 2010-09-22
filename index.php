@@ -606,7 +606,7 @@ case ('detail'):
 		create_newimage($photodir, $listFile[$photo+1], MINIATURE_MAXDIM, THUMBS_DIR, "__");
 	}
 ?>
-<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; photo : <?php echo $listFile[$photo]; ?> / n&deg;<?php echo $photo; ?> / <?php echo $total_images; ?></span></div>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; <?php echo $listFile[$photo]; ?> n&deg;<?php echo $photo; ?> / <?php echo $total_images; ?></span></div>
 <br>
 <table border="0" align="center" cellpadding="8" cellspacing="0">
 	<tr>
@@ -797,14 +797,8 @@ if(file_exists($kml_path)) {
 //http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 function initialize() {
 	var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
-	var myOptions = {
-		zoom: 11,
-		center: myLatlng,
-		mapTypeId: google.maps.MapTypeId.HYBRID
-	}
-
+	var myOptions = { zoom: 11, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID }
 	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
 	var ctaLayer = new google.maps.KmlLayer(<?php echo "\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir.".kml\""?>);
 	ctaLayer.setMap(map);
 }
@@ -813,10 +807,7 @@ function initialize() {
 }
 else
 {
-?>
-<div style="text-align:center; margin: auto; height: 50px;"><?php echo NO_PHOTO_WITH_GPS_DATA; ?></div>
-<?php
-
+	echo '<div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
 }
 break;
 //fin du switch
