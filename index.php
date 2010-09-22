@@ -629,7 +629,7 @@ case ('detail'):
 				<a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
 				<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> border="0" class="imageborder">
 			<?php if ($photo < $total_images) { ?></a><?php } 
-			} else { echo "<span class=\"txtrouge\">". NO_PHOTO_TO_DISPLAY ."</span>"; } ?>
+			} else { echo '<span class="txtrouge">'. NO_PHOTO_TO_DISPLAY .'</span>'; } ?>
 				</td>
 			</tr>
 			<tr>
@@ -639,14 +639,11 @@ case ('detail'):
 					$size = getimagesize($dir.'/'.$listFile[$photo], $info);
 					if (isset($info["APP13"])) {
 						$iptc = iptcparse($info["APP13"]);
-						echo "<span class=\"legend\">";
+						echo '<span class="legend">';
 						echo str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
-						echo "</span><br/>\n";
+						echo '</span><br/>';
 						echo extract_iptc_data($iptc, '2#025',"Tags : ")."<br/>\n";
 						echo extract_iptc_data($iptc, '2#122',"Auteur : ")."<br/>\n";
-						//echo "Headline : ".$iptc["Headline"]."\n";
-						//echo "Copyright Notice : ".$iptc["Copyright Notice"]."\n";
-						//echo "Credit : ".$iptc["Credit"]."\n";
 						/*2#122	Auteur
 						2#120	Légende / résumé		2000
 						2#118	Contact	tableau à plusieurs cases
