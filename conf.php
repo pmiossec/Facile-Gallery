@@ -31,8 +31,8 @@ define('GOOGLEMAP_ACTIVATE', 'true'); // Clé Google Map
  ***************EXIF tags to display************
  **********************************************/
 //Reorder and comment/uncomment, change label to display the iptc you want
-//ex: array(code , 'Label')
-// code : don't touch!
+//ex: array(code1 , code2, 'Label')
+// code1 & code2 : don't touch!
 // Label : do want you want :)
 $exif_to_display = array(
 array('EXIF' , 'DateTimeOriginal', 'Date et Heure'),
@@ -84,22 +84,13 @@ array('2#122' , 'Auteur'),
 //array('2#005' , 'Nom de l\'objet'),//64'),
 );
 
-
-
-
 /***********************************************
  *******************Translation*****************
  **********************************************/
-
 define('PHOTO_DIR_NEEDED','Vous devez sp&eacute;cifier un r&eacute;pertoire photo !');
 define('BACK','Retour');
 define('PHOTO_DIR_NOT_EXISTING','Ce r&eacute;pertoire photo n\'existe pas !');
 define('DISPLAY_MAP','Afficher la carte');
 define('NO_PHOTO_TO_DISPLAY','Il n\'y a aucune photo à afficher !');
-define('NO_PHOTO_WITH_GPS_DATA','Aucune photo ne contient de données GPS à afficher');
-//define('','');
-//define('','');
-
-
-
+define('NO_PHOTO_WITH_GPS_DATA','Aucune photo ne contient de données GPS :(');
 ?>
