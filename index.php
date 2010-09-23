@@ -6,6 +6,21 @@ error_reporting(0); // ne pas afficher les erreurs
 
 $separateurs = array('_', '-', '.');
 
+function add_map($url_kml_file)
+{
+	echo '<div id="map_canvas" style="width:800px; height:600px"></div>
+	<script type="text/javascript">
+	//DOC : http://code.google.com/intl/fr/apis/maps/documentation/javascript/v2/services.html#XML_Overlays
+	//http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
+	function initialize() {
+		var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
+		var myOptions = { zoom: 11, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID }
+		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+		var ctaLayer = new google.maps.KmlLayer("' . $url_kml_file . '");
+		ctaLayer.setMap(map);
+	}
+	</script>';
+}
 function verify_directories()
 {
 	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
@@ -281,7 +296,8 @@ default:
 	$totalPages = ceil($total_icons/ICO_PER_PAGE);
 	$page_num = (isset($_GET['page_num']) && $_GET['page_num'] !== "" && $_GET['page_num'] <= $totalPages ? $_GET['page_num'] : "1");
 	?>
-	<div class="fdgris"><span class="Style1"><?php echo HOME_NAME ?></span></div>
+	<div class="fdgris"><span class="Style1"><?php echo HOME_NAME ?></span>
+	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span></div>
 	<div class="fdcolor1" align="center">
 	<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo ($page_num-1); ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
 
@@ -701,7 +717,7 @@ case ('detail'):
 
 <?php
 break;
-case 'map':
+case ('map'):
 	list($continue, $photodir, $dir) = verify_directories();
 	if(!$continue) {break;}
 ?>
@@ -764,33 +780,46 @@ case 'map':
 }
 //Afficher une carte google map
 if(file_exists($kml_path)) {
-?>
-<div id="map_canvas" style="width:800px; height:600px"></div>
-<script type="text/javascript">
-//DOC : http://code.google.com/intl/fr/apis/maps/documentation/javascript/v2/services.html#XML_Overlays
-//http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
-function initialize() {
-	var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
-	var myOptions = { zoom: 11, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID }
-	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	var ctaLayer = new google.maps.KmlLayer(<?php echo "\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir.".kml\""?>);
-	ctaLayer.setMap(map);
-}
-</script>
-<?php
+	$kml_url = "http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir.".kml";
+//	echo $kml_url ;
+	add_map($kml_url);
 }
 else
 {
 	echo '<div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
 }
 break;
+case ('gallery_map'):
+	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
+	// listage des répertoires et fichiers
+	if ($handle = opendir(PHOTOS_DIR)) {
+		$cDir = 0;
+		$cFile = 0;
+		while (false !== ($file = readdir($handle))) {
+			if($file != "." && $file != ".." &&  $file != THUMBS_DIR && $file != IMAGE_STDDIM){
+				if(is_dir(PHOTOS_DIR . "/" . $file)){
+					$listDir[$cDir] = $file;
+					$cDir++;
+				}
+				else{
+					$listFile[$cFile] = $file;
+					$cFile++;
+				}
+			}
+		}
+		if (ALPHABETIC_ORDER == true) {
+			usort($listDir,"strnatcmp");
+		}
+		closedir($handle);
+	}
+
+
+break;
 //fin du switch
 }
-?>
-<div class="fdgris" align="right">
-	<span class="Style2">Php Photo Module 0.2.3 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span>
-</div>
-<noscript>
+if(DISPLAY_FOOTER)
+	echo '<div class="fdgris" align="right"><span class="Style2">Php Photo Module 0.2.3 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span></div>';
+?><noscript>
 <!-- Si vous retirez la référence ci dessus pour des raisons esthétiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
 Php Photo Module 0.2.3 | auteur : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
 </noscript>
