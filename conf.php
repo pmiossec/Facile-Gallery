@@ -1,4 +1,15 @@
 <?php 
+//TODO:
+// - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
+// - Carte pour la page principale avec 1 pushpin pour chaque gallerie
+// - slideshow
+// - améliorer ce qui est affiché dans la bulle lorsqu'on clique sur le pushpin ?!?
+// - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
+// - nettoyer le code....Mutualiser code de la ligne d'en haut
+// - corriger le mauvais support des n° de page (dissocier en 2 variables!!)
+// - afficher les propriétés de l'image sur le côté ?!?
+// - améliorer la création de l'image de la gallerie (plutot un resize intelligent qu'un crop et de la 1ère --correction ordre alphabétique--)
+
 /*
 Ce script offre la possibilité d'afficher des images de format GIF, JPG ou PNG.
 */
@@ -23,7 +34,7 @@ define('ICO_PER_LINE', 4); //nombre de miniatures à afficher par ligne sur la pa
 define('IMAGE_STDDIM', '800'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('IMAGE_400', '400'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('IMAGE_800', '1024'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
-define('PHOTONAME_MAXCHAR', 17); // Nb max de caractères pour un nom de photo
+define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
 define('GOOGLEMAP_KEY', 'ABQIAAAABx5vCKtNDJk_FQsgjJNJLRRUKmS4dCwRnBAOqX9EW63ghWPLRxQZLcfc8gFjCYowIb2YgpiSB_vv2w'); // Clé Google Map
 define('GOOGLEMAP_ACTIVATE', 'true'); // Clé Google Map
 

@@ -200,7 +200,7 @@ function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2
 /////////////////////////////////////////
 function wordTruncate($str) {
 	$str_to_count = html_entity_decode($str);
-	echo strlen($str_to_count);
+	//echo strlen($str_to_count);
 	if (strlen($str_to_count) <= PHOTONAME_MAXCHAR) {
 		return $str;
 	} else {
@@ -525,7 +525,7 @@ case ('list'):
 					<td width="<?php echo MINIATURE_MAXDIM + 18; ?>" height="<?php echo MINIATURE_MAXDIM + 18; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>"><img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$listvalidimg[$i] ?>" border="0" alt="<?php echo $listvalidimg[$i]; ?>" class="imageborder"></a></td>
 				</tr>
 				<tr>
-					<td align="center"><span class="Style2"><?php echo $i+1 ."| " . wordTruncate($listvalidimg[$i]); ?></span></td>
+					<td align="center"><span class="Style2"><?php echo ($i+1) ."| " . wordTruncate($listvalidimg[$i]); ?></span></td>
 				</tr>
 			</table>
 		</td>
