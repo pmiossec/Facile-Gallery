@@ -216,7 +216,7 @@ function wordTruncate($str) {
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <link href="global_style.css" rel="stylesheet" type="text/css">
-    <script src="http://maps.google.com/maps/api/js?key=<?php echo GOOGLEMAP_KEY ?>&sensor=false"
+    <script src="http://maps.google.com/maps/api/js?sensor=false"
             type="text/javascript"></script>
 <SCRIPT LANGUAGE=Javascript>
 <!--
