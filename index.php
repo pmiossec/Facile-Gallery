@@ -6,6 +6,18 @@ error_reporting(0); // ne pas afficher les erreurs
 
 $separateurs = array('_', '-', '.');
 
+function write_kml_file($kml_placemarks, $kml_path)
+{
+	//echo $kml_path;
+	$kml_content = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>'
+	               . $kml_placemarks . '</Document></kml>';
+	//echo $kml_content;
+	//Ecrire le fichier
+	$fh = fopen($kml_path, 'w') or die("can't open file");
+	fwrite($fh, $kml_content);
+	fclose($fh);
+}
+
 function add_map($url_kml_file)
 {
 	echo '<div id="map_canvas" style="width:800px; height:600px"></div>
@@ -143,7 +155,7 @@ function scan_invalid_char($dir2scan) {
 //fonction pour créer une miniature de la 1ère image du sous dossier photo
 //////////////////////////////////////////////////////////////////////////
 function create_icon($dir2iconize) {
-	$dir = PHOTOS_DIR."/".$dir2iconize; //chemin vers le répertoire à dont on doit créer l'icone
+	$dir = PHOTOS_DIR."/".$dir2iconize; //chemin vers le répertoire dont on doit créer l'icone
 	if ($handle = opendir($dir)) {
 		$cFile = 0;
 		while (false !== ($file = readdir($handle))) {
@@ -154,8 +166,13 @@ function create_icon($dir2iconize) {
 				}
 			}
 		}
-	closedir($handle);
+		closedir($handle);
 	}
+
+	if (ALPHABETIC_ORDER == true) {
+		usort($listFile,"strnatcmp");
+	}
+
 	//$extract = scandir($dir);//scan des "array" du répertoire
 	$first_dir_item = $listFile[0]; // on extrait la valeur du premier fichier du répertoire (après "." et "..")
 	list($width, $height, $type, $attr) = getimagesize($dir."/".$first_dir_item);//on liste les valeur de l'image
@@ -172,6 +189,43 @@ function create_icon($dir2iconize) {
 	//imagecopyresampled(image de destination, image source, int dst_x, int dst_y, int src_x, int src_y, int dst_w, int dst_h, int src_w, int src_h);
 	imagecopyresampled($miniature, $image, 0, 0,((($width - ICO_WIDTH)/2) <= ICO_WIDTH ? ICO_WIDTH-(($width - ICO_WIDTH)/2) : ($width - ICO_WIDTH)/2), ((($height - ICO_HEIGHT)/2) <= 0 ? ICO_HEIGHT-(($height - ICO_HEIGHT)/2) : ($height - ICO_HEIGHT)/2), ICO_WIDTH, ICO_HEIGHT, ICO_WIDTH*2, ICO_HEIGHT*2);
 	imagejpeg($miniature, $dir."/".ICO_FILENAME, GLOBAL_JPG_QUALITY);
+}
+//////////////////////////////////////////////////////////////////////////
+//fonction pour trouver une image ayant des données GPS
+//////////////////////////////////////////////////////////////////////////
+function find_file_with_gps_data($dir2findgps) {
+	$dir = PHOTOS_DIR."/".$dir2findgps; //chemin vers le répertoire dont on doit créer l'icone
+	if ($handle = opendir($dir)) {
+		$cFile = 0;
+		while (false !== ($file = readdir($handle))) {
+			if($file != "." && $file != ".."){
+				if(is_file($dir . "/" . $file)){
+					$listFile[$cFile] = $file;
+					$cFile++;
+				}
+			}
+		}
+		closedir($handle);
+	}
+	for($i=0;$i<$cFile;$i++)
+	{
+		$exif = read_exif_data($dir.'/'.$listFile[$i], 0, true);
+		if(isset($exif["GPS"]["GPSLatitude"][0])
+			&& isset($exif["GPS"]["GPSLongitude"][0]))
+		{
+			$size = getimagesize($dir.'/'.$listFile[$i], $info);
+			//if (isset($info["APP13"])) {
+			//	$html_code = "<a href=\"./" . PHOTOS_DIR . "/". $photodir. "/" . $file_to_add ."\"><img src=\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir. "/". THUMBS_DIR . "/__" . $file_to_add ."\"></a><br/>";
+			//}
+			$decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
+			$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
+			$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
+			$kml_file = $kml_file . $html_code;
+			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+			return array(true, $kml_file);
+		}
+	}
+	return array(false, "");
 }
 
 //////////////////////////////////////////////
@@ -256,7 +310,7 @@ function outCell(cell, newcolor) {
 </head>
 <?php
 $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
-if($show_heading =="map"){
+if($show_heading =="map" || $show_heading =="gallery_map"){
 	echo '<body onload="initialize()">';
 }
 else
@@ -264,6 +318,9 @@ else
 	echo "<body>";
 }
 ini_set('max_execution_time', 120); //2 mn max
+$directory = $_SERVER["SCRIPT_NAME"];
+$directory = substr($directory, 0, strrpos($directory,"/")+1);
+$url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 switch ($show_heading) {
 ///////////////////////////////////////////////////////////////
 //listing des répertoires photos sur la page d'index par défaut
@@ -743,7 +800,6 @@ case ('map'):
 //if(!file_exists($kml_path)) {   //TODO
 	if(true){
 	//Creer le fichier .kml
-	$kml_file = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>';
 	$at_least_one = false;
 	for ($i=0;$i < count($listFile); $i++) {
 	
@@ -770,17 +826,14 @@ case ('map'):
 			$at_least_one = true;
 		}
 	}
-	$kml_file = $kml_file . "</Document></kml>";
 	//Ecrire le fichier
 	if($at_least_one){
-		$fh = fopen($kml_path, 'w') or die("can't open file");
-		fwrite($fh, $kml_file);
-		fclose($fh);
+		write_kml_file($kml_file,$kml_path);
 	}
 }
 //Afficher une carte google map
 if(file_exists($kml_path)) {
-	$kml_url = "http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir.".kml";
+	$kml_url = $url_path_datas. $photodir.".kml";
 //	echo $kml_url ;
 	add_map($kml_url);
 }
@@ -791,6 +844,9 @@ else
 break;
 case ('gallery_map'):
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
+?>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a></span></div>
+<?php
 	// listage des répertoires et fichiers
 	if ($handle = opendir(PHOTOS_DIR)) {
 		$cDir = 0;
@@ -811,6 +867,30 @@ case ('gallery_map'):
 			usort($listDir,"strnatcmp");
 		}
 		closedir($handle);
+	}
+	$kml_gallery_filename = "gallery.kml";
+	$kml_path =  "./" . PHOTOS_DIR . "/" .$kml_gallery_filename ;
+	$placemarks = "";
+	$at_least_one = false;
+	for($iDir=0;$iDir< count($listDir); $iDir++){
+		list($find_one, $placemark) = find_file_with_gps_data($listDir[$iDir]);
+		if($find_one)
+		{
+			$placemarks = $placemarks .  $placemark ;
+			$at_least_one = true;
+		}
+	}
+	if($at_least_one){
+		write_kml_file($placemarks,$kml_path);
+	}
+	if(file_exists($kml_path)) {
+		$kml_url = $url_path_datas . $kml_gallery_filename;
+	//	echo $kml_url ;
+		add_map($kml_url);
+	}
+	else
+	{
+		echo '<div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
 	}
 
 
