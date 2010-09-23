@@ -242,7 +242,7 @@ function outCell(cell, newcolor) {
 <?php
 $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 if($show_heading =="map"){
-	echo "<body onload=\"initialize()\">";
+	echo '<body onload="initialize()">';
 }
 else
 {
