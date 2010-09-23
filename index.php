@@ -659,11 +659,13 @@ case ('detail'):
 					if (exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_PNG && exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_GIF) {
 						?><hr size="1" noshade><?php
 						$exif = read_exif_data($dir.'/'.$listFile[$photo], 0, true);
-						echo $exif["FILE"]["FileName"] . " || " . round(($exif["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exif["COMPUTED"]["Width"]."px x ".$exif["COMPUTED"]["Height"]."px<br>\n";
+						echo $exif["FILE"]["FileName"] . " || " . round(($exif["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exif["COMPUTED"]["Width"]." x ".$exif["COMPUTED"]["Height"]."px<br>\n";
 						for($i_exif=0;$i_exif<count($exif_to_display);$i_exif++)
 						{
 							list($field1, $field2, $label)= $exif_to_display[$i_exif];
-							echo extract_exif_data($exif, $field1, $field2 , $label . ' : ')."<br/>\n";
+							$text = extract_exif_data($exif, $field1, $field2 , $label . ' : ');
+							if(strlen($text) != 0)
+								echo $text."<br/>\n";
 						}
 						if(isset($exif["GPS"]["GPSLatitude"][0])
 							&& isset($exif["GPS"]["GPSLongitude"][0]))
