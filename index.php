@@ -61,6 +61,14 @@ function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
 	return $gps_ref2 *($deg + $min / 60 + $sec/3600) ;
 }
 ///////////////////////////////////////////////////////////////////////
+//fonction qui extrait et met en forme une donnée exif
+///////////////////////////////////////////////////////////////////////
+function extract_exif_data($exifs, $field1, $field2, $label){
+	if (isset($exifs[$field1][$field2]))
+		return $label . $exifs[$field1][$field2];
+	else return "";
+}
+///////////////////////////////////////////////////////////////////////
 //fonction qui extrait et met en forme une donnée IPTC
 ///////////////////////////////////////////////////////////////////////
 function extract_iptc_data($iptcs, $iptc_entry_code, $label){
@@ -651,14 +659,12 @@ case ('detail'):
 					if (exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_PNG && exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_GIF) {
 						?><hr size="1" noshade><?php
 						$exif = read_exif_data($dir.'/'.$listFile[$photo], 0, true);
-						echo $exif["FILE"]["FileName"] . " || " . round(($exif["FILE"]["FileSize"]/1024), 0) . " Ko || Résolution originale : ".$exif["COMPUTED"]["Width"]." x ".$exif["COMPUTED"]["Height"]."<br>\n";
-						if (isset($exif["EXIF"]["DateTimeOriginal"]))  echo "Date et Heure : ".$exif["EXIF"]["DateTimeOriginal"]."<br>";
-						if (isset($exif["EXIF"]["ExposureTime"])) echo "Temps d'exposition : ".$exif["EXIF"]["ExposureTime"]." || ";
-						if (isset($exif["EXIF"]["ISOSpeedRatings"])) echo "ISO : ".$exif["EXIF"]["ISOSpeedRatings"]."<br>";
-						if (isset($exif["COMPUTED"]["ApertureFNumber"])) echo "Ouverture de la focale : ".$exif["COMPUTED"]["ApertureFNumber"]." || ";
-						if (isset($exif["EXIF"]["FocalLength"])) echo "Longueur de la focale : ".$exif["EXIF"]["FocalLength"]."\n";
-						if (isset($exif["EXIF"]["Description"])) echo "Description : ".$exif["EXIF"]["Description"]."\n";
-						echo "<br/>";
+						echo $exif["FILE"]["FileName"] . " || " . round(($exif["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exif["COMPUTED"]["Width"]."px x ".$exif["COMPUTED"]["Height"]."px<br>\n";
+						for($i_exif=0;$i_exif<count($exif_to_display);$i_exif++)
+						{
+							list($field1, $field2, $label)= $exif_to_display[$i_exif];
+							echo extract_exif_data($exif, $field1, $field2 , $label . ' : ')."<br/>\n";
+						}
 						if(isset($exif["GPS"]["GPSLatitude"][0])
 							&& isset($exif["GPS"]["GPSLongitude"][0]))
 						{

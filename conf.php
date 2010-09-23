@@ -28,6 +28,22 @@ define('GOOGLEMAP_KEY', 'ABQIAAAABx5vCKtNDJk_FQsgjJNJLRRUKmS4dCwRnBAOqX9EW63ghWP
 define('GOOGLEMAP_ACTIVATE', 'true'); // Clé Google Map
 
 /***********************************************
+ ***************EXIF tags to display************
+ **********************************************/
+//Reorder and comment/uncomment, change label to display the iptc you want
+//ex: array(code , 'Label')
+// code : don't touch!
+// Label : do want you want :)
+$exif_to_display = array(
+array('EXIF' , 'DateTimeOriginal', 'Date et Heure'),
+array('EXIF' , 'ExposureTime', 'Temps d\'exposition'),
+array('EXIF' , 'ISOSpeedRatings', 'ISO'),
+array('COMPUTED' , 'ApertureFNumber', 'Ouverture de la focale'),
+array('EXIF' , 'FocalLength', 'Longueur de la focale'),
+array('EXIF' , 'Description', 'Description')
+);
+
+/***********************************************
  ***************IPTC tags to display************
  **********************************************/
 //Reorder and comment/uncomment, change label to display the iptc you want
