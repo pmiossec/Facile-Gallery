@@ -903,12 +903,12 @@ case ('gallery_map'):
 	}
 break;
 case ('slideshow'):
-?>
-	<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?> ( <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> -> <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?> / <?php echo $total_files; ?>)</span>
-	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=slideshow&dir=<?php echo $photodir; ?>" class="Style2"><?php echo SLIDESHOW ?></a></span></div>
-<?php
 	list($continue, $photodir, $dir) = verify_directories();
 	if(!$continue) {break;}
+?>
+	<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?></span>
+	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span></div>
+<?php
 	// listage des répertoires et fichiers
 	if ($handle = opendir($dir)) {
 		$cDir = 0;
