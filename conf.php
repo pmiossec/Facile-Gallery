@@ -1,7 +1,6 @@
 <?php 
 //TODO:
 // - Améliorer carte pour la page principale avec image dans pushpin + lien vers la galerie
-// - slideshow
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - améliorer la création de l'image de la gallerie (plutot un resize intelligent qu'un crop et de la 1ère --correction ordre alphabétique--)
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
