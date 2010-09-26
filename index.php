@@ -21,8 +21,7 @@ function write_kml_file($kml_placemarks, $kml_path)
 function add_map($url_kml_file){
 	echo '<div id="map_canvas" style="width:800px; height:600px"></div>
 	<script type="text/javascript">
-	//DOC : http://code.google.com/intl/fr/apis/maps/documentation/javascript/v2/services.html#XML_Overlays
-	//http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
+	//DOC : http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 	function initialize() {
 		var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
 		var myOptions = { zoom: 11, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID }
@@ -345,7 +344,14 @@ $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<link href="global_style.css" rel="stylesheet" type="text/css">
-<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<?php if(GOOGLEMAP_ACTIVATE) { ?>
+	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	<style type="text/css">
+		html { height: 100% }
+		body { height: 100%; margin: 0px; padding: 0px }
+	 	#map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
+	</style>
+<?php } ?>
 <SCRIPT LANGUAGE=Javascript>
 <!--
 function inCell(cell, newcolor) {
@@ -361,11 +367,6 @@ function outCell(cell, newcolor) {
 }
 //-->
 </SCRIPT>
-<style type="text/css">
-  html { height: 100% }
-  body { height: 100%; margin: 0px; padding: 0px }
-  #map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
-</style>
 <?php
 $activate_slideshow = SLIDESHOW_ACTIVATE; //TODO : ajouter la vérification de la présence de la lirairie
 if($show_heading =="list" && $activate_slideshow){?>
@@ -454,7 +455,7 @@ if($show_heading =="list" && $activate_slideshow){?>
 }?>
 </head>
 <?php
-if($show_heading =="map" || $show_heading =="gallery_map"){
+if(GOOGLEMAP_ACTIVATE && ($show_heading =="map" || $show_heading =="gallery_map")){
 	echo '<body onload="initialize()">';
 }
 else
@@ -498,7 +499,7 @@ default:
 	$page_num = (isset($_GET['page_num']) && $_GET['page_num'] !== "" && $_GET['page_num'] <= $totalPages ? $_GET['page_num'] : "1");
 	?>
 	<div class="fdgris"><span class="Style1"><?php echo HOME_NAME ?></span>
-	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span></div>
+	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
 	<div class="fdcolor1" align="center">
 	<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo ($page_num-1); ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
 
@@ -716,7 +717,7 @@ case ('list'):
 	}
 	?>
 	<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?> ( <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> -> <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?> / <?php echo $total_files; ?>)</span>
-	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php if($activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
+	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php } if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
 	<div class="fdcolor1" align="center">
 		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num-1) ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
@@ -942,6 +943,7 @@ case ('detail'):
 <?php
 break;
 case ('map'):
+	if(!GOOGLEMAP_ACTIVATE) {break;}
 	list($continue, $photodir, $dir) = verify_directories();
 	if(!$continue) {break;}
 ?>
@@ -1010,6 +1012,7 @@ else
 }
 break;
 case ('gallery_map'):
+	if(!GOOGLEMAP_ACTIVATE) {break;}
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a></span></div>

@@ -35,8 +35,8 @@ define('IMAGE_STDDIM', '800'); // largeur de l'image de miniature en pixel / ne 
 define('IMAGE_400', '400'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('IMAGE_800', '1024'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
-define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
-define('SLIDESHOW_ACTIVATE', false); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
+define('GOOGLEMAP_ACTIVATE', false); // Activation de la fonctionnalité Google Map
+define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
 define('DISPLAY_FOOTER', false); //Afficher le pied de page
 
 /***********************************************
