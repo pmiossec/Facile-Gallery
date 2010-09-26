@@ -1,8 +1,8 @@
 <?php 
 //TODO:
 // - Googlemap : eviter de construire le kml à chaque fois
-// - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas  et la 1ere image dans Corbeille (activer les messages d'erreur!!!))
 // - Regénérées les miniatures lorsqu'on change la taille dans le fichier config.php (cf create_newimage())
+// - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas  et la 1ere image dans Corbeille (activer les messages d'erreur!!!))
 // - Slideshow : ajouter les légendes
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
