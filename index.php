@@ -1,8 +1,8 @@
 <?php 
 require("conf.php");
 
-//error_reporting(E_ALL); // afficher les erreurs
-error_reporting(0); // ne pas afficher les erreurs
+error_reporting(E_ALL); // afficher les erreurs
+//error_reporting(0); // ne pas afficher les erreurs
 
 $separateurs = array('_', '-', '.');
 
@@ -544,7 +544,7 @@ default:
 		<td>
 			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 				<tr class="tddeco">
-					<td width="<?php echo ICO_WIDTH + 18; ?>" height="<?php echo ICO_HEIGHT + 18; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
+					<td width="<?php echo ICO_WIDTH + SPACE_AROUND_MINIATURE; ?>" height="<?php echo ICO_HEIGHT + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 						<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" width="<?php echo ICO_WIDTH ?>" height="<?php echo ICO_HEIGHT ?>" border="0" class="imageborder"></a></td>
 				</tr>
 				<tr>
@@ -763,7 +763,7 @@ case ('list'):
 		<td>
 			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 				<tr class="tddeco">
-					<td width="<?php echo MINIATURE_MAXDIM + 18; ?>" height="<?php echo MINIATURE_MAXDIM + 18; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>"><img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$listvalidimg[$i] ?>" border="0" alt="<?php echo $listvalidimg[$i]; ?>" class="imageborder"></a></td>
+					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>"><img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$listvalidimg[$i] ?>" border="0" alt="<?php echo $listvalidimg[$i]; ?>" class="imageborder"></a></td>
 				</tr>
 				<tr>
 					<td align="center"><span class="Style2"><?php echo wordTruncate(($i+1) ."|" . $listvalidimg[$i]); ?></span></td>
@@ -863,7 +863,7 @@ case ('detail'):
 		<?php if ($photo > 1) {?>
 		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 			<tr class="tddeco">
-				<td width="<?php echo MINIATURE_MAXDIM + 18; ?>" height="<?php echo MINIATURE_MAXDIM + 18; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
+				<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 				<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo-1; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo-1]; ?>" alt="<?php echo $listFile[$photo-1]; ?>" border="0" class="imageborder"></a>
 				</td>
 			</tr>
@@ -930,7 +930,7 @@ case ('detail'):
 	<?php if ($photo < $total_images) {?>
 		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 			<tr class="tddeco">
-				<td width="<?php echo MINIATURE_MAXDIM + 18; ?>" height="<?php echo MINIATURE_MAXDIM + 18; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
+				<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 					<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo+1; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo+1]; ?>" alt="<?php echo $listFile[$photo+1]; ?>" border="0" class="imageborder"></a>
 				</td>
 			</tr>

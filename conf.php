@@ -3,9 +3,7 @@
 // - Googlemap : eviter de construire le kml à chaque fois
 // - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas
 // - Améliorer carte pour la page principale avec image dans pushpin + lien vers la galerie
-// - mode list : diminuer espace blanc entre photo et cadre des miniatures
 // - Slideshow : ajouter les légendes
-// - Slideshow : Tester => pouvoir le désactiver dans le code par une variable de config
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables,...
@@ -20,7 +18,8 @@ define('THUMBS_DIR', 'miniatures'); // nom des répertoires contenant les fichier
 define('ICO_FILENAME', '_icon.jpg'); // nom de l'icone créée à partir de la 1ère image de chaque répertoire
 define('ICO_WIDTH', '250'); // largeur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
 define('ICO_HEIGHT', '150'); // hauteur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
-define('MINIATURE_MAXDIM', '120'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
+define('MINIATURE_MAXDIM', '150'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
+define('SPACE_AROUND_MINIATURE', '10'); // Espace blanc autours des miniatures
 define('GLOBAL_JPG_QUALITY', '50'); // taux de compression des jpg créés
 /* 
 La capacité du script à créer vos miniatures photo dépend de la rapidité d'execution de votre serveur :
