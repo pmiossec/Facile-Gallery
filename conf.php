@@ -2,7 +2,7 @@
 //TODO:
 // - Googlemap : eviter de construire le kml à chaque fois
 // - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas
-// - trouver pourquoi les miniatures ne sont pas regénérées lorsqu'on change la taille dans le fichier config.php
+// - Regénérées les miniatures lorsqu'on change la taille dans le fichier config.php (cf create_newimage())
 // - Slideshow : ajouter les légendes
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?

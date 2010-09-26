@@ -756,7 +756,9 @@ case ('list'):
 		}
 		$pos = strrpos($listvalidimg[$i], '.'); //calcule la position du point dans la chaine $document, ex. : 8
 		$ext = strtolower(substr($listvalidimg[$i], $pos + 1));
-		if (($ext == "jpeg" || $ext == "jpg" || $ext == "gif" || $ext == "png") && $listvalidimg[$i] !== ICO_FILENAME && ("__".$listvalidimg[$i] !== $fileexist)) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
+		if (($ext == "jpeg" || $ext == "jpg" || $ext == "gif" || $ext == "png")
+			&& $listvalidimg[$i] !== ICO_FILENAME
+			&& ("__".$listvalidimg[$i] !== $fileexist)) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
 			create_newimage($photodir, $listvalidimg[$i], MINIATURE_MAXDIM, THUMBS_DIR, "__");
 		}
 		?>
