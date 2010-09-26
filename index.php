@@ -342,11 +342,10 @@ $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 <html>
 <head>
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<link href="global_style.css" rel="stylesheet" type="text/css">
-    <script src="http://maps.google.com/maps/api/js?sensor=false"
-            type="text/javascript"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<link href="global_style.css" rel="stylesheet" type="text/css">
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <SCRIPT LANGUAGE=Javascript>
 <!--
 function inCell(cell, newcolor) {
@@ -368,10 +367,89 @@ function outCell(cell, newcolor) {
   #map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
 </style>
 <?php
-if($show_heading =="list"){?>
+$activate_slideshow = SLIDESHOW_ACTIVATE; //TODO : ajouter la vérification de la présence de la lirairie
+if($show_heading =="list" && $activate_slideshow){?>
 	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
 	<script src="js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+
+		$(document).ready(function(){
+			$("a[rel^='prettyPhoto']").prettyPhoto({
+				animation_speed: 'fast', /* fast/slow/normal */
+				slideshow: 10000, /* false OR interval time in ms */
+				autoplay_slideshow: false, /* true/false */
+				opacity: 0.80, /* Value between 0 and 1 */
+				show_title: false, /* true/false */
+				allow_resize: true, /* Resize the photos bigger than viewport. true/false */
+				default_width: 500,
+				default_height: 344,
+				counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
+				theme: 'facebook', /* light_rounded / dark_rounded / light_square / dark_square / facebook */
+				hideflash: false, /* Hides all the flash object on a page, set to TRUE if flash appears over prettyPhoto */
+				wmode: 'opaque', /* Set the flash wmode attribute */
+				autoplay: true, /* Automatically start videos: True/False */
+				modal: false, /* If set to true, only the close button will close the window */
+				overlay_gallery: true, /* If set to true, a gallery will overlay the fullscreen image on mouse over */
+				keyboard_shortcuts: true, /* Set to false if you open forms inside prettyPhoto */
+				changepicturecallback: function(){}, /* Called everytime an item is shown/changed */
+				callback: function(){}, /* Called when prettyPhoto is closed */
+				markup: '<div class="pp_pic_holder"> \
+							<div class="ppt">&nbsp;</div> \
+							<div class="pp_top"> \
+								<div class="pp_left"></div> \
+								<div class="pp_middle"></div> \
+								<div class="pp_right"></div> \
+							</div> \
+							<div class="pp_content_container"> \
+								<div class="pp_left"> \
+								<div class="pp_right"> \
+									<div class="pp_content"> \
+										<div class="pp_loaderIcon"></div> \
+										<div class="pp_fade"> \
+											<a href="#" class="pp_expand" title="Expand the image">Expand</a> \
+											<div class="pp_hoverContainer"> \
+												<a class="pp_next" href="#">next</a> \
+												<a class="pp_previous" href="#">previous</a> \
+											</div> \
+											<div id="pp_full_res"></div> \
+											<div class="pp_details clearfix"> \
+												<p class="pp_description"></p> \
+												<a class="pp_close" href="#">Close</a> \
+												<div class="pp_nav"> \
+													<a href="#" class="pp_arrow_previous">Previous</a> \
+													<p class="currentTextHolder">0/0</p> \
+													<a href="#" class="pp_arrow_next">Next</a> \
+												</div> \
+											</div> \
+										</div> \
+									</div> \
+								</div> \
+								</div> \
+							</div> \
+							<div class="pp_bottom"> \
+								<div class="pp_left"></div> \
+								<div class="pp_middle"></div> \
+								<div class="pp_right"></div> \
+							</div> \
+						</div> \
+						<div class="pp_overlay"></div>',
+				gallery_markup: '<div class="pp_gallery"> \
+									<a href="#" class="pp_arrow_previous">Previous</a> \
+									<ul> \
+										{gallery} \
+									</ul> \
+									<a href="#" class="pp_arrow_next">Next</a> \
+								</div>',
+				image_markup: '<img id="fullResImage" src="" />',
+				flash_markup: '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="{width}" height="{height}"><param name="wmode" value="{wmode}" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="{path}" /><embed src="{path}" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="{width}" height="{height}" wmode="{wmode}"></embed></object>',
+				quicktime_markup: '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" height="{height}" width="{width}"><param name="src" value="{path}"><param name="autoplay" value="{autoplay}"><param name="type" value="video/quicktime"><embed src="{path}" height="{height}" width="{width}" autoplay="{autoplay}" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/"></embed></object>',
+				iframe_markup: '<iframe src ="{path}" width="{width}" height="{height}" frameborder="no"></iframe>',
+				inline_markup: '<div class="pp_inline clearfix">{content}</div>',
+				custom_markup: ''
+			});
+		});
+	</script>
 <?php
 }?>
 </head>
@@ -613,108 +691,32 @@ case ('list'):
 	}
 	$total_files = count($listvalidimg);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
 
-	//données du slideshow
-	$images='images = [';
-	$titles='titles = [' ;
-	$descriptions='descriptions = [';
-	for($i=0;$i<count($listvalidimg);$i++)
+	if($activate_slideshow)
 	{
-		if($i!=0){
-			$images.=',';
-			$titles.=',';
-			$descriptions.=',';
+		//données du slideshow
+		$images='images = [';
+		$titles='titles = [' ;
+		$descriptions='descriptions = [';
+		for($i=0;$i<count($listvalidimg);$i++)
+		{
+			if($i!=0){
+				$images.=',';
+				$titles.=',';
+				$descriptions.=',';
+			}
+				$images .= "'./$dir/$listvalidimg[$i]'";
+				$titles .="'titre'";
+				$descriptions.="'desc'";
 		}
-			$images .= "'./$dir/$listvalidimg[$i]'";
-			$titles .="'titre'";
-			$descriptions.="'desc'";
+		$images.='];';
+		$titles.='];';
+		$descriptions.='];';
+
+		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
-	$images.='];';
-	$titles.='];';
-	$descriptions.='];';
-
-	echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	?>
-<script type="text/javascript" charset="utf-8">
-
-	$(document).ready(function(){
-		$("a[rel^='prettyPhoto']").prettyPhoto({
-			animation_speed: 'fast', /* fast/slow/normal */
-			slideshow: 10000, /* false OR interval time in ms */
-			autoplay_slideshow: false, /* true/false */
-			opacity: 0.80, /* Value between 0 and 1 */
-			show_title: false, /* true/false */
-			allow_resize: true, /* Resize the photos bigger than viewport. true/false */
-			default_width: 500,
-			default_height: 344,
-			counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
-			theme: 'facebook', /* light_rounded / dark_rounded / light_square / dark_square / facebook */
-			hideflash: false, /* Hides all the flash object on a page, set to TRUE if flash appears over prettyPhoto */
-			wmode: 'opaque', /* Set the flash wmode attribute */
-			autoplay: true, /* Automatically start videos: True/False */
-			modal: false, /* If set to true, only the close button will close the window */
-			overlay_gallery: true, /* If set to true, a gallery will overlay the fullscreen image on mouse over */
-			keyboard_shortcuts: true, /* Set to false if you open forms inside prettyPhoto */
-			changepicturecallback: function(){}, /* Called everytime an item is shown/changed */
-			callback: function(){}, /* Called when prettyPhoto is closed */
-			markup: '<div class="pp_pic_holder"> \
-						<div class="ppt">&nbsp;</div> \
-						<div class="pp_top"> \
-							<div class="pp_left"></div> \
-							<div class="pp_middle"></div> \
-							<div class="pp_right"></div> \
-						</div> \
-						<div class="pp_content_container"> \
-							<div class="pp_left"> \
-							<div class="pp_right"> \
-								<div class="pp_content"> \
-									<div class="pp_loaderIcon"></div> \
-									<div class="pp_fade"> \
-										<a href="#" class="pp_expand" title="Expand the image">Expand</a> \
-										<div class="pp_hoverContainer"> \
-											<a class="pp_next" href="#">next</a> \
-											<a class="pp_previous" href="#">previous</a> \
-										</div> \
-										<div id="pp_full_res"></div> \
-										<div class="pp_details clearfix"> \
-											<p class="pp_description"></p> \
-											<a class="pp_close" href="#">Close</a> \
-											<div class="pp_nav"> \
-												<a href="#" class="pp_arrow_previous">Previous</a> \
-												<p class="currentTextHolder">0/0</p> \
-												<a href="#" class="pp_arrow_next">Next</a> \
-											</div> \
-										</div> \
-									</div> \
-								</div> \
-							</div> \
-							</div> \
-						</div> \
-						<div class="pp_bottom"> \
-							<div class="pp_left"></div> \
-							<div class="pp_middle"></div> \
-							<div class="pp_right"></div> \
-						</div> \
-					</div> \
-					<div class="pp_overlay"></div>',
-			gallery_markup: '<div class="pp_gallery"> \
-								<a href="#" class="pp_arrow_previous">Previous</a> \
-								<ul> \
-									{gallery} \
-								</ul> \
-								<a href="#" class="pp_arrow_next">Next</a> \
-							</div>',
-			image_markup: '<img id="fullResImage" src="" />',
-			flash_markup: '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="{width}" height="{height}"><param name="wmode" value="{wmode}" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="{path}" /><embed src="{path}" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="{width}" height="{height}" wmode="{wmode}"></embed></object>',
-			quicktime_markup: '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" height="{height}" width="{width}"><param name="src" value="{path}"><param name="autoplay" value="{autoplay}"><param name="type" value="video/quicktime"><embed src="{path}" height="{height}" width="{width}" autoplay="{autoplay}" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/"></embed></object>',
-			iframe_markup: '<iframe src ="{path}" width="{width}" height="{height}" frameborder="no"></iframe>',
-			inline_markup: '<div class="pp_inline clearfix">{content}</div>',
-			custom_markup: ''
-		});
-	});
-	//$.prettyPhoto.initialize();
-</script>
 	<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?> ( <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> -> <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?> / <?php echo $total_files; ?>)</span>
-	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span></div>
+	<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php if($activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
 	<div class="fdcolor1" align="center">
 		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num-1) ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
