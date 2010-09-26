@@ -3,9 +3,8 @@
 // - Améliorer carte pour la page principale avec image dans pushpin + lien vers la galerie
 // - Slideshow : avant le slideshow, essayer de passer en plein ecran le navigateur
 // - Slideshow : ajouter les légendes
-// - Slideshow : pouvoir le désactiver
+// - Slideshow : pouvoir le désactiver dans le code par une variable de config
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
-// - améliorer la création de l'image de la gallerie (plutot un resize intelligent qu'un crop et de la 1ère --correction ordre alphabétique--)
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables,...
 // - afficher les propriétés de l'image sur le côté ?!?

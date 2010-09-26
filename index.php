@@ -18,8 +18,7 @@ function write_kml_file($kml_placemarks, $kml_path)
 	fclose($fh);
 }
 
-function add_map($url_kml_file)
-{
+function add_map($url_kml_file){
 	echo '<div id="map_canvas" style="width:800px; height:600px"></div>
 	<script type="text/javascript">
 	//DOC : http://code.google.com/intl/fr/apis/maps/documentation/javascript/v2/services.html#XML_Overlays
@@ -175,20 +174,75 @@ function create_icon($dir2iconize) {
 
 	//$extract = scandir($dir);//scan des "array" du répertoire
 	$first_dir_item = $listFile[0]; // on extrait la valeur du premier fichier du répertoire (après "." et "..")
-	list($width, $height, $type, $attr) = getimagesize($dir."/".$first_dir_item);//on liste les valeur de l'image
-	$miniature = imagecreatetruecolor(ICO_WIDTH, ICO_HEIGHT);
+
+	list($srcWidth, $srcHeight, $type, $attr) = getimagesize($dir."/".$first_dir_item);//on liste les valeur de l'image
+	//$miniature = imagecreatetruecolor(ICO_WIDTH, ICO_HEIGHT);
 	if ($type == 1) {
-		$image = imagecreatefromgif($dir."/".$first_dir_item);
+		$handle = imagecreatefromgif($dir."/".$first_dir_item);
 	}
 	if ($type == 2) {
-		$image = imagecreatefromjpeg($dir."/".$first_dir_item);
+		$handle = imagecreatefromjpeg($dir."/".$first_dir_item);
 	}
 	if ($type == 3) {
-		$image = imagecreatefrompng($dir."/".$first_dir_item);
+		$handle = imagecreatefrompng($dir."/".$first_dir_item);
 	}
+
+	if ($srcWidth >= ICO_WIDTH && $srcHeight >= ICO_HEIGHT)
+	{
+		$newHandle = imagecreatetruecolor(ICO_WIDTH, ICO_HEIGHT);
+		if (!$newHandle)
+			return false;
+
+		if($srcHeight < $srcWidth)
+		{
+			$ratio = (double)($srcHeight / ICO_HEIGHT);
+
+			$cpyWidth = round(ICO_WIDTH * $ratio);
+			if ($cpyWidth > $srcWidth)
+			{
+				$ratio = (double)($srcWidth / ICO_WIDTH);
+				$cpyWidth = $srcWidth;
+				$cpyHeight = round(ICO_HEIGHT * $ratio);
+				$xOffset = 0;
+				$yOffset = round(($srcHeight - $cpyHeight) / 2);
+			} else {
+				$cpyHeight = $srcHeight;
+				$xOffset = round(($srcWidth - $cpyWidth) / 2);
+				$yOffset = 0;
+			}
+		} else {
+			$ratio = (double)($srcWidth / ICO_WIDTH);
+
+			$cpyHeight = round(ICO_HEIGHT * $ratio);
+			if ($cpyHeight > $srcHeight)
+			{
+				$ratio = (double)($srcHeight / ICO_HEIGHT);
+				$cpyHeight = $srcHeight;
+				$cpyWidth = round(ICO_WIDTH * $ratio);
+				$xOffset = round(($srcWidth - $cpyWidth) / 2);
+				$yOffset = 0;
+			} else {
+				$cpyWidth = $srcWidth;
+				$xOffset = 0;
+				$yOffset = round(($srcHeight - $cpyHeight) / 2);
+			}
+		}
+		if (!imagecopyresampled($newHandle, $handle, 0, 0, $xOffset, $yOffset, ICO_WIDTH, ICO_HEIGHT, $cpyWidth, $cpyHeight))
+			return false;
+		imagedestroy($handle);
+
+		imagejpeg($newHandle, $dir."/".ICO_FILENAME, GLOBAL_JPG_QUALITY);
+		imagedestroy($newHandle);
+	} else {
+		imagejpeg($handle, $dir."/".ICO_FILENAME, GLOBAL_JPG_QUALITY);
+		imagedestroy($handle);
+	}
+	//ancienne methode moins bonne
 	//imagecopyresampled(image de destination, image source, int dst_x, int dst_y, int src_x, int src_y, int dst_w, int dst_h, int src_w, int src_h);
-	imagecopyresampled($miniature, $image, 0, 0,((($width - ICO_WIDTH)/2) <= ICO_WIDTH ? ICO_WIDTH-(($width - ICO_WIDTH)/2) : ($width - ICO_WIDTH)/2), ((($height - ICO_HEIGHT)/2) <= 0 ? ICO_HEIGHT-(($height - ICO_HEIGHT)/2) : ($height - ICO_HEIGHT)/2), ICO_WIDTH, ICO_HEIGHT, ICO_WIDTH*2, ICO_HEIGHT*2);
-	imagejpeg($miniature, $dir."/".ICO_FILENAME, GLOBAL_JPG_QUALITY);
+	//imagecopyresampled($newHandle, $handle, 0, 0,((($width - ICO_WIDTH)/2) <= ICO_WIDTH ? ICO_WIDTH-(($width - ICO_WIDTH)/2) : ($width - ICO_WIDTH)/2), ((($height - ICO_HEIGHT)/2) <= 0 ? ICO_HEIGHT-(($height - ICO_HEIGHT)/2) : ($height - ICO_HEIGHT)/2), ICO_WIDTH, ICO_HEIGHT, ICO_WIDTH*2, ICO_HEIGHT*2);
+	//imagedestroy($handle);
+	//imagejpeg($NewThumb, $dir."/".ICO_FILENAME, GLOBAL_JPG_QUALITY);
+	//imagedestroy($newhandle);
 }
 //////////////////////////////////////////////////////////////////////////
 //fonction pour trouver une image ayant des données GPS
