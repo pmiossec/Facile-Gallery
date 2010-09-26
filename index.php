@@ -315,7 +315,10 @@ function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2
 		$image = imagecreatefrompng($dir."/".$file2miniaturize);
 	}
 	imagecopyresampled($miniature, $image, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-	imagejpeg($miniature, $dir.$dir_where2save."/".$file_prefixe.$file2miniaturize, GLOBAL_JPG_QUALITY); 
+	imagedestroy($image);
+	imagejpeg($miniature, $dir.$dir_where2save."/".$file_prefixe.$file2miniaturize, GLOBAL_JPG_QUALITY);
+	imagedestroy($miniature);
+
 }
 
 /////////////////////////////////////////
