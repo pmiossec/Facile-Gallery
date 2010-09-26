@@ -10,6 +10,25 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+function fatal_error_handler($buffer) {
+  if (ereg("(error</b>:)(.+)(<br)", $buffer, $regs) ) {
+    $err = preg_replace("/<.*?>/","",$regs[2]);
+    error_log($err);
+    return "ERROR CAUGHT check log file";
+  }
+  return $buffer;
+}
+
+function handle_error ($errno, $errstr, $errfile, $errline)
+{
+    error_log("$errstr in $errfile on line $errline");
+    if($errno == FATAL || $errno == ERROR){
+        ob_end_flush();
+        echo "ERROR CAUGHT check log file";
+        exit(0);
+    }
+}
+
 function write_kml_file($kml_placemarks, $kml_path)
 {
 	//echo $kml_path;
@@ -268,18 +287,21 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 	for($i=0;$i<$cFile;$i++)
 	{
 		$exif = read_exif_data($dir.'/'.$listFile[$i], 0, true);
+		$decimal_lat = 0;
+		$decimal_long = 0;
 		if(isset($exif["GPS"]["GPSLatitude"][0])
 			&& isset($exif["GPS"]["GPSLongitude"][0]))
 		{
-			$size = getimagesize($dir.'/'.$listFile[$i], $info);
-
-			$html_code = "<a href=\"$url_path_script?show_heading=list&dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
 			$decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
 			$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
-			$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
-			$kml_file = $kml_file . $html_code;
-			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
-			return array(true, $kml_file);
+			if($decimal_lat != 0 && $decimal_long != 0)
+			{
+				$html_code = "<a href=\"$url_path_script?show_heading=list&dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
+				$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
+				$kml_file = $kml_file . $html_code;
+				$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+				return array(true, $kml_file);
+			}
 		}
 	}
 	return array(false, "");
@@ -973,6 +995,13 @@ case ('map'):
 	if(true){
 	//Creer le fichier .kml
 	$at_least_one = false;
+ob_start("fatal_error_handler");
+set_error_handler("handle_error");
+
+//causes a warning
+preg_replace();
+
+//would normally cause a fatal error, but instead our output handler will be called allowing us to handle the error.
 	for ($i=0;$i < count($listFile); $i++) {
 	
 		$file_to_add = $listFile[$i];
@@ -998,6 +1027,7 @@ case ('map'):
 			$at_least_one = true;
 		}
 	}
+	ob_end_flush();
 	//Ecrire le fichier
 	if($at_least_one){
 		write_kml_file($kml_file,$kml_path);
