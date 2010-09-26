@@ -1,10 +1,14 @@
 <?php 
 require("conf.php");
 
-error_reporting(E_ALL); // afficher les erreurs
-//error_reporting(0); // ne pas afficher les erreurs
+//error_reporting(E_ALL); // afficher les erreurs
+error_reporting(0); // ne pas afficher les erreurs
 
 $separateurs = array('_', '-', '.');
+$directory = $_SERVER["SCRIPT_NAME"];
+$directory = substr($directory, 0, strrpos($directory,"/")+1);
+$url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
+$url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
 function write_kml_file($kml_placemarks, $kml_path)
 {
@@ -19,7 +23,8 @@ function write_kml_file($kml_placemarks, $kml_path)
 }
 
 function add_map($url_kml_file){
-	echo '<div id="map_canvas" style="width:800px; height:600px"></div>
+	echo '<div id="map_canvas" style="width:800px; height:600px"></div><br/>
+	<a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=' . $url_kml_file . '" target="_blank">' . OPEN_IN_GOOGLE_MAP . '</a>
 	<script type="text/javascript">
 	//DOC : http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 	function initialize() {
@@ -246,7 +251,7 @@ function create_icon($dir2iconize) {
 //////////////////////////////////////////////////////////////////////////
 //fonction pour trouver une image ayant des données GPS
 //////////////////////////////////////////////////////////////////////////
-function find_file_with_gps_data($dir2findgps) {
+function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas) {
 	$dir = PHOTOS_DIR."/".$dir2findgps; //chemin vers le répertoire dont on doit créer l'icone
 	if ($handle = opendir($dir)) {
 		$cFile = 0;
@@ -267,9 +272,8 @@ function find_file_with_gps_data($dir2findgps) {
 			&& isset($exif["GPS"]["GPSLongitude"][0]))
 		{
 			$size = getimagesize($dir.'/'.$listFile[$i], $info);
-			//if (isset($info["APP13"])) {
-			//	$html_code = "<a href=\"./" . PHOTOS_DIR . "/". $photodir. "/" . $file_to_add ."\"><img src=\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir. "/". THUMBS_DIR . "/__" . $file_to_add ."\"></a><br/>";
-			//}
+
+			$html_code = "<a href=\"$url_path_script?show_heading=list&dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
 			$decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
 			$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
 			$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
@@ -463,9 +467,6 @@ else
 	echo "<body>";
 }
 ini_set('max_execution_time', 120); //2 mn max
-$directory = $_SERVER["SCRIPT_NAME"];
-$directory = substr($directory, 0, strrpos($directory,"/")+1);
-$url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 switch ($show_heading) {
 ///////////////////////////////////////////////////////////////
 //listing des répertoires photos sur la page d'index par défaut
@@ -981,7 +982,7 @@ case ('map'):
 			$size = getimagesize($dir.'/'.$listFile[$i], $info);
 			if (isset($info["APP13"])) {
 				$iptc = iptcparse($info["APP13"]);
-				$html_code = "<a href=\"./" . PHOTOS_DIR . "/". $photodir. "/" . $file_to_add ."\"><img src=\"http://". $_SERVER['SERVER_NAME'] . "/photos/". PHOTOS_DIR ."/". $photodir. "/". THUMBS_DIR . "/__" . $file_to_add ."\"></a><br/>";
+				$html_code = "<a href=\"$url_path_datas$photodir/" . $file_to_add ."\"><img src=\"$url_path_datas$photodir/". THUMBS_DIR . "/__$file_to_add\"></a><br/>";
 				$html_code = $html_code . "<span class=\"legend\">";
 				$html_code = $html_code . str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
 				$html_code = $html_code . "</span><br/>\n";
@@ -1043,7 +1044,7 @@ case ('gallery_map'):
 	$placemarks = "";
 	$at_least_one = false;
 	for($iDir=0;$iDir< count($listDir); $iDir++){
-		list($find_one, $placemark) = find_file_with_gps_data($listDir[$iDir]);
+		list($find_one, $placemark) = find_file_with_gps_data($listDir[$iDir], $url_path_script, $url_path_datas);
 		if($find_one)
 		{
 			$placemarks = $placemarks .  $placemark ;

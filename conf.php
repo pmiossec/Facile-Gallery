@@ -2,7 +2,7 @@
 //TODO:
 // - Googlemap : eviter de construire le kml à chaque fois
 // - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas
-// - Améliorer carte pour la page principale avec image dans pushpin + lien vers la galerie
+// - trouver pourquoi les miniatures ne sont pas regénérées lorsqu'on change la taille dans le fichier config.php
 // - Slideshow : ajouter les légendes
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
@@ -106,4 +106,5 @@ define('DISPLAY_MAP','Afficher la carte');
 define('NO_PHOTO_TO_DISPLAY','Il n\'y a aucune photo à afficher !');
 define('NO_PHOTO_WITH_GPS_DATA','Aucune photo ne contient de données GPS :(');
 define('SLIDESHOW','Diaporama');
+define('OPEN_IN_GOOGLE_MAP','Ouvrir sur google map');
 ?>
