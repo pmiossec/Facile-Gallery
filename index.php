@@ -284,6 +284,13 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 		}
 		closedir($handle);
 	}
+
+	//Gestion des FATAL ERROR
+	ob_start("fatal_error_handler");
+	set_error_handler("handle_error");
+	//causes a warning
+	preg_replace();
+
 	for($i=0;$i<$cFile;$i++)
 	{
 		$exif = read_exif_data($dir.'/'.$listFile[$i], 0, true);
@@ -300,10 +307,15 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 				$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
 				$kml_file = $kml_file . $html_code;
 				$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+
+				//Gestion des FATAL ERROR
+				ob_end_flush();
 				return array(true, $kml_file);
 			}
 		}
 	}
+	//Gestion des FATAL ERROR
+	ob_end_flush();
 	return array(false, "");
 }
 
@@ -995,11 +1007,12 @@ case ('map'):
 	if(true){
 	//Creer le fichier .kml
 	$at_least_one = false;
-ob_start("fatal_error_handler");
-set_error_handler("handle_error");
 
-//causes a warning
-preg_replace();
+	//Gestion des FATAL ERROR
+	ob_start("fatal_error_handler");
+	set_error_handler("handle_error");
+	//causes a warning
+	preg_replace();
 
 //would normally cause a fatal error, but instead our output handler will be called allowing us to handle the error.
 	for ($i=0;$i < count($listFile); $i++) {
@@ -1027,6 +1040,8 @@ preg_replace();
 			$at_least_one = true;
 		}
 	}
+
+	//Gestion des FATAL ERROR
 	ob_end_flush();
 	//Ecrire le fichier
 	if($at_least_one){
