@@ -758,7 +758,7 @@ case ('list'):
 				$descriptions.=',';
 			}
 			list($legend, $tags) = get_file_metadata("./$dir/$listvalidimg[$i]", false);
-			$legend = str_replace("\n","<br/>",$legend);
+			$legend = str_replace( array("\n", "\r", "\r\n", "\n\r"),"<br/>",$legend);
 			$images .= "'./$dir/$listvalidimg[$i]'";
 			$titles .="'$listvalidimg[$i]'";
 			$descriptions.="'$legend'";
