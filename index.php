@@ -10,6 +10,23 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+	function get_file_metadata($filepath, $extract_gps_data)
+	{
+			//TODO Finir!!!!!!
+			$size = getimagesize($filepath, $info);
+			if (isset($info["APP13"])) {
+				$iptc = iptcparse($info["APP13"]);
+				$legend = extract_iptc_data($iptc, '2#120',"");
+				$tags = extract_iptc_data($iptc, '2#025',"Tags : ");
+			}
+			if(!$extract_gps_data)
+				return array($legend, $tags);
+			$decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
+			$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
+			return array($legend, $tags, $decimal_lat, $decimal_long);
+
+	}
+
 function fatal_error_handler($buffer) {
   if (ereg("(error</b>:)(.+)(<br)", $buffer, $regs) ) {
     $err = preg_replace("/<.*?>/","",$regs[2]);
@@ -740,9 +757,11 @@ case ('list'):
 				$titles.=',';
 				$descriptions.=',';
 			}
-				$images .= "'./$dir/$listvalidimg[$i]'";
-				$titles .="'titre'";
-				$descriptions.="'desc'";
+			list($legend, $tags) = get_file_metadata("./$dir/$listvalidimg[$i]", false);
+			$legend = str_replace("\n","<br/>",$legend);
+			$images .= "'./$dir/$listvalidimg[$i]'";
+			$titles .="'$listvalidimg[$i]'";
+			$descriptions.="'$legend'";
 		}
 		$images.='];';
 		$titles.='];';

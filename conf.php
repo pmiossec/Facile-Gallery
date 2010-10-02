@@ -2,11 +2,13 @@
 //TODO:
 // - Googlemap : eviter de construire le kml à chaque fois
 // - Regénérées les miniatures lorsqu'on change la taille dans le fichier config.php (cf create_newimage())
-// - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas  et la 1ere image dans Corbeille (activer les messages d'erreur!!!))
 // - Slideshow : ajouter les légendes
+// - enlever ce chiffre 1 qui traine quand il n'y a qu'1 seule page!!!!
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
-// - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables,...
+
+// - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
+// - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas  et la 1ere image dans Corbeille (activer les messages d'erreur!!!))
 // - afficher les propriétés de l'image sur le côté ?!?
 
 /*
