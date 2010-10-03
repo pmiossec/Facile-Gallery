@@ -167,8 +167,7 @@ function write_kml_file($kml_placemarks, $kml_path){
 }
 
 function add_map($url_kml_file){
-	echo '<div id="map_canvas" style="width:800px; height:600px"></div><br/>
-	<a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=' . $url_kml_file . '" target="_blank">' . OPEN_IN_GOOGLE_MAP . '</a>
+	echo '<div id="map_canvas" style="width:95%; height:95%"></div><br/>
 	<script type="text/javascript">
 	//DOC : http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 	function initialize() {
@@ -1028,7 +1027,7 @@ case ('map'):
 	list($continue, $photodir, $dir) = verify_directories();
 	if(!$continue) {break;}
 ?>
-<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span></div>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span>
 <?php
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
@@ -1082,18 +1081,20 @@ case ('map'):
 if(file_exists($kml_path)) {
 	$kml_url = $url_path_datas. $photodir.".kml";
 //	echo $kml_url ;
+	echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
+	echo "</div>";
 	add_map($kml_url);
 }
 else
 {
-	echo '<div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
+	echo '</div><div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
 }
 break;
 case ('gallery_map'):
 	if(!GOOGLEMAP_ACTIVATE) {break;}
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
 ?>
-<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a></span></div>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
 	// listage des répertoires et fichiers
 	if ($handle = opendir(PHOTOS_DIR)) {
@@ -1134,11 +1135,13 @@ case ('gallery_map'):
 	if(file_exists($kml_path)) {
 		$kml_url = $url_path_datas . $kml_gallery_filename;
 	//	echo $kml_url ;
+		echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
+		echo "</div>";
 		add_map($kml_url);
 	}
 	else
 	{
-		echo '<div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
+		echo '</div><div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
 	}
 break;
 //fin du switch
@@ -1147,7 +1150,7 @@ if(DISPLAY_FOOTER)
 	echo '<div class="fdgris" align="right"><span class="Style2">Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span></div>';
 ?><noscript>
 <!-- Si vous retirez la référence ci dessus pour des raisons esthétiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
-Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+Php Photo Module 0.3.0 | auteur : Philippe Miossec | auteur original : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
 </noscript>
 </body>
 </html>

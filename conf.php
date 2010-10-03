@@ -3,7 +3,6 @@
 //slideshow : afficher l'image en plein ecran + infos en transparance sur l'image lors du mouse over
 // - Googlemap : eviter de construire le kml à chaque fois
 // - Regénérées les miniatures lorsqu'on change la taille dans le fichier config.php (cf create_newimage())
-// - enlever ce chiffre 1 qui traine quand il n'y a qu'1 seule page!!!!
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables,...
 
