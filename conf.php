@@ -2,7 +2,6 @@
 //TODO:
 // - Googlemap : eviter de construire le kml à chaque fois
 // - Regénérées les miniatures lorsqu'on change la taille dans le fichier config.php (cf create_newimage())
-// - Slideshow : ajouter les légendes
 // - enlever ce chiffre 1 qui traine quand il n'y a qu'1 seule page!!!!
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables,...
@@ -109,4 +108,5 @@ define('NO_PHOTO_TO_DISPLAY','Il n\'y a aucune photo à afficher !');
 define('NO_PHOTO_WITH_GPS_DATA','Aucune photo ne contient de données GPS :(');
 define('SLIDESHOW','Diaporama');
 define('OPEN_IN_GOOGLE_MAP','Ouvrir sur google map');
+define('TAGS','Tags : ');
 ?>
