@@ -43,19 +43,32 @@ function display_pages($page_uri,$page_num, $totalPages)
 //list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata($filepath, $extract_gps_data);
 function get_file_all_metadata($filepath, $extract_gps_data, $extrat_datas_only_if_gps_exists, $extrat_only_gps_datas)
 {
-		//TODO Finir!!!!!!
+
+		//Gestion des FATAL ERROR
+		ob_start("fatal_error_handler");
+		set_error_handler("handle_error");
+		//causes a warning
+		preg_replace();
+
 		$decimal_lat = 0;
 		$decimal_long = 0;
 		$exif_exists = exif_imagetype($filepath) != IMAGETYPE_PNG && exif_imagetype($filepath) != IMAGETYPE_GIF;
+		//would normally cause a fatal error, but instead our output handler will be called allowing us to handle the error.
 		if($exif_exists)
 			$exifs = read_exif_data($filepath, 0, true);
+		//Gestion des FATAL ERROR
+		ob_end_flush();
 		if($extrat_datas_only_if_gps_exists || $extrat_only_gps_datas)
 		{
 			if(!$exif_exists)
-				{ return array(false, null, null, '', '', 0, 0);}
+			{
+				return array(false, null, null, '', '', 0, 0);
+			}
 			if(!isset($exifs["GPS"]["GPSLatitude"][0])
 			|| !isset($exifs["GPS"]["GPSLongitude"][0]))
-				{ return array(false, null, null, '', '', 0, 0);}
+			{
+				return array(false, null, null, '', '', 0, 0);
+			}
 			$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
 			$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
 			if($decimal_lat == 0 || $decimal_long == 0)
@@ -395,12 +408,6 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 		closedir($handle);
 	}
 
-	//Gestion des FATAL ERROR
-	ob_start("fatal_error_handler");
-	set_error_handler("handle_error");
-	//causes a warning
-	preg_replace();
-
 	for($i=0;$i<$cFile;$i++){
 		$decimal_lat = 0;
 		$decimal_long = 0;
@@ -410,14 +417,8 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 				$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
 				$kml_file = $kml_file . $html_code;
 				$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
-
-				//Gestion des FATAL ERROR
-				ob_end_flush();
-				return array(true, $kml_file);
 		}
 	}
-	//Gestion des FATAL ERROR
-	ob_end_flush();
 	return array(false, "");
 }
 
@@ -1050,14 +1051,6 @@ case ('map'):
 	if(true){
 	//Creer le fichier .kml
 	$at_least_one = false;
-
-	//Gestion des FATAL ERROR
-	ob_start("fatal_error_handler");
-	set_error_handler("handle_error");
-	//causes a warning
-	preg_replace();
-
-//would normally cause a fatal error, but instead our output handler will be called allowing us to handle the error.
 	for ($i=0;$i < count($listFile); $i++) {
 	
 		$file_to_add = $listFile[$i];
@@ -1080,8 +1073,6 @@ case ('map'):
 		}
 	}
 
-	//Gestion des FATAL ERROR
-	ob_end_flush();
 	//Ecrire le fichier
 	if($at_least_one){
 		write_kml_file($kml_file,$kml_path);
