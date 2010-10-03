@@ -105,10 +105,15 @@
 				if(typeof $pp_pic_holder != 'undefined'){
 					if($pp_pic_holder.is(':visible')){
 						switch(e.keyCode){
-							case 37:
+							case 8: //Backspace
+							case 37: //left
+							case 33: //Page Up
 								$.prettyPhoto.changePage('previous');
 								break;
-							case 39:
+							case 13: //enter
+							case 32: //Space
+							case 34: //Page down
+							case 39: //right
 								$.prettyPhoto.changePage('next');
 								break;
 							case 27:
