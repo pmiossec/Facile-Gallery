@@ -4,6 +4,8 @@ require("conf.php");
 //error_reporting(E_ALL); // afficher les erreurs
 error_reporting(0); // ne pas afficher les erreurs
 
+//define('LINE_SEPARATOR', array("\r\n", "\n\r", "\n", "\r" ));
+$line_separator = array("\r\n", "\n\r", "\n", "\r" );
 $separateurs = array('_', '-', '.');
 $directory = $_SERVER["SCRIPT_NAME"];
 $directory = substr($directory, 0, strrpos($directory,"/")+1);
@@ -758,7 +760,7 @@ case ('list'):
 				$descriptions.=',';
 			}
 			list($legend, $tags) = get_file_metadata("./$dir/$listvalidimg[$i]", false);
-			$legend = str_replace( array("\n", "\r", "\r\n", "\n\r"),"<br/>",$legend);
+			$legend = str_replace( $line_separator ,"<br/>",$legend);
 			$images .= "'./$dir/$listvalidimg[$i]'";
 			$titles .="'$listvalidimg[$i]'";
 			$descriptions.="'$legend'";
