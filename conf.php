@@ -1,8 +1,6 @@
 <?php 
 //TODO:
-//slideshow : afficher l'image en plein ecran + infos en transparance sur l'image lors du mouse over
-//slideshow : essayer de précharger l'image
-// - Googlemap : eviter de construire le kml à chaque fois
+// - slideshow : compter le temps de latence APRES l'affichage de l'image
 // - Regénérées les miniatures lorsqu'on change la taille dans le fichier config.php (cf create_newimage())
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables,...
@@ -10,6 +8,8 @@
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas  et la 1ere image dans Corbeille (activer les messages d'erreur!!!))
 // - afficher les propriétés de l'image sur le côté ?!?
+
+//Trick : To regenerate kml google map file, just add the parameter to the uri '&create=true'
 
 /*
 Ce script offre la possibilité d'afficher des images de format GIF, JPG ou PNG.

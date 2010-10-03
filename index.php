@@ -1016,6 +1016,7 @@ case ('map'):
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span>
 <?php
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
+	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
 	$dir = PHOTOS_DIR . "/" . $photodir;
 	if ($handle = opendir($dir)) {
@@ -1032,8 +1033,8 @@ case ('map'):
 	}
 	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml";
 	//echo $kml_path ;
-//if(!file_exists($kml_path)) {   //TODO
-	if(true){
+	if(!file_exists($kml_path) || $create_kml_file="true") {
+	//if(true){
 	//Creer le fichier .kml
 	$at_least_one = false;
 	for ($i=0;$i < count($listFile); $i++) {
@@ -1083,6 +1084,8 @@ case ('gallery_map'):
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
 	// listage des répertoires et fichiers
+	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
+
 	if ($handle = opendir(PHOTOS_DIR)) {
 		$cDir = 0;
 		$cFile = 0;
@@ -1106,17 +1109,19 @@ case ('gallery_map'):
 	$kml_gallery_filename = "gallery.kml";
 	$kml_path =  "./" . PHOTOS_DIR . "/" .$kml_gallery_filename ;
 	$placemarks = "";
-	$at_least_one = false;
-	for($iDir=0;$iDir< count($listDir); $iDir++){
-		list($find_one, $placemark) = find_file_with_gps_data($listDir[$iDir], $url_path_script, $url_path_datas);
-		if($find_one)
-		{
-			$placemarks = $placemarks .  $placemark ;
-			$at_least_one = true;
+	if(!file_exists($kml_path) || $create_kml_file="true") {
+		$at_least_one = false;
+		for($iDir=0;$iDir< count($listDir); $iDir++){
+			list($find_one, $placemark) = find_file_with_gps_data($listDir[$iDir], $url_path_script, $url_path_datas);
+			if($find_one)
+			{
+				$placemarks = $placemarks .  $placemark ;
+				$at_least_one = true;
+			}
 		}
-	}
-	if($at_least_one){
-		write_kml_file($placemarks,$kml_path);
+		if($at_least_one){
+			write_kml_file($placemarks,$kml_path);
+		}
 	}
 	if(file_exists($kml_path)) {
 		$kml_url = $url_path_datas . $kml_gallery_filename;
