@@ -1,6 +1,7 @@
 <?php 
 //TODO:
 //slideshow : afficher l'image en plein ecran + infos en transparance sur l'image lors du mouse over
+//slideshow : essayer de précharger l'image
 // - Googlemap : eviter de construire le kml à chaque fois
 // - Regénérées les miniatures lorsqu'on change la taille dans le fichier config.php (cf create_newimage())
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)

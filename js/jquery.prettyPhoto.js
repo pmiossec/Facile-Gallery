@@ -337,7 +337,19 @@
 
 			_hideContent(function(){ $.prettyPhoto.open(); });
 		};
+  /*$("#container").imageCaching("image.jpg",function(){
+2 alert("image loaded");
+3 });
 
+  $.fn.imageCaching = function(src, f){
+2   return this.each(function(){
+3     var i = new Image();
+4     i.src = src;
+5     i.onload = f;
+6     this.appendChild(i);
+7   });
+8 }
+		*/
 
 		/**
 		* Change gallery page in the prettyPhoto modal box
@@ -539,10 +551,10 @@
 			
 				while (!fitting){
 					if((pp_containerWidth > windowWidth)){
-						imageWidth = (windowWidth - 200);
+						imageWidth = windowWidth;
 						imageHeight = (height/width) * imageWidth;
 					}else if((pp_containerHeight > windowHeight)){
-						imageHeight = (windowHeight - 200);
+						imageHeight = windowHeight;
 						imageWidth = (width/height) * imageHeight;
 					}else{
 						fitting = true;
@@ -558,7 +570,7 @@
 				width:Math.floor(imageWidth),
 				height:Math.floor(imageHeight),
 				containerHeight:Math.floor(pp_containerHeight),
-				containerWidth:Math.floor(pp_containerWidth) + 40, // 40 behind the side padding
+				containerWidth:Math.floor(pp_containerWidth), // 40 behind the side padding
 				contentHeight:Math.floor(pp_contentHeight),
 				contentWidth:Math.floor(pp_contentWidth),
 				resized:resized
@@ -588,7 +600,7 @@
 			$pp_details.remove();
 			
 			// Get the container size, to resize the holder to the right dimensions
-			pp_contentHeight = height + detailsHeight;
+			pp_contentHeight = height;
 			pp_contentWidth = width;
 			pp_containerHeight = pp_contentHeight + $ppt.height() + $pp_pic_holder.find('.pp_top').height() + $pp_pic_holder.find('.pp_bottom').height();
 			pp_containerWidth = width;
@@ -642,7 +654,7 @@
 		function _resize_overlay() {
 			windowHeight = $(window).height(), windowWidth = $(window).width();
 			
-			if(typeof $pp_overlay != "undefined") $pp_overlay.height($(document).height());
+			//if(typeof $pp_overlay != "undefined") $pp_overlay.height($(document).height());
 		};
 	
 		function _insert_gallery(){
@@ -779,8 +791,8 @@
 			$pp_overlay
 				.css({
 					'opacity':0,
-					'height':$(document).height(),
-					'width':$(document).width()
+					'height':'100%',
+					'width':'100%'
 					})
 				.bind('click',function(){
 					if(!settings.modal) $.prettyPhoto.close();
