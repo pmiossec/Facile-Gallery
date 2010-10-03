@@ -552,6 +552,10 @@ if($show_heading =="list" && $activate_slideshow){?>
 										</div> \
 										<div class="pp_fade"> \
 											<div id="pp_full_res"></div> \
+											<div class="pp_hoverContainer"> \
+												<a class="pp_next" href="#">next</a> \
+												<a class="pp_previous" href="#">previous</a> \
+											</div> \
 										</div> \
 									</div> \
 							</div> \
