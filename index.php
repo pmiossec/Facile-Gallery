@@ -18,17 +18,21 @@ $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR .
 			//TODO Finir!!!!!!
 			$decimal_lat = 0;
 			$decimal_long = 0;
-			$exifs = read_exif_data($filepath, 0, true);
+			$exif_exists = exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_PNG && exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_GIF;
+			if($exif_exists)
+				$exifs = read_exif_data($filepath, 0, true);
 			if($extrat_datas_only_if_gps_exists)
 			{
+				if(!$exif_exists)
+					{ return array(false, null, null, '', '', 0, 0);}
 				if(!isset($exifs["GPS"]["GPSLatitude"][0])
 				|| !isset($exifs["GPS"]["GPSLongitude"][0]))
-					{ return array(false, '', '', '', '', 0, 0);}
+					{ return array(false, null, null, '', '', 0, 0);}
 				$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
 				$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
 				if($decimal_lat == 0 || $decimal_long == 0)
 				{
-					return array(false, '', '', '', '', 0, 0);
+					return array(false, null, null, '', '', 0, 0);
 				}
 			}
 			$size = getimagesize($filepath, $info);
@@ -45,16 +49,18 @@ $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR .
 			}
 			if($extrat_datas_only_if_gps_exists)
 				return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
+			if(!$exif_exists)
+				return array(true, null , $iptcs, $legend, $tags, 0, 0);
 			if(!$extract_gps_data)
 				return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
 			if(!isset($exifs["GPS"]["GPSLatitude"][0])
 			|| !isset($exifs["GPS"]["GPSLongitude"][0]))
-				{ return array(false, $exifs, $iptcs, $legend, $tags, 0, 0);}
+				{ return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);}
 			$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
 			$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
 			if($decimal_lat == 0 || $decimal_long == 0)
 			{
-				return array(false, $exifs, $iptcs, $legend, $tags, 0, 0);
+				return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
 			}
 			return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
 	}
@@ -999,34 +1005,29 @@ case ('detail'):
 				<td align="center">
 					<span class="Style2">
 					<?php
-					$size = getimagesize($dir.'/'.$listFile[$photo], $info);
-					if (isset($info["APP13"])) {
-						$iptc = iptcparse($info["APP13"]);
+					list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($dir.'/'.$listFile[$photo]);
+					if ($succes) {
 						echo '<span class="legend">';
-						echo str_replace("\n","<br/>",extract_iptc_data($iptc, '2#120',""));
+						echo str_replace($line_separator,"<br/>",$legend);
 						echo '</span><br/>';
 						for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
 						{
 						   list($code,$label)= $iptc_to_display[$i_iptc];
-							echo extract_iptc_data($iptc, $code, $label . ' : ')."<br/>\n";
+							echo extract_iptc_data($iptcs, $code, $label . ' : ')."<br/>\n";
 						}
 					}
-					if (exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_PNG && exif_imagetype($dir.'/'.$listFile[$photo]) != IMAGETYPE_GIF) {
+					if ($exifs!=null) {
 						?><hr size="1" noshade><?php
-						$exif = read_exif_data($dir.'/'.$listFile[$photo], 0, true);
-						echo $exif["FILE"]["FileName"] . " || " . round(($exif["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exif["COMPUTED"]["Width"]." x ".$exif["COMPUTED"]["Height"]."px<br>\n";
+						echo $exifs["FILE"]["FileName"] . " || " . round(($exifs["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exifs["COMPUTED"]["Width"]." x ".$exifs["COMPUTED"]["Height"]."px<br>\n";
 						for($i_exif=0;$i_exif<count($exif_to_display);$i_exif++)
 						{
 							list($field1, $field2, $label)= $exif_to_display[$i_exif];
-							$text = extract_exif_data($exif, $field1, $field2 , $label . ' : ');
+							$text = extract_exif_data($exifs, $field1, $field2 , $label . ' : ');
 							if(strlen($text) != 0)
 								echo $text."<br/>\n";
 						}
-						if(isset($exif["GPS"]["GPSLatitude"][0])
-							&& isset($exif["GPS"]["GPSLongitude"][0]))
+						if( $decimal_lat != 0 && $decimal_long != 0)
 						{
-							$decimal_lat =  extract_gps_datas($exif["GPS"]["GPSLatitude"][0] , $exif["GPS"]["GPSLatitude"][1] , $exif["GPS"]["GPSLatitude"][2], $exif["GPS"]["GPSLatitudeRef"]);
-							$decimal_long =  extract_gps_datas($exif["GPS"]["GPSLongitude"][0] , $exif["GPS"]["GPSLongitude"][1] , $exif["GPS"]["GPSLongitude"][2], $exif["GPS"]["GPSLongitudeRef"]);
 							echo "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&spn=0.01,0.01&q=". $decimal_lat."," . $decimal_long."&hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a><br/>";
 						}
 						/*$keys = array_keys($exif["EXIF"]);
