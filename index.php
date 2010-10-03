@@ -12,6 +12,22 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+
+	function create_miniature($photodir, $filename)
+	{
+ 		if(!file_exists(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" . $filename)) {
+			create_newimage($photodir, $filename, MINIATURE_MAXDIM, THUMBS_DIR, "__");
+		}
+		else
+			{
+				list($width, $height, $type, $attr) = getimagesize("__" . $filename);
+				if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
+				{
+					create_newimage($photodir, $filename, MINIATURE_MAXDIM, THUMBS_DIR, "__");
+				}
+			}
+	}
+
 function display_pages($page_uri,$page_num, $totalPages)
 {
 
@@ -148,7 +164,7 @@ function fatal_error_handler($buffer) {
 
 function handle_error ($errno, $errstr, $errfile, $errline){
 	error_log("$errstr in $errfile on line $errline");
-	if($errno == FATAL || $errno == ERROR){
+	if($errno == E_ALL){
 		ob_end_flush();
 		echo "ERROR CAUGHT check log file";
 		exit(0);
@@ -842,9 +858,19 @@ case ('list'):
 		$pos = strrpos($listvalidimg[$i], '.'); //calcule la position du point dans la chaine $document, ex. : 8
 		$ext = strtolower(substr($listvalidimg[$i], $pos + 1));
 		if (($ext == "jpeg" || $ext == "jpg" || $ext == "gif" || $ext == "png")
-			&& $listvalidimg[$i] !== ICO_FILENAME
-			&& ("__".$listvalidimg[$i] !== $fileexist)) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
-			create_newimage($photodir, $listvalidimg[$i], MINIATURE_MAXDIM, THUMBS_DIR, "__");
+			&& $listvalidimg[$i] !== ICO_FILENAME) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
+			if("__".$listvalidimg[$i] !== $fileexist)
+			{
+				create_newimage($photodir, $listvalidimg[$i], MINIATURE_MAXDIM, THUMBS_DIR, "__");
+			}
+			else
+			{
+				list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" .$listvalidimg[$i]);
+				if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
+				{
+					create_newimage($photodir, $listvalidimg[$i], MINIATURE_MAXDIM, THUMBS_DIR, "__");
+				}
+			}
 		}
 		?>
 		<?php (is_int($k/MINIATURES_PER_LINE) ? print "<tr>": print "");  ?>
@@ -919,11 +945,13 @@ case ('detail'):
 	$total_images = count($listFile);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
 	list($width, $height, $type, $attr) = getimagesize($dir . "/" . $dim . "/" . $listFile[$photo]);
 	//on créé les miniatures si elles sont absentes
-	if ($photo > 1 && !file_exists(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" . $listFile[$photo-1])) {
-		create_newimage($photodir, $listFile[$photo-1], MINIATURE_MAXDIM, THUMBS_DIR, "__");
+	if ($photo > 1)
+	{
+		create_miniature($photodir, $listFile[$photo-1]);
 	}
-	if ($photo < $total_images && !file_exists(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" . $listFile[$photo+1])) {
-		create_newimage($photodir, $listFile[$photo+1], MINIATURE_MAXDIM, THUMBS_DIR, "__");
+	if ($photo < $total_images)
+	{
+		create_miniature($photodir, $listFile[$photo+1]);
 	}
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; <?php echo $listFile[$photo]; ?> n&deg;<?php echo $photo; ?> / <?php echo $total_images; ?></span></div>
