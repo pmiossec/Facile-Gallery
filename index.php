@@ -13,110 +13,108 @@ $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
 //list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata($filepath, $extract_gps_data);
-	function get_file_all_metadata($filepath, $extract_gps_data, $extrat_datas_only_if_gps_exists, $extrat_only_gps_datas)
-	{
-			//TODO Finir!!!!!!
-			$decimal_lat = 0;
-			$decimal_long = 0;
-			$exif_exists = exif_imagetype($filepath) != IMAGETYPE_PNG && exif_imagetype($filepath) != IMAGETYPE_GIF;
-			if($exif_exists)
-				$exifs = read_exif_data($filepath, 0, true);
-			if($extrat_datas_only_if_gps_exists || $extrat_only_gps_datas)
-			{
-				if(!$exif_exists)
-					{ return array(false, null, null, '', '', 0, 0);}
-				if(!isset($exifs["GPS"]["GPSLatitude"][0])
-				|| !isset($exifs["GPS"]["GPSLongitude"][0]))
-					{ return array(false, null, null, '', '', 0, 0);}
-				$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
-				$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
-				if($decimal_lat == 0 || $decimal_long == 0)
-				{
-					return array(false, null, null, '', '', 0, 0);
-				}
-				if($extrat_only_gps_datas)
-				{
-					return array(true, $exifs, null, '', '', $decimal_lat, $decimal_long);
-				}
-			}
-			$size = getimagesize($filepath, $info);
-			if (isset($info["APP13"])) {
-				$iptcs = iptcparse($info["APP13"]);
-				$legend = extract_iptc_data($iptcs, '2#120',"");
-				$tags = extract_iptc_data($iptcs, '2#025',TAGS);
-			}
-			else
-			{
-				$iptcs = null;
-				$legend = '';
-				$tags = '';
-			}
-			if($extrat_datas_only_if_gps_exists)
-				return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
+function get_file_all_metadata($filepath, $extract_gps_data, $extrat_datas_only_if_gps_exists, $extrat_only_gps_datas)
+{
+		//TODO Finir!!!!!!
+		$decimal_lat = 0;
+		$decimal_long = 0;
+		$exif_exists = exif_imagetype($filepath) != IMAGETYPE_PNG && exif_imagetype($filepath) != IMAGETYPE_GIF;
+		if($exif_exists)
+			$exifs = read_exif_data($filepath, 0, true);
+		if($extrat_datas_only_if_gps_exists || $extrat_only_gps_datas)
+		{
 			if(!$exif_exists)
-				return array(true, null , $iptcs, $legend, $tags, 0, 0);
-			if(!$extract_gps_data)
-				return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+				{ return array(false, null, null, '', '', 0, 0);}
 			if(!isset($exifs["GPS"]["GPSLatitude"][0])
 			|| !isset($exifs["GPS"]["GPSLongitude"][0]))
-				{ return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);}
+				{ return array(false, null, null, '', '', 0, 0);}
 			$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
 			$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
 			if($decimal_lat == 0 || $decimal_long == 0)
 			{
-				return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+				return array(false, null, null, '', '', 0, 0);
 			}
+			if($extrat_only_gps_datas)
+			{
+				return array(true, $exifs, null, '', '', $decimal_lat, $decimal_long);
+			}
+		}
+		$size = getimagesize($filepath, $info);
+		if (isset($info["APP13"])) {
+			$iptcs = iptcparse($info["APP13"]);
+			$legend = extract_iptc_data($iptcs, '2#120',"");
+			$tags = extract_iptc_data($iptcs, '2#025',TAGS);
+		}
+		else
+		{
+			$iptcs = null;
+			$legend = '';
+			$tags = '';
+		}
+		if($extrat_datas_only_if_gps_exists)
 			return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
-	}
+		if(!$exif_exists)
+			return array(true, null , $iptcs, $legend, $tags, 0, 0);
+		if(!$extract_gps_data)
+			return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+		if(!isset($exifs["GPS"]["GPSLatitude"][0])
+		|| !isset($exifs["GPS"]["GPSLongitude"][0]))
+			{ return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);}
+		$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
+		$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
+		if($decimal_lat == 0 || $decimal_long == 0)
+		{
+			return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+		}
+		return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
+}
 //list($succes,$exifs, $iptcs, $legend, $tags) = get_file_metadata($filepath);
-	function get_file_metadata($filepath)
-	{
-		list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, false, false, false);
-		return array($succes, $exifs, $iptcs, $legend, $tags);
-	}
+function get_file_metadata($filepath)
+{
+	list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, false, false, false);
+	return array($succes, $exifs, $iptcs, $legend, $tags);
+}
 
-	//list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($filepath);
-	function get_file_metadata_and_gps($filepath)
-	{
-		list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, true, false, false);
-		return array($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
-	}
-	
-	//list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($filepath);
-	function get_file_metadata_only_gps($filepath)
-	{
-		list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, false, false, true);
-		return array($succes, $decimal_lat, $decimal_long);
-	}
+//list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($filepath);
+function get_file_metadata_and_gps($filepath)
+{
+	list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, true, false, false);
+	return array($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
+}
+
+//list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($filepath);
+function get_file_metadata_only_gps($filepath)
+{
+	list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, false, false, true);
+	return array($succes, $decimal_lat, $decimal_long);
+}
 
 //list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_only_if_gps_exists($filepath);
-	function get_file_metadata_only_if_gps_exists($filepath)
-	{
-		list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, false, true, false);
-		return array($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
-	}
+function get_file_metadata_only_if_gps_exists($filepath)
+{
+	list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_all_metadata($filepath, false, true, false);
+	return array($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
+}
 
 function fatal_error_handler($buffer) {
-  if (ereg("(error</b>:)(.+)(<br)", $buffer, $regs) ) {
-    $err = preg_replace("/<.*?>/","",$regs[2]);
-    error_log($err);
-    return "ERROR CAUGHT check log file";
-  }
-  return $buffer;
+	if (ereg("(error</b>:)(.+)(<br)", $buffer, $regs) ) {
+		$err = preg_replace("/<.*?>/","",$regs[2]);
+		error_log($err);
+		return "ERROR CAUGHT check log file";
+	}
+	return $buffer;
 }
 
-function handle_error ($errno, $errstr, $errfile, $errline)
-{
-    error_log("$errstr in $errfile on line $errline");
-    if($errno == FATAL || $errno == ERROR){
-        ob_end_flush();
-        echo "ERROR CAUGHT check log file";
-        exit(0);
-    }
+function handle_error ($errno, $errstr, $errfile, $errline){
+		error_log("$errstr in $errfile on line $errline");
+		if($errno == FATAL || $errno == ERROR){
+			ob_end_flush();
+			echo "ERROR CAUGHT check log file";
+			exit(0);
+		}
 }
 
-function write_kml_file($kml_placemarks, $kml_path)
-{
+function write_kml_file($kml_placemarks, $kml_path){
 	//echo $kml_path;
 	$kml_content = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>'
 	               . $kml_placemarks . '</Document></kml>';
@@ -141,8 +139,7 @@ function add_map($url_kml_file){
 	}
 	</script>';
 }
-function verify_directories()
-{
+function verify_directories(){
 	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
 	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien
 		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
