@@ -12,6 +12,34 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+function display_pages($page_uri,$page_num, $totalPages)
+{
+
+	$pages_html = '<div class="fdcolor1" align="center"><span class="Style2">';
+	if ($page_num > 1) {
+		$pages_html .= "<a href=\"$page_uri&page_num=" . ($page_num-1) .'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
+	}
+
+	for ($l =1; $l < $totalPages; $l++) {
+		if ($page_num != $l) {
+			$pages_html .= "<a href=\"$page_uri&page_num=" . $l .'" class="Style2">' .$l .'</a> &nbsp;|&nbsp;';
+		} else {
+			$pages_html .= "<b>$l</b> &nbsp;|&nbsp;";
+		}
+	}
+	/*if ($page_num != $l) {
+		$pages_html .= "<a href="\"$page_uri&page_num=" . $l .'" class="Style2">' .$l .'</a>';
+	} else {
+  			$pages_html .= "<b>$l</b>";"
+	}*/
+	if ($page_num < $totalPages) {
+		$pages_html .= "<a href=\"$page_uri&page_num=" . ($page_num+1) .'" class="Style2">&raquo;</a>';
+	}
+	$pages_html .= '</span></div>';
+	return $pages_html;
+}
+
+
 //list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata($filepath, $extract_gps_data);
 function get_file_all_metadata($filepath, $extract_gps_data, $extrat_datas_only_if_gps_exists, $extrat_only_gps_datas)
 {
@@ -106,12 +134,12 @@ function fatal_error_handler($buffer) {
 }
 
 function handle_error ($errno, $errstr, $errfile, $errline){
-		error_log("$errstr in $errfile on line $errline");
-		if($errno == FATAL || $errno == ERROR){
-			ob_end_flush();
-			echo "ERROR CAUGHT check log file";
-			exit(0);
-		}
+	error_log("$errstr in $errfile on line $errline");
+	if($errno == FATAL || $errno == ERROR){
+		ob_end_flush();
+		echo "ERROR CAUGHT check log file";
+		exit(0);
+	}
 }
 
 function write_kml_file($kml_placemarks, $kml_path){
@@ -222,8 +250,7 @@ function extract_iptc_data($iptcs, $iptc_entry_code, $label){
 ///////////////////////////////////////////////////////////////////////
 //fonction qui retourne un nombre correspondant à une donnée GPS
 ///////////////////////////////////////////////////////////////////////
-function divide_gps_coordinates($a)
-  {
+function divide_gps_coordinates($a){
   // evaluate the string fraction and return a float //	
     $e = explode('/', $a);
   // prevent division by zero //
@@ -232,7 +259,7 @@ function divide_gps_coordinates($a)
     }	else{
     return $e[0] / $e[1];
     }
-  }
+}
 
 ///////////////////////////////////////////////////////////////////////
 //fonction qui renomme les dossiers comprenant des caractères interdits
@@ -607,26 +634,11 @@ default:
 	$total_icons = count($listDir);
 	$totalPages = ceil($total_icons/ICO_PER_PAGE);
 	$page_num = (isset($_GET['page_num']) && $_GET['page_num'] !== "" && $_GET['page_num'] <= $totalPages ? $_GET['page_num'] : "1");
+	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?show_heading=default", $page_num, $totalPages);
 	?>
 	<div class="fdgris"><span class="Style1"><?php echo HOME_NAME ?></span>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
-	<div class="fdcolor1" align="center">
-	<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo ($page_num-1); ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
-
-	for ($l =1; $l < $totalPages; $l++) {
-		if ($page_num != $l) {
-			?> <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a> &nbsp;|&nbsp; <?php
-		} else {
-		?> <b><?php echo $l; ?></b> &nbsp;|&nbsp; <?php
-		}
-	}
-	if ($page_num != $l) {
-		?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a><?php
-	} else {
-		?><b><?php echo $l; ?></b><?php
-	}
-	if ($page_num < $totalPages) { ?> &nbsp;|&nbsp; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo ($page_num+1) ?>" class="Style2">&raquo;</a><?php } ?>
-	</span></div>
+   <?php echo $pages_html; ?>
 	<br>
 	<table border="0" align="center" cellpadding="8" cellspacing="0">
 		<tr>
@@ -679,24 +691,8 @@ default:
 	}
 	?>
 	</table><br>
-	<div class="fdcolor1" align="center">
-		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo ($page_num-1); ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
-
-	for ($l =1; $l < ceil($total_icons/ICO_PER_PAGE); $l++) {
-		if ($page_num != $l) {
-			?> <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a> &nbsp;|&nbsp; <?php
-		} else {
-			?> <b><?php echo $l; ?></b> &nbsp;|&nbsp; <?php
-		}
-	}
-	if ($page_num != $l) {
-		?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a><?php
-	} else {
-		?><b><?php echo $l; ?></b><?php
-	}
-	if ($page_num < ( ceil(($total_icons)/ICO_PER_PAGE)) ) { ?> &nbsp;|&nbsp; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo ($page_num+1) ?>" class="Style2">&raquo;</a><?php } ?>
-	  </span></div>
 	<?php
+	echo $pages_html;
 	break;//Fin : listing des répertoires photos sur la page d'index par défaut
 
 
@@ -817,7 +813,7 @@ case ('list'):
 			}
 			list($succes, $exifs, $iptcs, $legend, $tags) = get_file_metadata("./$dir/$listvalidimg[$i]");
 			$images .= "'./$dir/$listvalidimg[$i]'";
-			$titles .="'$listvalidimg[$i]'";
+			$titles .= "'$listvalidimg[$i]'";
 			if($succes)
 			{
 				$legend = str_replace( $line_separator ,"<br/>",$legend);
@@ -834,28 +830,13 @@ case ('list'):
 
 		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
+	$totalPages =ceil(($total_files)/MINIATURES_PER_PAGE);
+	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?show_heading=list&dir=$photodir", $page_num, $totalPages);
 	?>
 	<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default&page_num=<?php echo $page_index; ?>" class="Style1"><?php echo HOME_NAME; ?></a> &raquo; <?php echo str_replace($separateurs, ' ', $photodir); ?> ( <?php echo (($page_num-1)*MINIATURES_PER_PAGE)+1; ?> -> <?php if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { echo (($page_num)*MINIATURES_PER_PAGE); } else { echo $total_files; } ?> / <?php echo $total_files; ?>)</span>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php } if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
-	<div class="fdcolor1" align="center">
-		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num-1) ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
-		$l =1;
-		while ($l < (ceil(($total_files)/MINIATURES_PER_PAGE)) ) {
-			if ($page_num != $l) {
-				?> <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a> &nbsp;|&nbsp; <?php
-			} else {
-				?> <b><?php echo $l; ?></b> &nbsp;|&nbsp; <?php
-			}
-			$l++;
-		}
-		if ($page_num != $l) {
-			?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a><?php
-		} else {
-			?><b><?php echo $l; ?></b><?php
-		}
-		if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { ?> &nbsp;|&nbsp; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num+1) ?>" class="Style2">&raquo;</a><?php } ?>
-		</span></div>
+	<?php echo $pages_html; ?>
 	<br>
 	<table border="0" align="center" cellpadding="8" cellspacing="0">
 		<tr>
@@ -896,25 +877,8 @@ case ('list'):
 	}
 	?>
 	</table><br>
-	<div class="fdcolor1" align="center">
-		<span class="Style2"><?php if ($page_num > 1) { ?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num-1) ?>" class="Style2">&laquo;</a> &nbsp;|&nbsp; <?php }
-		$l =1;
-		while ($l < (ceil(($total_files)/MINIATURES_PER_PAGE)) ) {
-			if ($page_num != $l) {
-				?> <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a> &nbsp;|&nbsp; <?php
-			} else {
-				?> <b><?php echo $l; ?></b> &nbsp;|&nbsp; <?php
-			}
-			$l++;
-		}
-		if ($page_num != $l) {
-			?><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo $l; ?>" class="Style2"><?php echo $l; ?></a><?php
-		} else {
-			?><b><?php echo $l; ?></b><?php
-		}
-		if ($page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) ) { ?> &nbsp;|&nbsp; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir; ?>&page_num=<?php echo ($page_num+1) ?>" class="Style2">&raquo;</a><?php } ?>
-		</span></div>
-	<?php
+<?php
+	echo $pages_html;
 	break;//Fin : listing des miniatures dans un répertoire photo spécifié
 
 
@@ -1189,10 +1153,10 @@ break;
 //fin du switch
 }
 if(DISPLAY_FOOTER)
-	echo '<div class="fdgris" align="right"><span class="Style2">Php Photo Module 0.2.3 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span></div>';
+	echo '<div class="fdgris" align="right"><span class="Style2">Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span></div>';
 ?><noscript>
 <!-- Si vous retirez la référence ci dessus pour des raisons esthétiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
-Php Photo Module 0.2.3 | auteur : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
 </noscript>
 </body>
 </html>
