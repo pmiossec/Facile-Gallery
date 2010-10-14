@@ -1,8 +1,8 @@
 <?php 
 require("conf.php");
 
-//error_reporting(E_ALL); // afficher les erreurs
-error_reporting(0); // ne pas afficher les erreurs
+error_reporting(E_ALL); // afficher les erreurs
+//error_reporting(0); // ne pas afficher les erreurs
 
 //define('LINE_SEPARATOR', array("\r\n", "\n\r", "\n", "\r" ));
 $line_separator = array("\r\n", "\n\r", "\n", "\r" );
@@ -13,20 +13,20 @@ $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
 
-	function create_miniature($photodir, $filename)
-	{
- 		if(!file_exists(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" . $filename)) {
-			create_newimage($photodir, $filename, MINIATURE_MAXDIM, THUMBS_DIR, "__");
-		}
-		else
-			{
-				list($width, $height, $type, $attr) = getimagesize("__" . $filename);
-				if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
-				{
-					create_newimage($photodir, $filename, MINIATURE_MAXDIM, THUMBS_DIR, "__");
-				}
-			}
+function create_miniature($photodir, $filename)
+{
+	if(!file_exists(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" . $filename)) {
+		create_newimage($photodir, $filename, MINIATURE_MAXDIM, THUMBS_DIR, "__");
 	}
+	else
+		{
+			list($width, $height, $type, $attr) = getimagesize("__" . $filename);
+			if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
+			{
+				create_newimage($photodir, $filename, MINIATURE_MAXDIM, THUMBS_DIR, "__");
+			}
+		}
+}
 
 function display_pages($page_uri,$page_num, $totalPages)
 {
@@ -432,6 +432,7 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 				$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
 				$kml_file = $kml_file . $html_code;
 				$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+				return array(true, $kml_file);
 		}
 	}
 	return array(false, "");

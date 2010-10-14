@@ -1,7 +1,7 @@
 <?php 
 //TODO:
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
-// - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables,...
+// - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables (les différents répertoires utilisés),...
 
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
