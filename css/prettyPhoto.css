@@ -1,3 +1,6 @@
+/* ------------------------------------------------------------------------
+  This you can edit.
+------------------------------------------------------------------------- */
 div.light_rounded .pp_top .pp_left { background: url(../images/prettyPhoto/light_rounded/sprite.png) -88px -53px no-repeat }
 div.light_rounded .pp_top .pp_middle { background: #fff }
 div.light_rounded .pp_top .pp_right { background: url(../images/prettyPhoto/light_rounded/sprite.png) -110px -53px no-repeat }
@@ -6,7 +9,7 @@ div.light_rounded .pp_content_container .pp_left,
 div.light_rounded .pp_content_container .pp_right { background: #fff }
 div.light_rounded .pp_content { background-color: #fff }
 div.light_rounded .pp_next:hover {
-    background: url(../images/prettyPhoto/light_rounded/btnNext.png) center right no-repeat;
+    background: url(../images/prettyPhoto/light_rounded/btnNext.png) center right  no-repeat;
     cursor: pointer;
 }
 div.light_rounded .pp_previous:hover {
@@ -62,6 +65,9 @@ div.light_rounded .pp_bottom .pp_left { background: url(../images/prettyPhoto/li
 div.light_rounded .pp_bottom .pp_middle { background: #fff }
 div.light_rounded .pp_bottom .pp_right { background: url(../images/prettyPhoto/light_rounded/sprite.png) -110px -80px no-repeat }
 div.light_rounded .pp_loaderIcon { background: url(../images/prettyPhoto/light_rounded/loader.gif) center center no-repeat }
+/* ----------------------------------
+     Dark Rounded Theme
+  ----------------------------------- */
 div.dark_rounded .pp_top .pp_left { background: url(../images/prettyPhoto/dark_rounded/sprite.png) -88px -53px no-repeat }
 div.dark_rounded .pp_top .pp_middle { background: url(../images/prettyPhoto/dark_rounded/contentPattern.png) top left repeat }
 div.dark_rounded .pp_top .pp_right { background: url(../images/prettyPhoto/dark_rounded/sprite.png) -110px -53px no-repeat }
@@ -69,7 +75,7 @@ div.dark_rounded .pp_content_container .pp_left { background: url(../images/pret
 div.dark_rounded .pp_content_container .pp_right { background: url(../images/prettyPhoto/dark_rounded/contentPattern.png) top right repeat-y }
 div.dark_rounded .pp_content { background: url(../images/prettyPhoto/dark_rounded/contentPattern.png) top left repeat }
 div.dark_rounded .pp_next:hover {
-    background: url(../images/prettyPhoto/dark_rounded/btnNext.png) center right no-repeat;
+    background: url(../images/prettyPhoto/dark_rounded/btnNext.png) center right  no-repeat;
     cursor: pointer;
 }
 div.dark_rounded .pp_previous:hover {
@@ -127,6 +133,9 @@ div.dark_rounded .pp_bottom .pp_left { background: url(../images/prettyPhoto/dar
 div.dark_rounded .pp_bottom .pp_middle { background: url(../images/prettyPhoto/dark_rounded/contentPattern.png) top left repeat }
 div.dark_rounded .pp_bottom .pp_right { background: url(../images/prettyPhoto/dark_rounded/sprite.png) -110px -80px no-repeat }
 div.dark_rounded .pp_loaderIcon { background: url(../images/prettyPhoto/dark_rounded/loader.gif) center center no-repeat }
+/* ----------------------------------
+     Dark Square Theme
+  ----------------------------------- */
 div.dark_square .pp_left,
 div.dark_square .pp_middle,
 div.dark_square .pp_right,
@@ -182,13 +191,16 @@ div.dark_square .pp_arrow_next.disabled {
     cursor: default;
 }
 div.dark_square .pp_next:hover {
-    background: url(../images/prettyPhoto/dark_square/btnNext.png) center right no-repeat;
+    background: url(../images/prettyPhoto/dark_square/btnNext.png) center right  no-repeat;
     cursor: pointer;
 }
 div.dark_square .pp_previous:hover {
     background: url(../images/prettyPhoto/dark_square/btnPrevious.png) center left no-repeat;
     cursor: pointer;
 }
+/* ----------------------------------
+     Light Square Theme
+  ----------------------------------- */
 div.light_square .pp_left,
 div.light_square .pp_middle,
 div.light_square .pp_right,
@@ -240,13 +252,16 @@ div.light_square .pp_arrow_next.disabled {
     cursor: default;
 }
 div.light_square .pp_next:hover {
-    background: url(../images/prettyPhoto/light_square/btnNext.png) center right no-repeat;
+    background: url(../images/prettyPhoto/light_square/btnNext.png) center right  no-repeat;
     cursor: pointer;
 }
 div.light_square .pp_previous:hover {
     background: url(../images/prettyPhoto/light_square/btnPrevious.png) center left no-repeat;
     cursor: pointer;
 }
+/* ----------------------------------
+     Facebook style Theme
+  ----------------------------------- */
 div.facebook .pp_top .pp_left { background: url(../images/prettyPhoto/facebook/sprite.png) -88px -53px no-repeat }
 div.facebook .pp_top .pp_middle { background: url(../images/prettyPhoto/facebook/contentPatternTop.png) top left repeat-x }
 div.facebook .pp_top .pp_right { background: url(../images/prettyPhoto/facebook/sprite.png) -110px -53px no-repeat }
@@ -324,6 +339,9 @@ div.facebook .pp_previous:hover {
 div.facebook .pp_bottom .pp_left { background: url(../images/prettyPhoto/facebook/sprite.png) -88px -80px no-repeat }
 div.facebook .pp_bottom .pp_middle { background: url(../images/prettyPhoto/facebook/contentPatternBottom.png) top left repeat-x }
 div.facebook .pp_bottom .pp_right { background: url(../images/prettyPhoto/facebook/sprite.png) -110px -80px no-repeat }
+/* ------------------------------------------------------------------------
+  DO NOT CHANGE
+------------------------------------------------------------------------- */
 div.pp_pic_holder a:focus { outline: none }
 div.pp_overlay {
     background: #000;
@@ -555,6 +573,9 @@ div.ppt {
     margin: 0 0 0 0;
     z-index: 9999;
 }
+/* ------------------------------------------------------------------------
+  Miscellaneous
+------------------------------------------------------------------------- */
 .clearfix:after {
     content: ".";
     display: block;
@@ -563,6 +584,8 @@ div.ppt {
     visibility: hidden;
 }
 .clearfix { display: inline-block }
+/* Hides from IE-mac \*/
 * html .clearfix { height: 1% }
 .clearfix { display: block }
+/* End hide from IE-mac */
 
