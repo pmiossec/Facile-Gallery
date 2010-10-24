@@ -19,7 +19,8 @@
 			default_width: 500,
 			default_height: 344,
 			counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
-			theme: 'facebook', /* light_rounded / dark_rounded / light_square / dark_square / facebook */
+			theme: 'facebook', /* light_rounded / dark_rounded / light_square / dark_square / facebook*/
+			fullscreen : true, /* true/false */
 			hideflash: false, /* Hides all the flash object on a page, set to TRUE if flash appears over prettyPhoto */
 			wmode: 'opaque', /* Set the flash wmode attribute */
 			autoplay: true, /* Automatically start videos: True/False */
@@ -342,19 +343,6 @@
 
 			_hideContent(function(){ $.prettyPhoto.open(); });
 		};
-  /*$("#container").imageCaching("image.jpg",function(){
-2 alert("image loaded");
-3 });
-
-  $.fn.imageCaching = function(src, f){
-2   return this.each(function(){
-3     var i = new Image();
-4     i.src = src;
-5     i.onload = f;
-6     this.appendChild(i);
-7   });
-8 }
-		*/
 
 		/**
 		* Change gallery page in the prettyPhoto modal box
@@ -556,10 +544,20 @@
 			
 				while (!fitting){
 					if((pp_containerWidth > windowWidth)){
-						imageWidth = windowWidth;
+						if(settings.fullscreen){
+						  imageWidth = windowWidth;
+						}
+						else{
+						  imageWidth = windowWidth -200;
+						}
 						imageHeight = (height/width) * imageWidth;
 					}else if((pp_containerHeight > windowHeight)){
-						imageHeight = windowHeight;
+						if(settings.fullscreen){
+							imageHeight = windowHeight;
+						}
+						else{
+							imageHeight = windowHeight - 200;
+						}
 						imageWidth = (width/height) * imageHeight;
 					}else{
 						fitting = true;
@@ -571,11 +569,17 @@
 				_getDimensions(imageWidth,imageHeight);
 			};
 
+			 if(settings.fullscreen){
+				newContainerWidth = Math.floor(pp_containerWidth);
+			 }
+			 else{
+				newContainerWidth = Math.floor(pp_containerWidth) + 40; // 40 behind the side padding
+			 }
 			return {
 				width:Math.floor(imageWidth),
 				height:Math.floor(imageHeight),
 				containerHeight:Math.floor(pp_containerHeight),
-				containerWidth:Math.floor(pp_containerWidth), // 40 behind the side padding
+				containerWidth:newContainerWidth, 
 				contentHeight:Math.floor(pp_contentHeight),
 				contentWidth:Math.floor(pp_contentWidth),
 				resized:resized
@@ -605,7 +609,12 @@
 			$pp_details.remove();
 			
 			// Get the container size, to resize the holder to the right dimensions
-			pp_contentHeight = height;
+			if(settings.fullscreen){
+				pp_contentHeight = height;
+			}
+			else{
+				pp_contentHeight = height + detailsHeight;
+			}
 			pp_contentWidth = width;
 			pp_containerHeight = pp_contentHeight + $ppt.height() + $pp_pic_holder.find('.pp_top').height() + $pp_pic_holder.find('.pp_bottom').height();
 			pp_containerWidth = width;

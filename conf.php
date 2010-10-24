@@ -2,6 +2,8 @@
 //TODO:
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables (les différents répertoires utilisés),...
+// - voir si une intégration sans modification de prettyPhoto est possible...(ex : theme "fullscreen")
+// - dans le mode 'list', afficher un BEAU tooltip ou info bulle
 
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)

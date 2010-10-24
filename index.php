@@ -1,8 +1,8 @@
 <?php 
 require("conf.php");
 
-error_reporting(E_ALL); // afficher les erreurs
-//error_reporting(0); // ne pas afficher les erreurs
+//error_reporting(E_ALL); // afficher les erreurs
+error_reporting(0); // ne pas afficher les erreurs
 
 //define('LINE_SEPARATOR', array("\r\n", "\n\r", "\n", "\r" ));
 $line_separator = array("\r\n", "\n\r", "\n", "\r" );
@@ -543,6 +543,7 @@ if($show_heading =="list" && $activate_slideshow){?>
 				default_width: 500,
 				default_height: 344,
 				counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
+				fullscreen:true, /* true/false */
 				theme: 'facebook', /* light_rounded / dark_rounded / light_square / dark_square / facebook */
 				hideflash: false, /* Hides all the flash object on a page, set to TRUE if flash appears over prettyPhoto */
 				wmode: 'opaque', /* Set the flash wmode attribute */
