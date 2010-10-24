@@ -351,6 +351,7 @@ div.pp_overlay {
     top: 0;
     width: 100%;
     z-index: 9500;
+    height: 100%;
 }
 div.pp_pic_holder {
     display: none;
@@ -396,9 +397,26 @@ div.pp_pic_holder {
 }
 .pp_content_container .pp_left { padding-left: 20px }
 .pp_content_container .pp_right { padding-right: 20px }
+.pp_content_container .pp_details:hover {
+    position: absolute;
+    top: 0em;
+    margin: 0 0 0 0;
+    visibility: visible;
+    filter: alpha(opacity=0.8);
+    -moz-opacity: 0.8;
+    -khtml-opacity: 0.8;
+    opacity: 0.8;
+    background-color: #EEEEEE;
+    z-index: 2001;
+}
 .pp_content_container .pp_details {
-    float: left;
-    margin: 10px 0 2px 0;
+    position: absolute;
+    top: 0em;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    z-index: 2001;
 }
 .pp_description {
     display: none;
@@ -495,9 +513,9 @@ a.pp_contract {
     display: none;
     height: 20px;
     position: absolute;
-    right: 30px;
+    right: 0px;
     text-indent: -10000px;
-    top: 10px;
+    top: 0px;
     width: 20px;
     z-index: 20000;
 }
@@ -552,7 +570,7 @@ div.ppt {
     color: #fff;
     display: none;
     font-size: 17px;
-    margin: 0 0 5px 15px;
+    margin: 0 0 0 0;
     z-index: 9999;
 }
 /* ------------------------------------------------------------------------
