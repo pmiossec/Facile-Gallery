@@ -554,11 +554,11 @@ if($show_heading =="list" && $activate_slideshow){?>
 				changepicturecallback: function(){}, /* Called everytime an item is shown/changed */
 				callback: function(){}, /* Called when prettyPhoto is closed */
 				markup: '<div class="pp_pic_holder"> \
-							<div class="pp_content_container"> \
+							<div class="pp_content_container_fullscreen"> \
 									<div class="pp_content"> \
 										<div class="pp_loaderIcon"></div> \
-										<div class="pp_details clearfix"> \
-											<div class="ppt">&nbsp;</div> \
+										<div class="pp_details_fullscreen clearfix"> \
+											<div class="ppt_fullscreen">&nbsp;</div> \
 											<p class="pp_description"></p> \
 											<a href="#" class="pp_expand" title="Expand the image">Expand</a> \
 											<a href="#" class="pp_close">Close</a> \
