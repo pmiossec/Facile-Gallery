@@ -594,6 +594,7 @@ div.pp_overlay_fullscreen {
     opacity: 0.8;
     background-color: #EEEEEE;
     z-index: 2001;
+    width: 100%;
 }
 .pp_content_container_fullscreen .pp_details_fullscreen {
     position: absolute;
@@ -603,6 +604,7 @@ div.pp_overlay_fullscreen {
     -khtml-opacity: 0;
     opacity: 0;
     z-index: 2001;
+    width: 100%;
 }
 a.pp_contract_fullscreen {
     cursor: pointer;

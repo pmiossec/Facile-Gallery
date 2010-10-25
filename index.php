@@ -578,7 +578,7 @@ if($show_heading =="list" && $activate_slideshow){?>
 									</div> \
 							</div> \
 						</div> \
-						<div class="pp_overlay"></div>',
+						<div class="pp_overlay_fullscreen"></div>',
 				gallery_markup: '<div class="pp_gallery"> \
 									<a href="#" class="pp_arrow_previous">Previous</a> \
 									<ul> \
