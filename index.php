@@ -894,7 +894,7 @@ case ('list'):
 					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>">
 						  <img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$image_file_name ?>" border="0" alt="<?php echo $image_file_name; ?>" class="imageborder">
-							<em><?php echo nl2br($legend)?></em>
+							<?php if(strlen($legend) != 0) echo nl2br("<em>$legend</em>");?>
 						</a>
 					</td>
 				</tr>
