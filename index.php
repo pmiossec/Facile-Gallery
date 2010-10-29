@@ -4,7 +4,6 @@ require("conf.php");
 //error_reporting(E_ALL); // afficher les erreurs
 error_reporting(0); // ne pas afficher les erreurs
 
-//define('LINE_SEPARATOR', array("\r\n", "\n\r", "\n", "\r" ));
 $separateurs = array('_', '-', '.');
 $directory = $_SERVER["SCRIPT_NAME"];
 $directory = substr($directory, 0, strrpos($directory,"/")+1);
