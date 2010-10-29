@@ -5,7 +5,6 @@ require("conf.php");
 error_reporting(0); // ne pas afficher les erreurs
 
 //define('LINE_SEPARATOR', array("\r\n", "\n\r", "\n", "\r" ));
-$line_separator = array("\r\n", "\n\r", "\n", "\r" );
 $separateurs = array('_', '-', '.');
 $directory = $_SERVER["SCRIPT_NAME"];
 $directory = substr($directory, 0, strrpos($directory,"/")+1);
@@ -832,7 +831,7 @@ case ('list'):
 			$titles .= "'$image_file_name'";
 			if($succes)
 			{
-				$legend = str_replace( $line_separator ,"<br/>",$legend);
+				$legend = nl2br($legend);
 				$descriptions.="'$legend'";
 			}
 			else
@@ -1007,7 +1006,7 @@ case ('detail'):
 					list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($dir.'/'.$listFile[$photo]);
 					if ($succes) {
 						echo '<span class="legend">';
-						echo str_replace($line_separator,"<br/>",$legend);
+						echo nl2br($legend);
 						echo '</span><br/>';
 						for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
 						{
@@ -1095,7 +1094,7 @@ case ('map'):
 			{
 				$html_code = "<a href=\"$url_path_datas$photodir/" . $file_to_add ."\"><img src=\"$url_path_datas$photodir/". THUMBS_DIR . "/__$file_to_add\"></a><br/>";
 				$html_code = $html_code . "<span class=\"legend\">";
-				$html_code = $html_code . str_replace($line_separator,"<br/>",$legend);
+				$html_code = $html_code . nl2br($legend);
 				$html_code = $html_code . "</span><br/>\n";
 				$html_code = $html_code . $tags."<br/>\n";
 			}
