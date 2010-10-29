@@ -699,8 +699,8 @@ default:
 //////////////////////////////////////////////////////////
 case ('list'):
 	list($continue, $photodir, $dir) = verify_directories();
-	$thumb_dir = $dir. "/" . IMAGE_STDDIM ."/"
-	$image_dir = $dir. "/" . THUMBS_DIR ."/"
+	$thumb_dir = $dir. "/" . IMAGE_STDDIM ."/";
+	$image_dir = $dir. "/" . THUMBS_DIR ."/";
 	if(!$continue) {break;}
 	$page_num = (isset($_GET['page_num']) ? $_GET['page_num'] : "1");//vérification que le numéro de page existe bien
 	//création du répertoire miniatures et images
