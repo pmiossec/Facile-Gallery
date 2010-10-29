@@ -193,17 +193,21 @@ function add_map($url_kml_file){
 	}
 	</script>';
 }
-function verify_directories(){
-	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
-	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien
+function echo_message_with_history_back($message)
+{
 		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
 			<tr>
 				<td align="center">
-				<a href="javascript:history.go(-1)">' . PHOTO_DIR_NEEDED . '</a>
+				<a href="javascript:history.go(-1)">' . $message . '</a>
 				</td>
 		</tr>
 	</table>';
-	return array (false, '', '');
+}
+function verify_directories(){
+	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
+	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien
+		echo_message_with_history_back(PHOTO_DIR_NEEDED);
+		return array (false, '', '');
 	}
 	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
 	$photodir = preg_replace("/\\\\/", "", $photodir);
@@ -211,14 +215,8 @@ function verify_directories(){
 	$photodir = strtr($photodir, $str2clean);
 	$dir = PHOTOS_DIR . "/" . $photodir; //chemin vers le répertoire qui contient les miniatures
 	if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien
-		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
-			<tr>
-				<td align="center">
-				<a href="javascript:history.go(-1)">' . PHOTO_DIR_NOT_EXISTING . '</a>
-				</td>
-		</tr>
-	</table>';
-	return array (false, '', '');
+		echo_message_with_history_back(PHOTO_DIR_NOT_EXISTING);
+		return array (false, '', '');
 	}
 	return array (true, $photodir, $dir);
 }
@@ -942,15 +940,8 @@ case ('detail'):
 		}
 	}
 	//
-	if (!isset($_GET['photo']) || $_GET['photo'] == "" || !isset($listFile[$photo])) {//on vérifie que la photo existe bien ?>
-		<table border="0" align="center" cellpadding="28" cellspacing="0">
-			<tr>
-				<td align="center"><span class="txtrouge">
-				<a href="javascript:history.go(-1)"><?php echo NO_PHOTO_TO_DISPLAY; ?></a>
-				</td>
-			</tr>
-		</table>
-		<?php
+	if (!isset($_GET['photo']) || $_GET['photo'] == "" || !isset($listFile[$photo])) {//on vérifie que la photo existe bien
+		echo_message_with_history_back(NO_PHOTO_TO_DISPLAY);
 		break;
 	}
 	//
