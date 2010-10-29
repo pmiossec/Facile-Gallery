@@ -55,3 +55,37 @@ body {
 	font-weight: bold;
   
 }
+/*Tooltip*/
+a.tooltip em {
+	display:none;
+}
+a.tooltip:hover {
+	border: 0;
+	position: relative;
+	z-index: 500;
+	text-decoration:none;
+}
+a.tooltip:hover em {
+	font-style: normal;
+	font-size: small;
+	display: block;
+	position: absolute;
+	top: 20px;
+	left: -10px;
+	padding: 5px;
+	color: #000;
+	border: 1px solid #bbb;
+	background: #99CCCC;
+	/*width:300px;*/
+}
+a.tooltip:hover em span {
+	position: absolute;
+	top: -7px;
+	left: 15px;
+	height: 7px;
+	width: 11px;
+	background: transparent url(image-infobulle.gif);
+	margin:0;
+	padding: 0;
+	border: 0;
+}
