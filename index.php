@@ -900,7 +900,6 @@ case ('detail'):
 	if(!$continue) {break;}
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
-	$dir = PHOTOS_DIR . "/" . $photodir;
 	if ($handle = opendir($dir)) {
 		$cFile = 1;
 		while (false !== ($file = readdir($handle))) {
@@ -1044,7 +1043,6 @@ case ('map'):
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
-	$dir = PHOTOS_DIR . "/" . $photodir;
 	if ($handle = opendir($dir)) {
 		$cFile = 0;
 		while (false !== ($file = readdir($handle))) {
