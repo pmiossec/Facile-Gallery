@@ -198,10 +198,9 @@ function verify_directories(){
 	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien
 		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
 			<tr>
-				<td align="center"><span class="txtrouge">' . PHOTO_DIR_NEEDED . '</span>
-				<p>
-			<form method="post"><INPUT TYPE="button" VALUE="' . BACK . '" onClick="history.go(-1)"></form>
-			</td>
+				<td align="center">
+				<a href="javascript:history.go(-1)">' . PHOTO_DIR_NEEDED . '</a>
+				</td>
 		</tr>
 	</table>';
 	return array (false, '', '');
@@ -214,10 +213,9 @@ function verify_directories(){
 	if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien
 		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
 			<tr>
-				<td align="center"><span class="txtrouge">' . PHOTO_DIR_NOT_EXISTING . '</span>
-				<p>
-			<form method="post"><INPUT TYPE="button" VALUE="' . BACK . '" onClick="history.go(-1)"></form>
-			</td>
+				<td align="center">
+				<a href="javascript:history.go(-1)">' . PHOTO_DIR_NOT_EXISTING . '</a>
+				</td>
 		</tr>
 	</table>';
 	return array (false, '', '');
@@ -711,8 +709,8 @@ default:
 //////////////////////////////////////////////////////////
 case ('list'):
 	list($continue, $photodir, $dir) = verify_directories();
-	$thumb_dir = $dir. "/" . IMAGE_STDDIM ."/";
-	$image_dir = $dir. "/" . THUMBS_DIR ."/";
+	$image_dir = $dir. "/" . IMAGE_STDDIM ."/";
+	$thumb_dir = $dir. "/" . THUMBS_DIR ."/";
 	if(!$continue) {break;}
 	$page_num = (isset($_GET['page_num']) ? $_GET['page_num'] : "1");//vérification que le numéro de page existe bien
 	//création du répertoire miniatures et images
@@ -785,11 +783,11 @@ case ('list'):
 	$page_index = ceil($dir_index/ICO_PER_PAGE);
 
 	//on liste les miniatures
-	if ($handle = opendir($dir."/".THUMBS_DIR)) {
+	if ($handle = opendir($thumb_dir)) {
 		$thumb = 0;
 		while (false !== ($file = readdir($handle))) {
 			if($file != "." && $file != ".."){
-				if(is_file($dir."/".THUMBS_DIR . "/" . $file)){
+				if(is_file($thumb_dir . $file)){
 					$extractthumbs[$thumb] = $file;
 					$thumb++;
 				}
@@ -893,7 +891,7 @@ case ('list'):
 				<tr class="tddeco">
 					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>">
-						  <img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$image_file_name ?>" border="0" alt="<?php echo $image_file_name; ?>" class="imageborder">
+						  <img src="<?php echo $thumb_dir."__".$image_file_name ?>" border="0" alt="<?php echo $image_file_name; ?>" class="imageborder">
 							<?php if(strlen($legend) != 0) echo nl2br("<em>$legend</em>");?>
 						</a>
 					</td>
@@ -947,9 +945,8 @@ case ('detail'):
 	if (!isset($_GET['photo']) || $_GET['photo'] == "" || !isset($listFile[$photo])) {//on vérifie que la photo existe bien ?>
 		<table border="0" align="center" cellpadding="28" cellspacing="0">
 			<tr>
-				<td align="center"><span class="txtrouge"><?php echo NO_PHOTO_TO_DISPLAY; ?></span>
-					<p>
-					<form method="post"><INPUT TYPE="button" VALUE="<?php echo BACK; ?>" onClick="history.go(-1)"></form>
+				<td align="center"><span class="txtrouge">
+				<a href="javascript:history.go(-1)"><?php echo NO_PHOTO_TO_DISPLAY; ?></a>
 				</td>
 			</tr>
 		</table>
