@@ -570,6 +570,7 @@ div.ppt {
 * html .clearfix { height: 1% }
 .clearfix { display: block }
 /* End hide from IE-mac */
+
 /* ------------------------------------------------------------------------
   Fullscreen
 ------------------------------------------------------------------------- */
@@ -625,6 +626,10 @@ div.ppt_fullscreen {
     z-index: 9999;
 }
 
+a.pp_expand,
+a.pp_contract {
+	top: 0px;
+}
 
 
 
