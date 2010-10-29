@@ -786,7 +786,7 @@ case ('list'):
 		closedir($handle);
 	}
 	$valid = 0;
-	for ($i=0; $i <	count($listFile); $i++) {
+	for ($i=0; $i < count($listFile); $i++) {
 		if ($listFile[$i] !== ICO_FILENAME) {
 			$listvalidimg[$valid] = $listFile[$i];
 			$valid++;
@@ -794,22 +794,28 @@ case ('list'):
 	}
 	$total_files = count($listvalidimg);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
 
+	for($i=0;$i<count($listvalidimg);$i++)
+	{
+		$file_datas[$i] = array($listvalidimg[$i], get_file_metadata("./$dir/$listvalidimg[$i]"));
+	}
+
 	if($activate_slideshow)
 	{
 		//données du slideshow
 		$images='images = [';
 		$titles='titles = [' ;
 		$descriptions='descriptions = [';
-		for($i=0;$i<count($listvalidimg);$i++)
+		for($i=0;$i<count($file_datas);$i++)
 		{
 			if($i!=0){
 				$images.=',';
 				$titles.=',';
 				$descriptions.=',';
 			}
-			list($succes, $exifs, $iptcs, $legend, $tags) = get_file_metadata("./$dir/$listvalidimg[$i]");
-			$images .= "'./$dir/$listvalidimg[$i]'";
-			$titles .= "'$listvalidimg[$i]'";
+			list($image_file_name, $datas) = $file_datas[$i];
+			list($succes, $exifs, $iptcs, $legend, $tags) = $datas;
+			$images .= "'./$dir/$image_file_name'";
+			$titles .= "'$image_file_name'";
 			if($succes)
 			{
 				$legend = str_replace( $line_separator ,"<br/>",$legend);
@@ -849,20 +855,22 @@ case ('list'):
 			}
 			$j++;
 		}
-		$pos = strrpos($listvalidimg[$i], '.'); //calcule la position du point dans la chaine $document, ex. : 8
-		$ext = strtolower(substr($listvalidimg[$i], $pos + 1));
+		list($image_file_name, $datas) = $file_datas[$i];
+		list($succes, $exifs, $iptcs, $legend, $tags) = $datas;
+		$pos = strrpos($image_file_name, '.'); //calcule la position du point dans la chaine $document, ex. : 8
+		$ext = strtolower(substr($image_file_name, $pos + 1));
 		if (($ext == "jpeg" || $ext == "jpg" || $ext == "gif" || $ext == "png")
-			&& $listvalidimg[$i] !== ICO_FILENAME) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
-			if("__".$listvalidimg[$i] !== $fileexist)
+			&& $image_file_name !== ICO_FILENAME) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
+			if("__".$image_file_name !== $fileexist)
 			{
-				create_newimage($photodir, $listvalidimg[$i], MINIATURE_MAXDIM, THUMBS_DIR, "__");
+				create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
 			}
 			else
 			{
 				list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" .$listvalidimg[$i]);
 				if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
 				{
-					create_newimage($photodir, $listvalidimg[$i], MINIATURE_MAXDIM, THUMBS_DIR, "__");
+					create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
 				}
 			}
 		}
@@ -873,12 +881,12 @@ case ('list'):
 				<tr class="tddeco">
 					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 						<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>">
-						  <img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$listvalidimg[$i] ?>" border="0" alt="<?php echo $listvalidimg[$i]; ?>" class="imageborder">
+						  <img title="<?php echo nl2br($legend)?>" src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$image_file_name ?>" border="0" alt="<?php echo $image_file_name; ?>" class="imageborder">
 						</a>
 					</td>
 				</tr>
 				<tr>
-					<td align="center"><span class="Style2"><?php echo wordTruncate(($i+1) ."|" . $listvalidimg[$i]); ?></span></td>
+					<td align="center"><span class="Style2"><?php echo wordTruncate(($i+1) ."|" . $image_file_name); ?></span></td>
 				</tr>
 			</table>
 		</td>
