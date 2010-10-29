@@ -602,7 +602,7 @@ div.pp_overlay_fullscreen {
     filter: alpha(opacity=0);
     -moz-opacity: 0;
     -khtml-opacity: 0;
-    opacity: 0;
+    opacity: 0.2;
     z-index: 2001;
     width: 100%;
 }

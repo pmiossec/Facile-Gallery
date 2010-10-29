@@ -438,13 +438,6 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 	return array(false, "");
 }
 
-//////////////////////////////////////////////
-//fonction pour créer le répertoire miniatures
-//////////////////////////////////////////////
-function create_folder($dirwhere2folderize, $dir_name) {
-	mkdir(PHOTOS_DIR."/".$dirwhere2folderize."/".$dir_name);
-}
-
 /////////////////////////////////////////////////////////////////////
 //fonction pour créer toutes les miniatures du répertoire en question
 /////////////////////////////////////////////////////////////////////
@@ -651,19 +644,20 @@ default:
 	for ($i = (ICO_PER_PAGE*$page_num) - ICO_PER_PAGE; $i < ($total_icons > (ICO_PER_PAGE*($page_num)) ? ICO_PER_PAGE*$page_num : $total_icons); $i++) {
 		if ($listDir[$i] != "." && $listDir[$i] != ".." && $listDir[$i] != THUMBS_DIR && $listDir[$i] != IMAGE_STDDIM && $listDir[$i] != IMAGE_400 && $listDir[$i] != IMAGE_800 && is_dir(PHOTOS_DIR . "/" . $listDir[$i]) == true) {
 			//création du répertoire miniatures et images
-			if (!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . THUMBS_DIR)) {
-				create_folder($listDir[$i], THUMBS_DIR);
-			}
-			if (!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . IMAGE_STDDIM)) {
-				create_folder($listDir[$i], IMAGE_STDDIM);
-			}
+			$thumb_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . THUMBS_DIR . "/";
+			$image_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . IMAGE_STDDIM . "/";
+			if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
+			if (!file_exists($image_dir)) { mkdir($image_dir); }
 			//création de la miniature
-			if (!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME)) { //si la miniature existe
+			if (!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME)) {
 				create_icon($listDir[$i]);
 			}
-			list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $listDir[$i]  . "/" . ICO_FILENAME);//on liste les valeurs de la miniature
-			if ($width != ICO_WIDTH || $height != ICO_HEIGHT) { //on affiche
-				create_icon($listDir[$i]);
+			else
+			{
+				list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $listDir[$i]  . "/" . ICO_FILENAME);//on liste les valeurs de la miniature
+				if ($width != ICO_WIDTH || $height != ICO_HEIGHT) {
+					create_icon($listDir[$i]);
+				}
 			}
 			?>
 	<?php (is_int($k/ICO_PER_LINE) ? print "<tr>": print "");  ?>
@@ -705,15 +699,13 @@ default:
 //////////////////////////////////////////////////////////
 case ('list'):
 	list($continue, $photodir, $dir) = verify_directories();
+	$thumb_dir = $dir. "/" . IMAGE_STDDIM ."/"
+	$image_dir = $dir. "/" . THUMBS_DIR ."/"
 	if(!$continue) {break;}
 	$page_num = (isset($_GET['page_num']) ? $_GET['page_num'] : "1");//vérification que le numéro de page existe bien
-		//création du répertoire miniatures et images
-		if (!file_exists($dir . "/" . THUMBS_DIR)) {
-			create_folder($photodir, THUMBS_DIR);
-		}
-		if (!file_exists($dir . "/" . IMAGE_STDDIM)) {
-			create_folder($photodir, IMAGE_STDDIM);
-		}
+	//création du répertoire miniatures et images
+	if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
+	if (!file_exists($image_dir)) { mkdir($image_dir); }
 	// listage des répertoires et fichiers
 	if ($handle = opendir($dir)) {
 		$cDir = 0;
@@ -779,7 +771,7 @@ case ('list'):
 		}
 	}
 	$page_index = ceil($dir_index/ICO_PER_PAGE);
-	//
+
 	//on liste les miniatures
 	if ($handle = opendir($dir."/".THUMBS_DIR)) {
 		$thumb = 0;
@@ -879,7 +871,11 @@ case ('list'):
 		<td>
 			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 				<tr class="tddeco">
-					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>"><img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$listvalidimg[$i] ?>" border="0" alt="<?php echo $listvalidimg[$i]; ?>" class="imageborder"></a></td>
+					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
+						<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>">
+						  <img src="<?php echo PHOTOS_DIR."/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__".$listvalidimg[$i] ?>" border="0" alt="<?php echo $listvalidimg[$i]; ?>" class="imageborder">
+						</a>
+					</td>
 				</tr>
 				<tr>
 					<td align="center"><span class="Style2"><?php echo wordTruncate(($i+1) ."|" . $listvalidimg[$i]); ?></span></td>
