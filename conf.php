@@ -1,9 +1,9 @@
 <?php 
 //TODO:
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
-// - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables (les différents répertoires utilisés),...
-// - voir si une intégration sans modification de prettyPhoto est possible...(ex : theme "fullscreen")
-// - dans le mode 'list', afficher un BEAU tooltip ou info bulle
+// - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables (listing des images du répertoire),...
+// - slideshow : améliorer placement dans le bandeau d'informations
+// - améliorer placement info bulle dans la liste des photos
 
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
@@ -40,6 +40,7 @@ define('IMAGE_800', '1024'); // largeur de l'image de miniature en pixel / ne pa
 define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
+define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
 define('DISPLAY_FOOTER', false); //Afficher le pied de page
 
 /***********************************************

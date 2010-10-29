@@ -524,9 +524,13 @@ if($show_heading =="list" && $activate_slideshow){?>
 	<link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
 	<script src="js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function(){
+			$("a[rel^='prettyPhoto']").prettyPhoto();
+		});
 
 		$(document).ready(function(){
 			$("a[rel^='prettyPhoto']").prettyPhoto({
+				//Parameters slideshow : you can modify to your wish!!!
 				animation_speed: 'fast', /* fast/slow/normal */
 				slideshow: 10000, /* false OR interval time in ms */
 				autoplay_slideshow: false, /* true/false */
@@ -536,7 +540,6 @@ if($show_heading =="list" && $activate_slideshow){?>
 				default_width: 500,
 				default_height: 344,
 				counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
-				fullscreen:true, /* true/false */
 				theme: 'facebook', /* light_rounded / dark_rounded / light_square / dark_square / facebook */
 				hideflash: false, /* Hides all the flash object on a page, set to TRUE if flash appears over prettyPhoto */
 				wmode: 'opaque', /* Set the flash wmode attribute */
@@ -546,20 +549,26 @@ if($show_heading =="list" && $activate_slideshow){?>
 				keyboard_shortcuts: true, /* Set to false if you open forms inside prettyPhoto */
 				changepicturecallback: function(){}, /* Called everytime an item is shown/changed */
 				callback: function(){}, /* Called when prettyPhoto is closed */
+			<?php if(SLIDESHOW_FULLSCREEN){
+				//Parameters slideshow in fullscreen : Don't touch!!!
+				?>
+				fullscreen:true, /* true/false */
 				markup: '<div class="pp_pic_holder"> \
 							<div class="pp_content_container_fullscreen"> \
 									<div class="pp_content"> \
 										<div class="pp_loaderIcon"></div> \
 										<div class="pp_details_fullscreen clearfix"> \
 											<div class="ppt_fullscreen">&nbsp;</div> \
-											<p class="pp_description"></p> \
-											<a href="#" class="pp_expand" title="Expand the image">Expand</a> \
-											<a href="#" class="pp_close">Close</a> \
-											<div class="pp_nav"> \
-												<a href="#" class="pp_arrow_previous">Previous</a> \
-												<p class="currentTextHolder">0/0</p> \
-												<a href="#" class="pp_arrow_next">Next</a> \
-											</div> \
+											<div style="width:100%">\
+												<div class="pp_nav"> \
+													<a href="#" class="pp_arrow_previous">Previous</a> \
+													<p class="currentTextHolder">0/0</p> \
+													<a href="#" class="pp_arrow_next">Next</a> \
+												</div> \
+												<a href="#" class="pp_expand" title="Expand the image">Expand</a> \
+												<a href="#" class="pp_close">Close</a> \
+											</div>\
+											<div class="pp_description"></div> \
 										</div> \
 										<div class="pp_fade"> \
 											<div id="pp_full_res"></div> \
@@ -585,6 +594,11 @@ if($show_heading =="list" && $activate_slideshow){?>
 				iframe_markup: '<iframe src ="{path}" width="{width}" height="{height}" frameborder="no"></iframe>',
 				inline_markup: '<div class="pp_inline clearfix">{content}</div>',
 				custom_markup: ''
+			<?php }
+					else{
+						echo "fullscreen:false, /* true/false */";
+					}
+			?>
 			});
 		});
 	</script>
