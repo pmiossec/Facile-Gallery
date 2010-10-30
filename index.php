@@ -996,17 +996,26 @@ case ('detail'):
 					<?php
 					list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($dir.'/'.$listFile[$photo]);
 					if ($succes) {
-						echo '<span class="legend">';
-						echo my_nl2br($legend);
-						echo '</span><br/>';
+						$isIptcDisplayed = false;
+						if(strlen($legend) != 0)
+						{
+							echo '<span class="legend">' . my_nl2br($legend) . '</span><br/>';
+							$isIptcDisplayed = true;
+						}
 						for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
 						{
 						   list($code,$label)= $iptc_to_display[$i_iptc];
-							echo extract_iptc_data($iptcs, $code, $label . ' : ')."<br/>\n";
+							if(strlen($label)!=0) $label = $label . ' : ';
+							$iptc_with_label = extract_iptc_data($iptcs, $code, $label);
+							if(strlen($iptc_with_label)!=0)
+							{
+								echo $iptc_with_label."<br/>\n";
+								$isIptcDisplayed = true;
+							}
 						}
+						if($isIptcDisplayed) { echo '<hr size="1" noshade>'; }
 					}
 					if ($exifs!=null) {
-						?><hr size="1" noshade><?php
 						echo $exifs["FILE"]["FileName"] . " || " . round(($exifs["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exifs["COMPUTED"]["Width"]." x ".$exifs["COMPUTED"]["Height"]."px<br>\n";
 						for($i_exif=0;$i_exif<count($exif_to_display);$i_exif++)
 						{

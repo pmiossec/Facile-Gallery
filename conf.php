@@ -51,6 +51,9 @@ define('DISPLAY_FOOTER', false); //Afficher le pied de page
 // code1 & code2 : don't touch!
 // Label : do want you want :)
 $exif_to_display = array(
+array('WINXP' , 'Title', 'Titre'),
+array('WINXP' , 'Comments', 'Commentaire'),
+array('COMMENT' , '0', 'Commentaire'),
 array('EXIF' , 'DateTimeOriginal', 'Date et Heure'),
 array('EXIF' , 'ExposureTime', 'Temps d\'exposition'),
 array('EXIF' , 'ISOSpeedRatings', 'ISO'),
