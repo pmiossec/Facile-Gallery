@@ -1017,7 +1017,7 @@ case ('detail'):
 <br>
 <table border="0" align="center" cellpadding="8" cellspacing="0">
 	<tr>
-		<td width="<?php echo MINIATURE_MAXDIM + 26; ?>" height="<?php echo MINIATURE_MAXDIM + 26; ?>">
+		<td>
 		<?php if ($photo > 0) { echo insert_thumbnail_cell($photodir, $thumb_dir, $listFile[$photo-1], $photo-1, ""); }?>
 	</td>
 	<td>
@@ -1042,7 +1042,7 @@ case ('detail'):
 			</tr>
 		</table>
 	</td>
-	<td width="<?php echo MINIATURE_MAXDIM + 26; ?>" height="<?php echo MINIATURE_MAXDIM + 26; ?>">
+	<td>
 	<?php if ($photo < $total_images -1) {echo insert_thumbnail_cell($photodir, $thumb_dir, $listFile[$photo+1], $photo+1, ""); }?>
 		</td>
 	</tr>
