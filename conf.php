@@ -40,7 +40,7 @@ define('IMAGE_800', '1024'); // largeur de l'image de miniature en pixel / ne pa
 define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
-define('SLIDESHOW_FULLSCREEN', false); //Afficher le slideshow en plein écran
+define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
 define('DISPLAY_FOOTER', false); //Afficher le pied de page
 
 /***********************************************
@@ -104,7 +104,6 @@ array('2#122' , 'Auteur'),
  *******************Translation*****************
  **********************************************/
 define('PHOTO_DIR_NEEDED','Vous devez sp&eacute;cifier un r&eacute;pertoire photo !');
-define('BACK','Retour');
 define('PHOTO_DIR_NOT_EXISTING','Ce r&eacute;pertoire photo n\'existe pas !');
 define('DISPLAY_MAP','Afficher la carte');
 define('NO_PHOTO_TO_DISPLAY','Il n\'y a aucune photo à afficher !');

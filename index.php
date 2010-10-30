@@ -10,6 +10,10 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+function my_nl2br($string)
+{
+	return str_replace(array("\r\n", "\n", "\r"), "", nl2br($string));
+}
 
 function create_miniature($photodir, $filename)
 {
@@ -826,7 +830,7 @@ case ('list'):
 			$titles .= "'$image_file_name'";
 			if($succes)
 			{
-				$legend = nl2br($legend);
+				$legend = my_nl2br($legend);
 				$descriptions.="'$legend'";
 			}
 			else
@@ -890,7 +894,7 @@ case ('list'):
 					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>">
 						  <img src="<?php echo $thumb_dir."__".$image_file_name ?>" border="0" alt="<?php echo $image_file_name; ?>" class="imageborder">
-							<?php if(strlen($legend) != 0) echo nl2br("<em>$legend</em>");?>
+							<?php if(strlen($legend) != 0) echo my_nl2br("<em>$legend</em>");?>
 						</a>
 					</td>
 				</tr>
@@ -993,7 +997,7 @@ case ('detail'):
 					list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($dir.'/'.$listFile[$photo]);
 					if ($succes) {
 						echo '<span class="legend">';
-						echo nl2br($legend);
+						echo my_nl2br($legend);
 						echo '</span><br/>';
 						for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
 						{
@@ -1081,7 +1085,7 @@ case ('map'):
 			{
 				$html_code = "<a href=\"$url_path_datas$photodir/" . $file_to_add ."\"><img src=\"$url_path_datas$photodir/". THUMBS_DIR . "/__$file_to_add\"></a><br/>";
 				$html_code = $html_code . "<span class=\"legend\">";
-				$html_code = $html_code . nl2br($legend);
+				$html_code = $html_code . my_nl2br($legend);
 				$html_code = $html_code . "</span><br/>\n";
 				$html_code = $html_code . $tags."<br/>\n";
 			}
