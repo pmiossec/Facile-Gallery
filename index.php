@@ -800,7 +800,7 @@ case ('list'):
 		}
 		usort($listDir,"strnatcmp");
 		$photoDirNba = 1;
-		for ($b=0; $b <	count($listDir); $b++) {
+		for ($b=0; $b < count($listDir); $b++) {
 			$ordertest[$photoDirNba] = $listDir[$b];
 					if($ordertest[$photoDirNba] == $photodir){
 					$dir_index = $photoDirNba;
@@ -978,15 +978,12 @@ case ('detail'):
 		}
 		closedir($handle);
 	}
+	$photo -=1;
 	// Florent. Je retrie par ordre alphabétique mais le tableau trié $listFile2 commence à l'index 0.
 	// Je décale l'index pour que le tableau $listFile commence à 1, comme la variable $photo.
 	if (ALPHABETIC_ORDER == true)
 	{
-		$listFile2 = $listFile;
-		usort($listFile2,"strnatcmp");
-		for ($i=0;$i < count($listFile2); $i++) {
-			$listFile[$i+1] = $listFile2[$i];
-		}
+		usort($listFile,"strnatcmp");
 	}
 	//
 	if (!isset($_GET['photo']) || $_GET['photo'] == "" || !isset($listFile[$photo])) {//on vérifie que la photo existe bien
@@ -1000,11 +997,11 @@ case ('detail'):
 	$total_images = count($listFile);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
 	list($width, $height, $type, $attr) = getimagesize($dir . "/" . $dim . "/" . $listFile[$photo]);
 	//on créé les miniatures si elles sont absentes
-	if ($photo > 1)
+	if ($photo > 0)
 	{
 		create_miniature($photodir, $listFile[$photo-1]);
 	}
-	if ($photo < $total_images)
+	if ($photo < $total_images-1)
 	{
 		create_miniature($photodir, $listFile[$photo+1]);
 	}
@@ -1014,11 +1011,11 @@ case ('detail'):
 <table border="0" align="center" cellpadding="8" cellspacing="0">
 	<tr>
 		<td width="<?php echo MINIATURE_MAXDIM + 26; ?>" height="<?php echo MINIATURE_MAXDIM + 26; ?>">
-		<?php if ($photo > 1) {?>
+		<?php if ($photo > 0) {?>
 		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 			<tr class="tddeco">
 				<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
-				<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo-1; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo-1]; ?>" alt="<?php echo $listFile[$photo-1]; ?>" border="0" class="imageborder"></a>
+				<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo-1]; ?>" alt="<?php echo $listFile[$photo-1]; ?>" border="0" class="imageborder"></a>
 				</td>
 			</tr>
 		</table>
@@ -1028,11 +1025,11 @@ case ('detail'):
 		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 			<tr class="tddeco">
 				<td align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
-			<?php if ($photo != "") { ?>
-				<a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
-				<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> border="0" class="imageborder">
-			<?php if ($photo < $total_images) { ?></a><?php } 
-			} else { echo '<span class="txtrouge">'. NO_PHOTO_TO_DISPLAY .'</span>'; } ?>
+			<?php if ($photo >= 0 && $photo < $total_images) { ?>
+						<a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
+							<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> border="0" class="imageborder">
+						</a><?php
+					} else { echo_message_with_history_back( NO_PHOTO_TO_DISPLAY ); } ?>
 				</td>
 			</tr>
 			<tr>
@@ -1047,11 +1044,11 @@ case ('detail'):
 		</table>
 	</td>
 	<td width="<?php echo MINIATURE_MAXDIM + 26; ?>" height="<?php echo MINIATURE_MAXDIM + 26; ?>">
-	<?php if ($photo < $total_images) {?>
+	<?php if ($photo < $total_images -1) {?>
 		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
 			<tr class="tddeco">
 				<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
-					<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo+1; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo+1]; ?>" alt="<?php echo $listFile[$photo+1]; ?>" border="0" class="imageborder"></a>
+					<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo+2; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo+1]; ?>" alt="<?php echo $listFile[$photo+1]; ?>" border="0" class="imageborder"></a>
 				</td>
 			</tr>
 		</table>
