@@ -67,7 +67,7 @@ a.tooltip:hover {
 }
 a.tooltip:hover em {
 	font-style: normal;
-	font-size: small;
+	font-size: xx-small;
 	display: block;
 	position: absolute;
 	top: 24px; /* At least the Height of the image*/
@@ -76,7 +76,7 @@ a.tooltip:hover em {
 	color: #000;
 	border: 1px solid #bbb;
 	background: #99CCCC;
-	width:150%;
+	width:200%;
 	text-align:left;
 }
 a.tooltip:hover em span {

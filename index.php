@@ -10,6 +10,50 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+function get_file_metadata_to_display($filepath,$exif_to_display, $iptc_to_display, $display_gps_data)
+{
+	$metadata_to_display = "";
+	list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($filepath);
+	if ($succes) {
+		$isIptcDisplayed = false;
+		if(strlen($legend) != 0)
+		{
+			$metadata_to_display .= '<p class="legend">' . my_nl2br($legend) . '</p>';
+			$isIptcDisplayed = true;
+		}
+		for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
+		{
+			list($code,$label)= $iptc_to_display[$i_iptc];
+			if(strlen($label)!=0) $label = $label . ' : ';
+			$iptc_with_label = extract_iptc_data($iptcs, $code, $label);
+			if(strlen($iptc_with_label)!=0)
+			{
+				$metadata_to_display .=  $iptc_with_label."\n";
+				$isIptcDisplayed = true;
+			}
+		}
+		if($isIptcDisplayed) { $metadata_to_display .= '<hr size="1" noshade>'; }
+	}
+	if ($exifs!=null) {
+		$metadata_to_display .=  $exifs["FILE"]["FileName"] . " || " . round(($exifs["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exifs["COMPUTED"]["Width"]." x ".$exifs["COMPUTED"]["Height"]."px\n";
+		for($i_exif=0;$i_exif<count($exif_to_display);$i_exif++)
+		{
+			list($field1, $field2, $label)= $exif_to_display[$i_exif];
+			$text = extract_exif_data($exifs, $field1, $field2 , $label . ' : ');
+			if(strlen($text) != 0)
+				$metadata_to_display .=  $text."\n";
+		}
+		if($display_gps_data && $decimal_lat != 0 && $decimal_long != 0)
+		{
+			$metadata_to_display .=  "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&spn=0.01,0.01&q=". $decimal_lat."," . $decimal_long."&hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a>";
+		}
+		/*$keys = array_keys($exif["EXIF"]);
+		for ($i=0;$i < count($keys); $i++) {
+			echo $keys[$i] . " :" . $exif["EXIF"][$keys[$i]] . "<br/>";
+		}*/
+	}
+	return $metadata_to_display;
+}
 function my_nl2br($string)
 {
 	return str_replace(array("\r\n", "\n", "\r"), "", nl2br($string));
@@ -251,7 +295,7 @@ function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
 ///////////////////////////////////////////////////////////////////////
 function extract_exif_data($exifs, $field1, $field2, $label){
 	if (isset($exifs[$field1][$field2]))
-		return $label . $exifs[$field1][$field2];
+		return $label . utf8_decode($exifs[$field1][$field2]);
 	else return "";
 }
 ///////////////////////////////////////////////////////////////////////
@@ -868,7 +912,8 @@ case ('list'):
 			$j++;
 		}
 		list($image_file_name, $datas) = $file_datas[$i];
-		list($succes, $exifs, $iptcs, $legend, $tags) = $datas;
+		//list($succes, $exifs, $iptcs, $legend, $tags) = $datas;
+		$legend = get_file_metadata_to_display('./' .$dir.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
 		$pos = strrpos($image_file_name, '.'); //calcule la position du point dans la chaine $document, ex. : 8
 		$ext = strtolower(substr($image_file_name, $pos + 1));
 		if (($ext == "jpeg" || $ext == "jpg" || $ext == "gif" || $ext == "png")
@@ -994,46 +1039,8 @@ case ('detail'):
 				<td align="center">
 					<span class="Style2">
 					<?php
-					list($succes, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_and_gps($dir.'/'.$listFile[$photo]);
-					if ($succes) {
-						$isIptcDisplayed = false;
-						if(strlen($legend) != 0)
-						{
-							echo '<span class="legend">' . my_nl2br($legend) . '</span><br/>';
-							$isIptcDisplayed = true;
-						}
-						for($i_iptc=0;$i_iptc<count($iptc_to_display);$i_iptc++)
-						{
-						   list($code,$label)= $iptc_to_display[$i_iptc];
-							if(strlen($label)!=0) $label = $label . ' : ';
-							$iptc_with_label = extract_iptc_data($iptcs, $code, $label);
-							if(strlen($iptc_with_label)!=0)
-							{
-								echo $iptc_with_label."<br/>\n";
-								$isIptcDisplayed = true;
-							}
-						}
-						if($isIptcDisplayed) { echo '<hr size="1" noshade>'; }
-					}
-					if ($exifs!=null) {
-						echo $exifs["FILE"]["FileName"] . " || " . round(($exifs["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exifs["COMPUTED"]["Width"]." x ".$exifs["COMPUTED"]["Height"]."px<br>\n";
-						for($i_exif=0;$i_exif<count($exif_to_display);$i_exif++)
-						{
-							list($field1, $field2, $label)= $exif_to_display[$i_exif];
-							$text = extract_exif_data($exifs, $field1, $field2 , $label . ' : ');
-							if(strlen($text) != 0)
-								echo $text."<br/>\n";
-						}
-						if( $decimal_lat != 0 && $decimal_long != 0)
-						{
-							echo "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&spn=0.01,0.01&q=". $decimal_lat."," . $decimal_long."&hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a><br/>";
-						}
-						/*$keys = array_keys($exif["EXIF"]);
-						for ($i=0;$i < count($keys); $i++) {
-						  echo $keys[$i] . " :" . $exif["EXIF"][$keys[$i]] . "<br/>";
-						}*/
-					}
-?>
+					echo my_nl2br(get_file_metadata_to_display($dir.'/'.$listFile[$photo],$exif_to_display, $iptc_to_display, true));
+					?>
 					</span>
 				</td>
 			</tr>
