@@ -10,6 +10,27 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_image, $legend)
+{
+	$cell_content = '<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
+		<tr class="tddeco">
+			<td width="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE) .'" height="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE)
+			. '" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor=\'#666666\'" onmouseout="this.style.borderColor=\'#FFFFFF\'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?show_heading=detail&dir=' . rawurlencode($photodir) .'&photo=' . ($index_image+1) .'">
+					<img src="' . $thumb_dir."__".$image_file_name  .'" border="0" alt="' . $image_file_name .'" class="imageborder" />';
+
+					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em><span></span>$legend</em>");
+				$cell_content .= '</a>
+			</td>
+		</tr>
+		<tr>
+			<td align="center"><span class="Style2">' . wordTruncate(($index_image+1) ."|" . $image_file_name) .'</span></td>
+		</tr>
+	</table>';
+	return $cell_content;
+}
+
+
 function get_file_metadata_to_display($filepath,$exif_to_display, $iptc_to_display, $display_gps_data)
 {
 	$metadata_to_display = "";
@@ -932,23 +953,8 @@ case ('list'):
 			}
 		}
 		?>
-		<?php (is_int($k/MINIATURES_PER_LINE) ? print "<tr>": print "");  ?>
-		<td>
-			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
-				<tr class="tddeco">
-					<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
-						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo rawurlencode($photodir); ?>&photo=<?php echo $i+1; ?>">
-						  <img src="<?php echo $thumb_dir."__".$image_file_name ?>" border="0" alt="<?php echo $image_file_name; ?>" class="imageborder" />
-							<?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?>
-						</a>
-					</td>
-				</tr>
-				<tr>
-					<td align="center"><span class="Style2"><?php echo wordTruncate(($i+1) ."|" . $image_file_name); ?></span></td>
-				</tr>
-			</table>
-		</td>
-		<?php
+		<?php (is_int($k/MINIATURES_PER_LINE) ? print "<tr>": print "");
+			echo "<td>" . insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $i, $legend) . "</td>";
 		$k++;
 	}
 	?>
@@ -964,6 +970,7 @@ case ('list'):
 case ('detail'):
 	list($continue, $photodir, $dir) = verify_directories();
 	if(!$continue) {break;}
+	$thumb_dir = $dir. "/" . THUMBS_DIR ."/";
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
 	if ($handle = opendir($dir)) {
@@ -1006,20 +1013,12 @@ case ('detail'):
 		create_miniature($photodir, $listFile[$photo+1]);
 	}
 ?>
-<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; <?php echo $listFile[$photo]; ?> n&deg;<?php echo $photo; ?> / <?php echo $total_images; ?></span></div>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; <?php echo $listFile[$photo]; ?> n&deg;<?php echo ($photo+1); ?> / <?php echo ($total_images-1); ?></span></div>
 <br>
 <table border="0" align="center" cellpadding="8" cellspacing="0">
 	<tr>
 		<td width="<?php echo MINIATURE_MAXDIM + 26; ?>" height="<?php echo MINIATURE_MAXDIM + 26; ?>">
-		<?php if ($photo > 0) {?>
-		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
-			<tr class="tddeco">
-				<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
-				<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo-1]; ?>" alt="<?php echo $listFile[$photo-1]; ?>" border="0" class="imageborder"></a>
-				</td>
-			</tr>
-		</table>
-	<?php }?>
+		<?php if ($photo > 0) { echo insert_thumbnail_cell($photodir, $thumb_dir, $listFile[$photo-1], $photo-1, ""); }?>
 	</td>
 	<td>
 		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
@@ -1044,15 +1043,7 @@ case ('detail'):
 		</table>
 	</td>
 	<td width="<?php echo MINIATURE_MAXDIM + 26; ?>" height="<?php echo MINIATURE_MAXDIM + 26; ?>">
-	<?php if ($photo < $total_images -1) {?>
-		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
-			<tr class="tddeco">
-				<td width="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" height="<?php echo MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
-					<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=detail&dir=<?php echo $photodir; ?>&photo=<?php echo $photo+2; echo ($dim == IMAGE_STDDIM ? "" : "&dim=". $dim);?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . THUMBS_DIR . "/__" . $listFile[$photo+1]; ?>" alt="<?php echo $listFile[$photo+1]; ?>" border="0" class="imageborder"></a>
-				</td>
-			</tr>
-		</table>
-	<?php }?>
+	<?php if ($photo < $total_images -1) {echo insert_thumbnail_cell($photodir, $thumb_dir, $listFile[$photo+1], $photo+1, ""); }?>
 		</td>
 	</tr>
 </table>
