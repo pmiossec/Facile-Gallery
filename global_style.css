@@ -70,20 +70,21 @@ a.tooltip:hover em {
 	font-size: small;
 	display: block;
 	position: absolute;
-	top: 20px;
+	top: 30px; /* At least the Height of the image*/
 	left: -10px;
 	padding: 5px;
 	color: #000;
 	border: 1px solid #bbb;
 	background: #99CCCC;
-	/*width:300px;*/
+	width:300px;
+	text-align:left;
 }
 a.tooltip:hover em span {
 	position: absolute;
-	top: -7px;
+	top: -13px; /* -1 x Height of the image*/
 	left: 15px;
-	height: 7px;
-	width: 11px;
+	height: 13px; /* Height of the image*/
+	width: 25px; /* Width of the image*/
 	background: transparent url(tooltip.png);
 	margin:0;
 	padding: 0;
