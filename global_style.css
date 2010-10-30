@@ -76,7 +76,7 @@ a.tooltip:hover em {
 	color: #000;
 	border: 1px solid #bbb;
 	background: #99CCCC;
-	width:300px;
+	width:150%;
 	text-align:left;
 }
 a.tooltip:hover em span {
