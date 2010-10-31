@@ -10,8 +10,31 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
-function list_directory()
-{}
+function list_directory($dir2scan, $order_alphabetically, $exclude_file)
+{
+	// listage des répertoires et fichiers
+	if ($handle = opendir($dir2scan)) {
+		$cDir = 0;
+		$cFile = 0;
+		while (false !== ($file = readdir($handle))) {
+		if(!in_array($file,$exclude_file)){
+			if(is_dir($dir . "/" . $file)){
+				$listDir[$cDir] = $file;
+				$cDir++;
+			}
+			else{
+				$listFile[$cFile] = $file;
+				$cFile++;
+			}
+		}
+	   }
+	   closedir($handle);
+	}
+	if ($order_alphabetically == true) {
+		usort($listFile,"strnatcmp");
+	}
+	return array($listDir,$listFile);
+}
 
 
 function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_image, $legend)
@@ -780,27 +803,8 @@ case ('list'):
 	//création du répertoire miniatures et images
 	if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
 	if (!file_exists($image_dir)) { mkdir($image_dir); }
-	// listage des répertoires et fichiers
-	if ($handle = opendir($dir)) {
-		$cDir = 0;
-		$cFile = 0;
-		while (false !== ($file = readdir($handle))) {
-		if($file != "." && $file != ".."){
-			if(is_dir($dir . "/" . $file)){
-				$listDir[$cDir] = $file;
-				$cDir++;
-			}
-			else{
-				$listFile[$cFile] = $file;
-				$cFile++;
-			}
-		}
-	   }
-	   closedir($handle);
-	}
-	if (ALPHABETIC_ORDER == true) {
-		usort($listFile,"strnatcmp");
-	}
+
+	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER, array(".", "..", THUMBS_DIR , IMAGE_STDDIM));
 
 	//selon l'ordonnancement, on détermine la bonne pagination de retour à l'index principal.
 	if (ALPHABETIC_ORDER == true) {
