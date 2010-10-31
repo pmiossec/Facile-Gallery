@@ -24,11 +24,22 @@ a.Style2:hover {
 	color: #FF0000;
 	font-weight: bold;
 }
+table{
+	margin-left:auto;
+	margin-right:auto;
+	border :0;
+	padding:1px;
+	spacing:1px;
+}
+
 body,td,th {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 }
+tr.tddeco {
+	border: 1px solid #666666;
+}
 td.tdover {
-	border: 1px solid #FFFFFF;
+	border: 1px solid #666666;
 	background-color: #FFFFFF;
 }
 td.tdover:hover {

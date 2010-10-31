@@ -1,5 +1,7 @@
 <?php 
 //TODO:
+// - Mettre à la norme html5
+// - Gerer un fichier texte pour chaque répertoire indiquant le contenu du tooltip
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
 // - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables (listing des images du répertoire),...
 // - slideshow : améliorer placement dans le bandeau d'informations

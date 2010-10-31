@@ -10,20 +10,24 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
+function list_directory()
+{}
+
+
 function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_image, $legend)
 {
-	$cell_content = '<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
+	$cell_content = '<table>
 		<tr class="tddeco">
 			<td width="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE) .'" height="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE)
-			. '" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor=\'#666666\'" onmouseout="this.style.borderColor=\'#FFFFFF\'">
+			. '" align="center" valign="middle" class="tdover">
 				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?show_heading=detail&dir=' . rawurlencode($photodir) .'&photo=' . ($index_image+1) .'">
 					<img src="' . $thumb_dir."__".$image_file_name  .'" border="0" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em><span></span>$legend</em>");
-				$cell_content .= '</a>
+	$cell_content .= '</a>
 			</td>
 		</tr>
-		<tr>
+		<tr class="fdgris">
 			<td align="center"><span class="Style2">' . wordTruncate(($index_image+1) ."|" . $image_file_name) .'</span></td>
 		</tr>
 	</table>';
@@ -97,7 +101,6 @@ function create_miniature($photodir, $filename)
 
 function display_pages($page_uri,$page_num, $totalPages)
 {
-
 	$pages_html = '<div class="fdcolor1" align="center"><span class="Style2">';
 	if ($page_num > 1) {
 		$pages_html .= "<a href=\"$page_uri&page_num=" . ($page_num-1) .'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
@@ -110,11 +113,6 @@ function display_pages($page_uri,$page_num, $totalPages)
 			$pages_html .= "<b>$l</b> &nbsp;|&nbsp;";
 		}
 	}
-	/*if ($page_num != $l) {
-		$pages_html .= "<a href="\"$page_uri&page_num=" . $l .'" class="Style2">' .$l .'</a>';
-	} else {
-  			$pages_html .= "<b>$l</b>";"
-	}*/
 	if ($page_num < $totalPages) {
 		$pages_html .= "<a href=\"$page_uri&page_num=" . ($page_num+1) .'" class="Style2">&raquo;</a>';
 	}
@@ -126,71 +124,70 @@ function display_pages($page_uri,$page_num, $totalPages)
 //list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata($filepath, $extract_gps_data);
 function get_file_all_metadata($filepath, $extract_gps_data, $extrat_datas_only_if_gps_exists, $extrat_only_gps_datas)
 {
+	//Gestion des FATAL ERROR
+	ob_start("fatal_error_handler");
+	set_error_handler("handle_error");
+	//causes a warning
+	preg_replace();
 
-		//Gestion des FATAL ERROR
-		ob_start("fatal_error_handler");
-		set_error_handler("handle_error");
-		//causes a warning
-		preg_replace();
-
-		$decimal_lat = 0;
-		$decimal_long = 0;
-		$exif_exists = exif_imagetype($filepath) != IMAGETYPE_PNG && exif_imagetype($filepath) != IMAGETYPE_GIF;
-		//would normally cause a fatal error, but instead our output handler will be called allowing us to handle the error.
-		if($exif_exists)
-			$exifs = read_exif_data($filepath, 0, true);
-		//Gestion des FATAL ERROR
-		ob_end_flush();
-		if($extrat_datas_only_if_gps_exists || $extrat_only_gps_datas)
-		{
-			if(!$exif_exists)
-			{
-				return array(false, null, null, '', '', 0, 0);
-			}
-			if(!isset($exifs["GPS"]["GPSLatitude"][0])
-			|| !isset($exifs["GPS"]["GPSLongitude"][0]))
-			{
-				return array(false, null, null, '', '', 0, 0);
-			}
-			$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
-			$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
-			if($decimal_lat == 0 || $decimal_long == 0)
-			{
-				return array(false, null, null, '', '', 0, 0);
-			}
-			if($extrat_only_gps_datas)
-			{
-				return array(true, $exifs, null, '', '', $decimal_lat, $decimal_long);
-			}
-		}
-		$size = getimagesize($filepath, $info);
-		if (isset($info["APP13"])) {
-			$iptcs = iptcparse($info["APP13"]);
-			$legend = extract_iptc_data($iptcs, '2#120',"");
-			$tags = extract_iptc_data($iptcs, '2#025',TAGS);
-		}
-		else
-		{
-			$iptcs = null;
-			$legend = '';
-			$tags = '';
-		}
-		if($extrat_datas_only_if_gps_exists)
-			return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
+	$decimal_lat = 0;
+	$decimal_long = 0;
+	$exif_exists = exif_imagetype($filepath) != IMAGETYPE_PNG && exif_imagetype($filepath) != IMAGETYPE_GIF;
+	//would normally cause a fatal error, but instead our output handler will be called allowing us to handle the error.
+	if($exif_exists)
+		$exifs = read_exif_data($filepath, 0, true);
+	//Gestion des FATAL ERROR
+	ob_end_flush();
+	if($extrat_datas_only_if_gps_exists || $extrat_only_gps_datas)
+	{
 		if(!$exif_exists)
-			return array(true, null , $iptcs, $legend, $tags, 0, 0);
-		if(!$extract_gps_data)
-			return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+		{
+			return array(false, null, null, '', '', 0, 0);
+		}
 		if(!isset($exifs["GPS"]["GPSLatitude"][0])
 		|| !isset($exifs["GPS"]["GPSLongitude"][0]))
-			{ return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);}
+		{
+			return array(false, null, null, '', '', 0, 0);
+		}
 		$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
 		$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
 		if($decimal_lat == 0 || $decimal_long == 0)
 		{
-			return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+			return array(false, null, null, '', '', 0, 0);
 		}
+		if($extrat_only_gps_datas)
+		{
+			return array(true, $exifs, null, '', '', $decimal_lat, $decimal_long);
+		}
+	}
+	$size = getimagesize($filepath, $info);
+	if (isset($info["APP13"])) {
+		$iptcs = iptcparse($info["APP13"]);
+		$legend = extract_iptc_data($iptcs, '2#120',"");
+		$tags = extract_iptc_data($iptcs, '2#025',TAGS);
+	}
+	else
+	{
+		$iptcs = null;
+		$legend = '';
+		$tags = '';
+	}
+	if($extrat_datas_only_if_gps_exists)
 		return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
+	if(!$exif_exists)
+		return array(true, null , $iptcs, $legend, $tags, 0, 0);
+	if(!$extract_gps_data)
+		return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+	if(!isset($exifs["GPS"]["GPSLatitude"][0])
+	|| !isset($exifs["GPS"]["GPSLongitude"][0]))
+		{ return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);}
+	$decimal_lat =  extract_gps_datas($exifs["GPS"]["GPSLatitude"][0] , $exifs["GPS"]["GPSLatitude"][1] , $exifs["GPS"]["GPSLatitude"][2], $exifs["GPS"]["GPSLatitudeRef"]);
+	$decimal_long =  extract_gps_datas($exifs["GPS"]["GPSLongitude"][0] , $exifs["GPS"]["GPSLongitude"][1] , $exifs["GPS"]["GPSLongitude"][2], $exifs["GPS"]["GPSLongitudeRef"]);
+	if($decimal_lat == 0 || $decimal_long == 0)
+	{
+		return array(true, $exifs, $iptcs, $legend, $tags, 0, 0);
+	}
+	return array(true, $exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long);
 }
 //list($succes,$exifs, $iptcs, $legend, $tags) = get_file_metadata($filepath);
 function get_file_metadata($filepath)
@@ -554,7 +551,7 @@ $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 <html>
 <head>
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html;">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<link href="global_style.css" rel="stylesheet" type="text/css">
 <?php if(GOOGLEMAP_ACTIVATE) { ?>
@@ -565,7 +562,7 @@ $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 	 	#map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
 	</style>
 <?php } ?>
-<SCRIPT LANGUAGE=Javascript>
+<SCRIPT>
 <!--
 function inCell(cell, newcolor) {
 	if (!cell.contains(event.fromElement)) {
@@ -714,7 +711,7 @@ default:
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html; ?>
 	<br>
-	<table border="0" align="center" cellpadding="8" cellspacing="0">
+	<table>
 		<tr>
 	<?php
 	$k=0;
@@ -739,12 +736,12 @@ default:
 			?>
 	<?php (is_int($k/ICO_PER_LINE) ? print "<tr>": print "");  ?>
 		<td>
-			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
+			<table>
 				<tr class="tddeco">
 					<td width="<?php echo ICO_WIDTH + SPACE_AROUND_MINIATURE; ?>" height="<?php echo ICO_HEIGHT + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 						<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" width="<?php echo ICO_WIDTH ?>" height="<?php echo ICO_HEIGHT ?>" border="0" class="imageborder"></a></td>
 				</tr>
-				<tr>
+				<tr class="fdgris">
 					<td align="center"><span class="Style2"><?php
 				$titre_album = str_replace($separateurs, ' ', $listDir[$i]);
 				$nbmots = explode(" ", $titre_album);
@@ -917,7 +914,7 @@ case ('list'):
 
 	<?php echo $pages_html; ?>
 	<br>
-	<table border="0" align="center" cellpadding="8" cellspacing="0">
+	<table class="fdblanc">
 		<tr>
 	<?php
 	//si les références correspondent :
@@ -986,8 +983,6 @@ case ('detail'):
 		closedir($handle);
 	}
 	$photo -=1;
-	// Florent. Je retrie par ordre alphabétique mais le tableau trié $listFile2 commence à l'index 0.
-	// Je décale l'index pour que le tableau $listFile commence à 1, comme la variable $photo.
 	if (ALPHABETIC_ORDER == true)
 	{
 		usort($listFile,"strnatcmp");
@@ -1015,13 +1010,13 @@ case ('detail'):
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; <?php echo $listFile[$photo]; ?> n&deg;<?php echo ($photo+1); ?> / <?php echo $total_images; ?></span></div>
 <br>
-<table border="0" align="center" cellpadding="8" cellspacing="0">
+<table  class="fdblanc">
 	<tr>
 		<td>
 		<?php if ($photo > 0) { echo insert_thumbnail_cell($photodir, $thumb_dir, $listFile[$photo-1], $photo-1, ""); }?>
 	</td>
 	<td>
-		<table border="0" cellpadding="1" cellspacing="1" bgcolor="#666666">
+		<table  class="fdgris">
 			<tr class="tddeco">
 				<td align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 			<?php if ($photo >= 0 && $photo < $total_images) { ?>
