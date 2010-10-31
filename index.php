@@ -804,8 +804,9 @@ case ('list'):
 	if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
 	if (!file_exists($image_dir)) { mkdir($image_dir); }
 
-	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER, array(".", "..", THUMBS_DIR , IMAGE_STDDIM));
-
+	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER, array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME));
+	list($listDirThumb, $listFileThumb) = list_directory($thumb_dir, ALPHABETIC_ORDER, null);
+/*
 	//selon l'ordonnancement, on détermine la bonne pagination de retour à l'index principal.
 	if (ALPHABETIC_ORDER == true) {
 		if ($handle = opendir(PHOTOS_DIR)) {
@@ -870,8 +871,11 @@ case ('list'):
 			$valid++;
 		}
 	}
-	$total_files = count($listvalidimg);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
-
+	*/
+	$listvalidimg = $listFile;
+	$total_files = count($listFile);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
+//	$index_image_min = ($page_num -1) * MINIATURES_PER_PAGE;
+//	$index_image_max = ($page_num -1) * MINIATURES_PER_PAGE;
 	for($i=0;$i<count($listvalidimg);$i++)
 	{
 		$file_datas[$i] = array($listvalidimg[$i], get_file_metadata("./$dir/$listvalidimg[$i]"));
@@ -925,14 +929,6 @@ case ('list'):
 	$total_thumbFloor = MINIATURES_PER_PAGE*$page_num;
 	$k=0;
 	for ($i = $total_thumbFloor - MINIATURES_PER_PAGE; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
-		$fileexist = "";
-		$j = 0;
-		while ($j < ($total_files)) {
-			if ("__".$listvalidimg[$i] == (isset($extractthumbs[$j]) ? $extractthumbs[$j] : "")) {
-				$fileexist = $extractthumbs[$j];
-			}
-			$j++;
-		}
 		list($image_file_name, $datas) = $file_datas[$i];
 		//list($succes, $exifs, $iptcs, $legend, $tags) = $datas;
 		$legend = get_file_metadata_to_display('./' .$dir.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
@@ -940,7 +936,7 @@ case ('list'):
 		$ext = strtolower(substr($image_file_name, $pos + 1));
 		if (($ext == "jpeg" || $ext == "jpg" || $ext == "gif" || $ext == "png")
 			&& $image_file_name !== ICO_FILENAME) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
-			if("__".$image_file_name !== $fileexist)
+			if(!in_array("__".$image_file_name, $listFileThumb))
 			{
 				create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
 			}
