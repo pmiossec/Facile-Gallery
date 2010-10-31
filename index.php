@@ -812,78 +812,15 @@ case ('list'):
 	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
 			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
 			array("jpeg", "jpg", "gif", "png"));
-	list($listDirThumb, $listFileThumb) = list_directory($thumb_dir, ALPHABETIC_ORDER, null);
-/*
-	//selon l'ordonnancement, on détermine la bonne pagination de retour à l'index principal.
-	if (ALPHABETIC_ORDER == true) {
-		if ($handle = opendir(PHOTOS_DIR)) {
-			$cDir = 0;
-			while (false !== ($subdir = readdir($handle))) {
-				if($subdir != "." && $subdir != ".." && $subdir != THUMBS_DIR && $subdir != IMAGE_STDDIM){
-					if(is_dir(PHOTOS_DIR . "/" . $subdir)){
-						$listDir[$cDir] = $subdir;
-						$cDir++;
-					}
-				}
-			}
-			closedir($handle);
-		}
-		usort($listDir,"strnatcmp");
-		$photoDirNba = 1;
-		for ($b=0; $b < count($listDir); $b++) {
-			$ordertest[$photoDirNba] = $listDir[$b];
-					if($ordertest[$photoDirNba] == $photodir){
-					$dir_index = $photoDirNba;
-					} else {
-					$photoDirNba++;
-					}
-		}
-	} else {
-		// récupération du numéro du dossier photo
-		if ($handle = opendir(PHOTOS_DIR)) {
-			$photoDirNbb = 1;
-			while (false !== ($photoDirectory = readdir($handle))) {
-				if($photoDirectory != "." && $photoDirectory != ".." && $photoDirectory != THUMBS_DIR && $photoDirectory != IMAGE_STDDIM){
-					if(is_dir(PHOTOS_DIR . "/" . $photoDirectory)){
-						if($photoDirectory == $photodir){
-							$dir_index = $photoDirNbb;
-						} else {
-							$photoDirNbb++;
-						}
-					}
-				}
-			}
-			closedir($handle);
-		}
-	}
-	$page_index = ceil($dir_index/ICO_PER_PAGE);
+	list($listDirThumb, $listFileThumb) = list_directory($thumb_dir, ALPHABETIC_ORDER, null, null);
 
-	//on liste les miniatures
-	if ($handle = opendir($thumb_dir)) {
-		$thumb = 0;
-		while (false !== ($file = readdir($handle))) {
-			if($file != "." && $file != ".."){
-				if(is_file($thumb_dir . $file)){
-					$extractthumbs[$thumb] = $file;
-					$thumb++;
-				}
-			}
-		}
-		closedir($handle);
-	}
-	$valid = 0;
-	for ($i=0; $i < count($listFile); $i++) {
-		if ($listFile[$i] !== ICO_FILENAME) {
-			$listvalidimg[$valid] = $listFile[$i];
-			$valid++;
-		}
-	}
-	*/
-	$listvalidimg = $listFile;
-	$total_files = count($listFile);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
-	for($i=0;$i<count($listvalidimg);$i++)
+	//TODO A regérer
+	//$page_index = ceil($dir_index/ICO_PER_PAGE);
+	
+	$total_files = count($listFile);
+	for($i=0;$i<$total_files;$i++)
 	{
-		$file_datas[$i] = array($listvalidimg[$i], get_file_metadata("./$dir/$listvalidimg[$i]"));
+		$file_datas[$i] = array($listFile[$i], get_file_metadata("./$dir/$listFile[$i]"));
 	}
 
 	if($activate_slideshow)
@@ -943,7 +880,7 @@ case ('list'):
 		}
 		else
 		{
-			list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" .$listvalidimg[$i]);
+			list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" .$image_file_name);
 			if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
 			{
 				create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
