@@ -10,7 +10,7 @@ $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
 $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
 
-function list_directory($dir2scan, $order_alphabetically, $exclude_file)
+function list_directory($dir2scan, $order_alphabetically, $exclude_file, $supported_extensions)
 {
 	// listage des répertoires et fichiers
 	if ($handle = opendir($dir2scan)) {
@@ -23,8 +23,13 @@ function list_directory($dir2scan, $order_alphabetically, $exclude_file)
 				$cDir++;
 			}
 			else{
-				$listFile[$cFile] = $file;
-				$cFile++;
+				$pathinfos = pathinfo($file);
+				$file_ext = strtolower($pathinfos['extension']);
+				if($supported_extensions == null || (strlen($file_ext)!= 0 && in_array($file_ext, $supported_extensions)))
+				{
+					$listFile[$cFile] = $file;
+					$cFile++;
+				}
 			}
 		}
 	   }
@@ -804,7 +809,9 @@ case ('list'):
 	if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
 	if (!file_exists($image_dir)) { mkdir($image_dir); }
 
-	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER, array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME));
+	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array("jpeg", "jpg", "gif", "png"));
 	list($listDirThumb, $listFileThumb) = list_directory($thumb_dir, ALPHABETIC_ORDER, null);
 /*
 	//selon l'ordonnancement, on détermine la bonne pagination de retour à l'index principal.
@@ -874,8 +881,6 @@ case ('list'):
 	*/
 	$listvalidimg = $listFile;
 	$total_files = count($listFile);// on compte le nombre d'éléments dans le dossier sans compter "." et ".."
-//	$index_image_min = ($page_num -1) * MINIATURES_PER_PAGE;
-//	$index_image_max = ($page_num -1) * MINIATURES_PER_PAGE;
 	for($i=0;$i<count($listvalidimg);$i++)
 	{
 		$file_datas[$i] = array($listvalidimg[$i], get_file_metadata("./$dir/$listvalidimg[$i]"));
@@ -932,21 +937,16 @@ case ('list'):
 		list($image_file_name, $datas) = $file_datas[$i];
 		//list($succes, $exifs, $iptcs, $legend, $tags) = $datas;
 		$legend = get_file_metadata_to_display('./' .$dir.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
-		$pos = strrpos($image_file_name, '.'); //calcule la position du point dans la chaine $document, ex. : 8
-		$ext = strtolower(substr($image_file_name, $pos + 1));
-		if (($ext == "jpeg" || $ext == "jpg" || $ext == "gif" || $ext == "png")
-			&& $image_file_name !== ICO_FILENAME) { //si $document contient les extensions d'image et qu'il n'est pas icone/image du répertoire
-			if(!in_array("__".$image_file_name, $listFileThumb))
+		if(!in_array("__".$image_file_name, $listFileThumb))
+		{
+			create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
+		}
+		else
+		{
+			list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" .$listvalidimg[$i]);
+			if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
 			{
 				create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
-			}
-			else
-			{
-				list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $photodir . "/" . THUMBS_DIR . "/__" .$listvalidimg[$i]);
-				if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
-				{
-					create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
-				}
 			}
 		}
 		?>
