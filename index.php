@@ -590,23 +590,8 @@ $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 		body { height: 100%; margin: 0px; padding: 0px }
 	 	#map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
 	</style>
-<?php } ?>
-<SCRIPT>
-<!--
-function inCell(cell, newcolor) {
-	if (!cell.contains(event.fromElement)) {
-		cell.bgColor = newcolor;
-	}
-}
+<?php }
 
-function outCell(cell, newcolor) {
-	if (!cell.contains(event.toElement)) {
-		cell.bgColor = newcolor;
-	}
-}
-//-->
-</SCRIPT>
-<?php
 $activate_slideshow = SLIDESHOW_ACTIVATE; //TODO : ajouter la vérification de la présence de la lirairie
 if($show_heading =="list" && $activate_slideshow){?>
 	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
