@@ -4,7 +4,7 @@
 // - Dans le mode liste, regérer le num_page
 // - Gerer un fichier texte pour chaque répertoire indiquant le contenu du tooltip
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
-// - nettoyer le code....Mutualiser code de la ligne d'en haut et du calcul de certaines variables (listing des images du répertoire),...
+// - nettoyer le code....Mutualiser code de la ligne d'en haut
 // - slideshow : améliorer placement dans le bandeau d'informations
 // - améliorer placement info bulle dans la liste des photos
 

@@ -580,7 +580,7 @@ $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 <html>
 <head>
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
-	<meta http-equiv="Content-Type" content="text/html;">
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<link href="global_style.css" rel="stylesheet" type="text/css">
 <?php if(GOOGLEMAP_ACTIVATE) { ?>
@@ -724,7 +724,6 @@ default:
    <?php echo $pages_html; ?>
 	<br>
 	<table>
-		<tr>
 	<?php
 	$k=0;
 	for ($i = (ICO_PER_PAGE*$page_num) - ICO_PER_PAGE; $i < ($total_icons > (ICO_PER_PAGE*($page_num)) ? ICO_PER_PAGE*$page_num : $total_icons); $i++) {
@@ -750,7 +749,7 @@ default:
 		<td>
 			<table>
 				<tr class="tddeco">
-					<td width="<?php echo ICO_WIDTH + SPACE_AROUND_MINIATURE; ?>" height="<?php echo ICO_HEIGHT + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
+					<td width="<?php echo ICO_WIDTH + SPACE_AROUND_MINIATURE; ?>" height="<?php echo ICO_HEIGHT + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover">
 						<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" width="<?php echo ICO_WIDTH ?>" height="<?php echo ICO_HEIGHT ?>" border="0" class="imageborder"></a></td>
 				</tr>
 				<tr class="fdgris">
@@ -767,13 +766,14 @@ default:
 				?></span></td>
 			</tr>
 			</table>
-			</td>
+		</td>
 	<?php
-	//
+		(is_int(($k+1)/ICO_PER_LINE) ? print "</tr>": print "");
 		}
 		$k++;
 	}
 	?>
+	</tr>
 	</table><br>
 	<?php
 	echo $pages_html;
@@ -1061,7 +1061,7 @@ break;
 if(DISPLAY_FOOTER)
 	echo '<div class="fdgris" align="right"><span class="Style2">Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span></div>';
 ?><noscript>
-<!-- Si vous retirez la référence ci dessus pour des raisons esthétiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
+<!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
 Php Photo Module 0.3.0 | auteur : Philippe Miossec | auteur original : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
 </noscript>
 </body>
