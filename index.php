@@ -743,9 +743,10 @@ Php Photo Module 0.3.0 | auteur : Philippe Miossec | auteur original : <a href="
 	<?php (is_int($k/ICO_PER_LINE) ? print "<tr>": print "");  ?>
 		<td>
 			<table>
-				<tr class="tddeco">
-					<td width="<?php echo ICO_WIDTH + SPACE_AROUND_MINIATURE; ?>" height="<?php echo ICO_HEIGHT + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover">
-						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" border="0" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a></td>
+				<tr>
+					<td>
+						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" border="0" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+					</td>
 				</tr>
 				<tr class="fdgris">
 					<td align="center"><span class="Style2"><?php
