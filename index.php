@@ -580,7 +580,7 @@ $show_heading = (isset($_GET['show_heading']) ? $_GET['show_heading'] : "");
 <html>
 <head>
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta http-equiv="Content-Type" content="text/html;charset=windows-1252">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<link href="global_style.css" rel="stylesheet" type="text/css">
 <?php if(GOOGLEMAP_ACTIVATE) { ?>
@@ -875,6 +875,7 @@ case ('detail'):
 	if(!$continue) {break;}
 	$thumb_dir = $dir. "/" . THUMBS_DIR ."/";
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
+	$photo = $photo -1;
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
 
 	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,

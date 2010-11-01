@@ -1,6 +1,7 @@
 <?php 
 //TODO:
 // - Mettre à la norme html5
+// - Mettre un beau copyright
 // - Dans le mode liste, regérer le num_page
 // - Gerer un fichier texte pour chaque répertoire indiquant le contenu du tooltip
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
