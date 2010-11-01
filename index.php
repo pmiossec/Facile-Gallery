@@ -18,7 +18,7 @@ function list_directory($dir2scan, $order_alphabetically, $exclude_file, $suppor
 		$cFile = 0;
 		while (false !== ($file = readdir($handle))) {
 		if(!in_array($file,$exclude_file)){
-			if(is_dir($dir . "/" . $file)){
+			if(is_dir($dir2scan . "/" . $file)){
 				$listDir[$cDir] = $file;
 				$cDir++;
 			}
@@ -36,6 +36,7 @@ function list_directory($dir2scan, $order_alphabetically, $exclude_file, $suppor
 	   closedir($handle);
 	}
 	if ($order_alphabetically == true) {
+		usort($listDir,"strnatcmp");
 		usort($listFile,"strnatcmp");
 	}
 	return array($listDir,$listFile);
@@ -709,27 +710,10 @@ switch ($show_heading) {
 default:
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
 	// listage des répertoires et fichiers
-	if ($handle = opendir(PHOTOS_DIR)) {
-		$cDir = 0;
-		$cFile = 0;
-		while (false !== ($file = readdir($handle))) {
-			if($file != "." && $file != ".." &&  $file != THUMBS_DIR && $file != IMAGE_STDDIM){
-				if(is_dir(PHOTOS_DIR . "/" . $file)){
-					$listDir[$cDir] = $file;
-					$cDir++;
-				}
-				else{
-					$listFile[$cFile] = $file;
-					$cFile++;
-				}
-			}
-		}
-		if (ALPHABETIC_ORDER == true) {
-			usort($listDir,"strnatcmp");
-		}
-		closedir($handle);
-	}
-	//
+	list($listDir, $listFile) = list_directory("./".PHOTOS_DIR, ALPHABETIC_ORDER,
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array("jpeg", "jpg", "gif", "png"));
+
 	$total_icons = count($listDir);
 	$totalPages = ceil($total_icons/ICO_PER_PAGE);
 	$page_num = (isset($_GET['page_num']) && $_GET['page_num'] !== "" && $_GET['page_num'] <= $totalPages ? $_GET['page_num'] : "1");
@@ -907,23 +891,10 @@ case ('detail'):
 	$thumb_dir = $dir. "/" . THUMBS_DIR ."/";
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
-	if ($handle = opendir($dir)) {
-		$cFile = 1;
-		while (false !== ($file = readdir($handle))) {
-			if($file != "." && $file != ".."){
-				if(is_file($dir . "/" . $file) && $file != ICO_FILENAME){
-					$listFile[$cFile] = $file;
-					$cFile++;
-				}
-			}
-		}
-		closedir($handle);
-	}
-	$photo -=1;
-	if (ALPHABETIC_ORDER == true)
-	{
-		usort($listFile,"strnatcmp");
-	}
+
+	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array("jpeg", "jpg", "gif", "png"));
 	//
 	if (!isset($_GET['photo']) || $_GET['photo'] == "" || !isset($listFile[$photo])) {//on vérifie que la photo existe bien
 		echo_message_with_history_back(NO_PHOTO_TO_DISPLAY);
@@ -992,18 +963,11 @@ case ('map'):
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
 	$dim = (isset($_GET['dim']) ? $_GET['dim'] : IMAGE_STDDIM);
-	if ($handle = opendir($dir)) {
-		$cFile = 0;
-		while (false !== ($file = readdir($handle))) {
-			if($file != "." && $file != ".."){
-				if(is_file($dir . "/" . $file) && $file != ICO_FILENAME){
-					$listFile[$cFile] = $file;
-					$cFile++;
-				}
-			}
-		}
-		closedir($handle);
-	}
+
+	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array("jpeg", "jpg", "gif", "png"));
+
 	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml";
 	//echo $kml_path ;
 	if(!file_exists($kml_path) || $create_kml_file="true") {
@@ -1059,26 +1023,10 @@ case ('gallery_map'):
 	// listage des répertoires et fichiers
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
 
-	if ($handle = opendir(PHOTOS_DIR)) {
-		$cDir = 0;
-		$cFile = 0;
-		while (false !== ($file = readdir($handle))) {
-			if($file != "." && $file != ".." &&  $file != THUMBS_DIR && $file != IMAGE_STDDIM){
-				if(is_dir(PHOTOS_DIR . "/" . $file)){
-					$listDir[$cDir] = $file;
-					$cDir++;
-				}
-				else{
-					$listFile[$cFile] = $file;
-					$cFile++;
-				}
-			}
-		}
-		if (ALPHABETIC_ORDER == true) {
-			usort($listDir,"strnatcmp");
-		}
-		closedir($handle);
-	}
+	list($listDir, $listFile) = list_directory(PHOTOS_DIR, ALPHABETIC_ORDER,
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array("jpeg", "jpg", "gif", "png"));
+
 	$kml_gallery_filename = "gallery.kml";
 	$kml_path =  "./" . PHOTOS_DIR . "/" .$kml_gallery_filename ;
 	$placemarks = "";
