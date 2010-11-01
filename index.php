@@ -696,7 +696,7 @@ default:
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
 	// listage des répertoires et fichiers
 	list($listDir, $listFile) = list_directory("./".PHOTOS_DIR, ALPHABETIC_ORDER,
-			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME, IMAGE_400, IMAGE_800),
 			array("jpeg", "jpg", "gif", "png"));
 
 	$total_icons = count($listDir);
@@ -707,35 +707,45 @@ default:
 	<div class="fdgris"><span class="Style1"><?php echo HOME_NAME ?></span>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html; ?>
+	<!--a class="tooltip" href="#">(C)<em><span></span>
+Php Photo Module 0.3.0 | auteur : Philippe Miossec | auteur original : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+
+</em></a-->
 	<br>
 	<table>
 	<?php
 	$k=0;
 	for ($i = (ICO_PER_PAGE*$page_num) - ICO_PER_PAGE; $i < ($total_icons > (ICO_PER_PAGE*($page_num)) ? ICO_PER_PAGE*$page_num : $total_icons); $i++) {
-		if ($listDir[$i] != "." && $listDir[$i] != ".." && $listDir[$i] != THUMBS_DIR && $listDir[$i] != IMAGE_STDDIM && $listDir[$i] != IMAGE_400 && $listDir[$i] != IMAGE_800 && is_dir(PHOTOS_DIR . "/" . $listDir[$i]) == true) {
-			//création du répertoire miniatures et images
-			$thumb_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . THUMBS_DIR . "/";
-			$image_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . IMAGE_STDDIM . "/";
-			if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
-			if (!file_exists($image_dir)) { mkdir($image_dir); }
-			//création de la miniature
-			if (!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME)) {
+		//création du répertoire miniatures et images
+		$thumb_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . THUMBS_DIR . "/";
+		$image_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . IMAGE_STDDIM . "/";
+		if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
+		if (!file_exists($image_dir)) { mkdir($image_dir); }
+		$tooltip_filepath = PHOTOS_DIR . "/" . $listDir[$i] . "/" . FOLDER_INFO_FILENAME;
+		$legend = null;
+		if (file_exists($tooltip_filepath)) {
+			$fh = fopen($tooltip_filepath, 'r');
+			$legend = fread($fh, filesize($tooltip_filepath));
+			fclose($fh);
+		}
+		//création de la miniature
+		if (!file_exists(PHOTOS_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME)) {
+			create_icon($listDir[$i]);
+		}
+		else
+		{
+			list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $listDir[$i]  . "/" . ICO_FILENAME);//on liste les valeurs de la miniature
+			if ($width != ICO_WIDTH || $height != ICO_HEIGHT) {
 				create_icon($listDir[$i]);
 			}
-			else
-			{
-				list($width, $height, $type, $attr) = getimagesize(PHOTOS_DIR . "/" . $listDir[$i]  . "/" . ICO_FILENAME);//on liste les valeurs de la miniature
-				if ($width != ICO_WIDTH || $height != ICO_HEIGHT) {
-					create_icon($listDir[$i]);
-				}
-			}
-			?>
+		}
+		?>
 	<?php (is_int($k/ICO_PER_LINE) ? print "<tr>": print "");  ?>
 		<td>
 			<table>
 				<tr class="tddeco">
 					<td width="<?php echo ICO_WIDTH + SPACE_AROUND_MINIATURE; ?>" height="<?php echo ICO_HEIGHT + SPACE_AROUND_MINIATURE; ?>" align="center" valign="middle" class="tdover">
-						<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" width="<?php echo ICO_WIDTH ?>" height="<?php echo ICO_HEIGHT ?>" border="0" class="imageborder"></a></td>
+						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" border="0" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a></td>
 				</tr>
 				<tr class="fdgris">
 					<td align="center"><span class="Style2"><?php
@@ -754,7 +764,6 @@ default:
 		</td>
 	<?php
 		(is_int(($k+1)/ICO_PER_LINE) ? print "</tr>": print "");
-		}
 		$k++;
 	}
 	?>
@@ -794,10 +803,6 @@ case ('list'):
 
 	if($activate_slideshow)
 	{
-		//données du slideshow
-		$images='images = [';
-		$titles='titles = [' ;
-		$descriptions='descriptions = [';
 		for($i=0;$i<count($file_datas);$i++)
 		{
 			if($i!=0){
@@ -811,17 +816,16 @@ case ('list'):
 			$titles .= "'$image_file_name'";
 			if($succes)
 			{
-				$legend = my_nl2br($legend);
-				$descriptions.="'$legend'";
+				$descriptions.="'".my_nl2br($legend)."'";
 			}
 			else
 			{
 				$descriptions.="''";
 			}
 		}
-		$images.='];';
-		$titles.='];';
-		$descriptions.='];';
+		$images='images = [' . $images . '];';
+		$titles='titles = [' . $titles . '];';
+		$descriptions='descriptions = ['.$descriptions.'];';
 
 		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
@@ -910,7 +914,7 @@ case ('detail'):
 		<?php if ($photo > 0) { echo insert_thumbnail_cell($photodir, $thumb_dir, $listFile[$photo-1], $photo-1, ""); }?>
 	</td>
 	<td>
-		<table  class="fdgris">
+		<table >
 			<tr class="tddeco">
 				<td align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
 			<?php if ($photo >= 0 && $photo < $total_images) { ?>
@@ -920,7 +924,7 @@ case ('detail'):
 					} else { echo_message_with_history_back( NO_PHOTO_TO_DISPLAY ); } ?>
 				</td>
 			</tr>
-			<tr>
+			<tr class="fdgris">
 				<td align="center">
 					<span class="Style2">
 					<?php

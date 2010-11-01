@@ -3,7 +3,6 @@
 // - Mettre à la norme html5
 // - Mettre un beau copyright
 // - Dans le mode liste, regérer le num_page
-// - Gerer un fichier texte pour chaque répertoire indiquant le contenu du tooltip
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
 // - nettoyer le code....Mutualiser code de la ligne d'en haut
 // - slideshow : améliorer placement dans le bandeau d'informations
@@ -46,6 +45,8 @@ define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Ma
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
 define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
 define('DISPLAY_FOOTER', false); //Afficher le pied de page
+define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the directory display in the tooltip
+
 
 /***********************************************
  ***************EXIF tags to display************
