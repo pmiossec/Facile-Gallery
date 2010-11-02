@@ -38,7 +38,7 @@ Une fois créées, les photos restent sur le serveur.
 define('MINIATURES_PER_PAGE', 18); //nombre de miniatures à afficher par page
 define('MINIATURES_PER_LINE', 6); //nombre de miniatures à afficher par ligne dans les tableaux
 define('HOME_NAME', 'Mes Photos'); //nom de la page principale
-define('ICO_PER_PAGE', 16); //nombre de miniatures à afficher sur la page d'accueil
+define('ICO_PER_PAGE', 12); //nombre de miniatures à afficher sur la page d'accueil
 define('ICO_PER_LINE', 4); //nombre de miniatures à afficher par ligne sur la page d'accueil
 define('IMAGE_STDDIM', '800'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('IMAGE_400', '400'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale

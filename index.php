@@ -135,15 +135,16 @@ function display_pages($page_uri,$page_num, $totalPages)
 		$pages_html .= "<a href=\"$page_uri&page_num=" . ($page_num-1) .'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
 	}
 
-	for ($l =1; $l < $totalPages; $l++) {
+	for ($l =1; $l <= $totalPages; $l++) {
+		if($l > 1) $pages_html .= " &nbsp;|&nbsp;";
 		if ($page_num != $l) {
-			$pages_html .= "<a href=\"$page_uri&page_num=" . $l .'" class="Style2">' .$l .'</a> &nbsp;|&nbsp;';
+			$pages_html .= "<a href=\"$page_uri&page_num=" . $l .'" class="Style2">' .$l .'</a>';
 		} else {
-			$pages_html .= "<b>$l</b> &nbsp;|&nbsp;";
+			$pages_html .= "<b>$l</b>";
 		}
 	}
 	if ($page_num < $totalPages) {
-		$pages_html .= "<a href=\"$page_uri&page_num=" . ($page_num+1) .'" class="Style2">&raquo;</a>';
+		$pages_html .= " &nbsp;|&nbsp;<a href=\"$page_uri&page_num=" . ($page_num+1) .'" class="Style2">&raquo;</a>';
 	}
 	$pages_html .= '</span></div>';
 	return $pages_html;
