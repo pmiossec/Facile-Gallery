@@ -171,6 +171,9 @@ function create_miniature($photodir, $filename)
 function display_pages($page_uri,$page_num, $totalPages)
 {
 	$pages_html = '<div class="fdcolor1" align="center"><span class="Style2">';
+	if($totalPages == 1)
+		return $pages_html . "</span></div>";
+
 	if ($page_num > 1) {
 		$pages_html .= "<a href=\"$page_uri" . ($page_num-1) .'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
 	}
