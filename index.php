@@ -46,9 +46,9 @@ function list_directory($dir2scan, $order_alphabetically, $exclude_file, $suppor
 function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_image, $legend)
 {
 	$cell_content = '<table>
-		<tr class="tddeco">
+		<tr>
 			<td width="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE) .'" height="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE)
-			. '" align="center" valign="middle" class="tdover">
+			. '" align="center" valign="middle">
 				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?show_heading=detail&dir=' . rawurlencode($photodir) .'&photo=' . ($index_image+1) .'">
 					<img src="' . $thumb_dir."__".$image_file_name  .'" border="0" alt="' . $image_file_name .'" class="imageborder" />';
 
