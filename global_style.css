@@ -47,7 +47,10 @@ td.tdover:hover {
 }
 .fdgris {
 	background-color: #666666;
-	padding: 4px;
+	padding: 2px;
+}
+td.fdgris {
+	text-align : center;
 }
 .fdcolor1 {
 	background-color: #99CCCC;
