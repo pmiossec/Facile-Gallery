@@ -707,10 +707,7 @@ default:
 	<div class="fdgris"><span class="Style1"><?php echo HOME_NAME ?></span>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html; ?>
-	<!--a class="tooltip" href="#">(C)<em><span></span>
-Php Photo Module 0.3.0 | auteur : Philippe Miossec | auteur original : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
 
-</em></a-->
 	<br>
 	<table>
 	<?php

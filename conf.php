@@ -1,7 +1,11 @@
 <?php 
+require("fr.php"); //Français
+//require("en.php"); //English
+
 //TODO:
 // - Mettre à la norme html5
 // - Mettre un beau copyright
+// - Suppression des fichiers miniatures et resize
 // - nettoyer le code....Mutualiser code de la ligne d'en haut
 // - Gérer 2 num_page pour la galerie principale et le mode list
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
