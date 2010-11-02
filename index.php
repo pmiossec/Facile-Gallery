@@ -56,8 +56,8 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 	$cell_content .= '</a>
 			</td>
 		</tr>
-		<tr class="fdgris">
-			<td align="center"><span class="Style2">' . wordTruncate(($index_image+1) ."|" . $image_file_name) .'</span></td>
+		<tr>
+			<td class="fdgris"><span class="Style2">' . wordTruncate(($index_image+1) ."|" . $image_file_name) .'</span></td>
 		</tr>
 	</table>';
 	return $cell_content;
