@@ -916,8 +916,8 @@ case ('detail'):
 	</td>
 	<td>
 		<table >
-			<tr class="tddeco">
-				<td align="center" valign="middle" class="tdover" onmouseover="this.style.borderColor='#666666'" onmouseout="this.style.borderColor='#FFFFFF'">
+			<tr>
+				<td align="center" valign="middle">
 			<?php if ($photo >= 0 && $photo < $total_images) { ?>
 						<a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
 							<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> border="0" class="imageborder">
