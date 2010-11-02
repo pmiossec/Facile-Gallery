@@ -50,7 +50,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 			<td width="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE) .'" height="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE)
 			. '" align="center" valign="middle">
 				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?show_heading=detail&dir=' . rawurlencode($photodir) .'&photo=' . ($index_image+1) .'">
-					<img src="' . $thumb_dir."__".$image_file_name  .'" border="0" alt="' . $image_file_name .'" class="imageborder" />';
+					<img src="' . $thumb_dir."__".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em><span></span>$legend</em>");
 	$cell_content .= '</a>
@@ -745,7 +745,7 @@ Php Photo Module 0.3.0 | auteur : Philippe Miossec | auteur original : <a href="
 			<table>
 				<tr>
 					<td>
-						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" border="0" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
 					</td>
 				</tr>
 				<tr class="fdgris">
@@ -837,8 +837,7 @@ case ('list'):
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php } if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
 	<?php echo $pages_html; ?>
-	<br>
-	<table class="fdblanc">
+	<table>
 		<tr>
 	<?php
 	//si les références correspondent :
@@ -908,19 +907,18 @@ case ('detail'):
 	}
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?show_heading=list&dir=<?php echo $photodir ?>&page_num=<?php echo ceil($photo/MINIATURES_PER_PAGE); ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a> &raquo; <?php echo $listFile[$photo]; ?> n&deg;<?php echo ($photo+1); ?> / <?php echo $total_images; ?></span></div>
-<br>
-<table  class="fdblanc">
+<table>
 	<tr>
 		<td>
 		<?php if ($photo > 0) { echo insert_thumbnail_cell($photodir, $thumb_dir, $listFile[$photo-1], $photo-1, ""); }?>
 	</td>
 	<td>
-		<table >
+		<table>
 			<tr>
 				<td align="center" valign="middle">
 			<?php if ($photo >= 0 && $photo < $total_images) { ?>
 						<a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
-							<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> border="0" class="imageborder">
+							<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> class="imageborder">
 						</a><?php
 					} else { echo_message_with_history_back( NO_PHOTO_TO_DISPLAY ); } ?>
 				</td>

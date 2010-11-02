@@ -2,7 +2,7 @@
 //TODO:
 // - Mettre à la norme html5
 // - Mettre un beau copyright
-// - Dans le mode liste, regérer le num_page
+// - Gérer 2 num_page pour la galerie principale et le mode list
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
 // - nettoyer le code....Mutualiser code de la ligne d'en haut
 // - slideshow : améliorer placement dans le bandeau d'informations
