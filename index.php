@@ -86,7 +86,7 @@ function get_file_metadata_to_display($filepath,$exif_to_display, $iptc_to_displ
 				$isIptcDisplayed = true;
 			}
 		}
-		if($isIptcDisplayed) { $metadata_to_display .= '<hr size="1" noshade>'; }
+		if($isIptcDisplayed) { $metadata_to_display .= '<hr size="1">'; }
 	}
 	if ($exifs!=null) {
 		$metadata_to_display .=  $exifs["FILE"]["FileName"] . " || " . round(($exifs["FILE"]["FileSize"]/1024), 0) . " Ko || ".$exifs["COMPUTED"]["Width"]." x ".$exifs["COMPUTED"]["Height"]."px\n";
