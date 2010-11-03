@@ -22,7 +22,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	;
 	if($level!=0)
 	{
-		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&gallery_page_num=' . $gallery_page_num . '">';
+		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&amp;gallery_page_num=' . $gallery_page_num . '">';
 	}
 	$header .= HOME_NAME;
 	//Directory
@@ -33,7 +33,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 		$header .= '&raquo; ';
 		if($level == 2)
 		{
-			$header .= '<a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&dir='.$photodir.'&gallery_page_num=' . $gallery_page_num . '&thumb_page_num='.$thumb_page_num .'">';
+			$header .= '<a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$photodir.'&amp;gallery_page_num=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .'">';
 		}
 		$header .= str_replace($separateurs, ' ', $photodir);
 		if($level == 2)
@@ -89,7 +89,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 		<tr>
 			<td width="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE) .'" height="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE)
 			. '" align="center" valign="middle">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&gallery_page_num='.$gallery_page_num.'&thumb_page_num='.$thumb_page_num.'&dir=' . rawurlencode($photodir) .'&image_num=' . ($index_image+1) .'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .'">
 					<img src="' . $thumb_dir."__".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em><span></span>$legend</em>");
@@ -139,7 +139,7 @@ function get_file_metadata_to_display($filepath,$exif_to_display, $iptc_to_displ
 		}
 		if($display_gps_data && $decimal_lat != 0 && $decimal_long != 0)
 		{
-			$metadata_to_display .=  "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&spn=0.01,0.01&q=". $decimal_lat."," . $decimal_long."&hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a>";
+			$metadata_to_display .=  "<a target=\"_blank\" href=\"http://maps.google.com/maps?ll=". $decimal_lat."," . $decimal_long."&amp;spn=0.01,0.01&amp;q=". $decimal_lat."," . $decimal_long."&amp;hl=fr\">GPS: ". $decimal_lat."," . $decimal_long."</a>";
 		}
 		/*$keys = array_keys($exif["EXIF"]);
 		for ($i=0;$i < count($keys); $i++) {
@@ -561,7 +561,7 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 		$decimal_long = 0;
 		list($succes, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($dir.'/'.$listFile[$i]);
 		if($succes){
-				$html_code = "<a href=\"$url_path_script?here=list&dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
+				$html_code = "<a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
 				$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
 				$kml_file = $kml_file . $html_code;
 				$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
@@ -743,7 +743,7 @@ default:
 	$total_icons = count($listDir);
 	$totalPages = ceil($total_icons/ICO_PER_PAGE);
 	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
-	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?here=default&gallery_page_num=", $page_num, $totalPages);
+	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
 	echo '<div class="fdgris">' . construct_header(O,PHOTOS_DIR, $total_icons, null, null, null);
 ?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
@@ -783,7 +783,7 @@ default:
 			<table>
 				<tr>
 					<td>
-						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&gallery_page_num=<?php echo $page_num; ?>&dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
 					</td>
 				</tr>
 				<tr>
@@ -865,14 +865,14 @@ case ('list'):
 		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
 	$totalPages =ceil(($total_files)/MINIATURES_PER_PAGE);
-	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?here=list&dir=$photodir&gallery_page_num=$gallery_page_num&thumb_page_num=", $thumb_page_num, $totalPages);
+	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$photodir&amp;gallery_page_num=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
 	$index_photo_min = (($thumb_page_num-1)*MINIATURES_PER_PAGE)+1;
 	if ($thumb_page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) )
 	{ $index_photo_max = (($thumb_page_num)*MINIATURES_PER_PAGE); } else { $index_photo_max = $total_files; }
 
 	echo '<div class="fdgris">'. construct_header(1, $photodir, $total_files, null , $index_photo_min, $index_photo_max);
 	?>
-	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
+	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&amp;dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
 			if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
 			if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
@@ -987,7 +987,7 @@ case ('map'):
 	list($continue, $photodir, $dir) = verify_directories();
 	if(!$continue) {break;}
 ?>
-<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;dir=<?php echo $photodir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $photodir); ?></a></span>
 <?php
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
@@ -1034,7 +1034,7 @@ case ('map'):
 if(file_exists($kml_path)) {
 	$kml_url = $url_path_datas. $photodir.".kml";
 //	echo $kml_url ;
-	echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
+	echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
 	echo "</div>";
 	add_map($kml_url);
 }
@@ -1076,7 +1076,7 @@ case ('gallery_map'):
 	if(file_exists($kml_path)) {
 		$kml_url = $url_path_datas . $kml_gallery_filename;
 	//	echo $kml_url ;
-		echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
+		echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
 		echo "</div>";
 		add_map($kml_url);
 	}
