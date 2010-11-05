@@ -17,7 +17,9 @@ $thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1
 function construct_header($level, $photodir, $total_images, $photo_name, $index_photo_min, $index_photo_max)
 {
 	//HOME
-	$header = '<span class="Style1">// ';
+	$header = '<span class="Style1"><a class="Style1 tooltip" href="#">©<em style="width:230px"><span></span>No copyright, just copyleft :)<br/>
+Based on (modified) :<br>- Php Photo Module (CeCILL) / Jensen SIU
+<br>- PrettyPhoto (CC-Attribution) / Stephane Caron </em></a>&nbsp;// ';
 	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vérification que le numéro de page existe bien
 	;
 	if($level!=0)
@@ -92,7 +94,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .'">
 					<img src="' . $thumb_dir."__".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
-					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em><span></span>$legend</em>");
+					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>$legend</em>");
 	$cell_content .= '</a>
 			</td>
 		</tr>
@@ -783,7 +785,7 @@ default:
 			<table>
 				<tr>
 					<td>
-						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em style=\"width:250px\"><span></span>$legend</em>");?></a>
 					</td>
 				</tr>
 				<tr>
@@ -1088,10 +1090,13 @@ break;
 //fin du switch
 }
 if(DISPLAY_FOOTER)
-	echo '<div class="fdgris" align="right"><span class="Style2">Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span></div>';
+	echo '<div class="fdgris"><span class="Style2">Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span>
+<span class="Style2" style="float:right;">Slideshow by "<a class="Style2" href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron</span></div>';
 ?><noscript>
 <!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
-Php Photo Module 0.3.0 | auteur : Philippe Miossec | auteur original : <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+Based on :
+- Php script by "Php Photo Module" 0.2.3 by <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+- Slideshow by "<a href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron
 </noscript>
 </body>
 </html>

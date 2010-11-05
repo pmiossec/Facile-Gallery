@@ -90,12 +90,12 @@ a.tooltip:hover em {
 	display: block;
 	position: absolute;
 	top: 24px; /* At least the Height of the image*/
-	left: -10px;
+	left: -5px;
 	padding: 5px;
 	color: #000;
 	border: 1px solid #bbb;
 	background: #99CCCC;
-	width:200%;
+	/*width:auto;*/
 	text-align:left;
 }
 a.tooltip:hover em span {

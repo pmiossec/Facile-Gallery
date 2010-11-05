@@ -1,15 +1,13 @@
 <?php 
-require("fr.php"); //Français
-//require("en.php"); //English
+//require("fr.php"); //Français
+require("en.php"); //English
 
 //TODO:
-// - Mettre à la norme html5
-// - Mettre un beau copyright
-// - Suppression des fichiers miniatures et resize
-// - nettoyer le code....Mutualiser code de la ligne d'en haut
 // - Répendre 2 num_page sur les pages de google map
-// - slideshow : compter le temps de latence APRES l'affichage de l'image
+// - Suppression des fichiers miniatures et resize
 // - slideshow : améliorer placement dans le bandeau d'informations
+// - Mettre à la norme html5
+// - slideshow : compter le temps de latence APRES l'affichage de l'image
 
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
 // - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
@@ -47,7 +45,7 @@ define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
 define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
-define('DISPLAY_FOOTER', false); //Afficher le pied de page
+define('DISPLAY_FOOTER', true); //Afficher le pied de page
 define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the directory display in the tooltip
 
 
