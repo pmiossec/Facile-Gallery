@@ -963,23 +963,20 @@ case ('gallery_map'):
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
-	// listage des répertoires et fichiers
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
-
-	list($listDir, $listFile) = list_directory(PHOTOS_DIR, ALPHABETIC_ORDER,
-			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
-			array("jpeg", "jpg", "gif", "png"));
-
 	$kml_gallery_filename = "gallery.kml";
 	$kml_path =  "./" . PHOTOS_DIR . "/" .$kml_gallery_filename ;
 	$placemarks = "";
 	if(!file_exists($kml_path) || $create_kml_file="true") {
 		$at_least_one = false;
+		list($listDir, $listFile) = list_directory(PHOTOS_DIR, ALPHABETIC_ORDER,
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array("jpeg", "jpg", "gif", "png"));
 		for($iDir=0;$iDir< count($listDir); $iDir++){
 			list($find_one, $placemark) = find_file_with_gps_data($listDir[$iDir], $url_path_script, $url_path_datas);
 			if($find_one)
 			{
-				$placemarks = $placemarks .  $placemark ;
+				$placemarks .= $placemark ;
 				$at_least_one = true;
 			}
 		}
@@ -988,9 +985,8 @@ case ('gallery_map'):
 		}
 	}
 	if(file_exists($kml_path)) {
-		$kml_url = $url_path_datas . $kml_gallery_filename;
 		echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span></div>';
-		add_map($kml_url);
+		add_map($url_path_datas . $kml_gallery_filename);
 	}
 	else
 	{
