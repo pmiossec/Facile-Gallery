@@ -333,13 +333,7 @@ function add_map($url_kml_file){
 }
 function echo_message_with_history_back($message)
 {
-		echo '<table border="0" align="center" cellpadding="28" cellspacing="0">
-			<tr>
-				<td align="center">
-				<a href="javascript:history.go(-1)">' . $message . '</a>
-				</td>
-		</tr>
-	</table>';
+	echo '<a align="center" href="javascript:history.go(-1)">' . $message . '</a>';
 }
 function verify_directories(){
 	$photodir = (isset($_GET['dir']) ? $_GET['dir'] : "");
@@ -506,8 +500,7 @@ function create_icon($dir2iconize) {
 function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas) {
 	$dir = PHOTOS_DIR."/".$dir2findgps; //chemin vers le répertoire dont on doit créer l'icone
 	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
-			array(".", ".."),
-			array("jpeg", "jpg", "gif", "png"));
+			array(".", ".."), array("jpeg", "jpg", "gif", "png"));
 
 	for($i=0;$i<$cFile;$i++){
 		$decimal_lat = 0;
@@ -747,7 +740,7 @@ default:
 	</table><br>
 	<?php
 	echo $pages_html_indexes;
-	break;//Fin : listing des répertoires photos sur la page d'index par défaut
+	break;//default
 
 //listing des miniatures dans un répertoire photo spécifié
 case ('list'):
@@ -841,8 +834,7 @@ case ('list'):
 	</table><br>
 <?php
 	echo $pages_html_indexes;
-	break;//Fin : listing des miniatures dans un répertoire photo spécifié
-
+	break;//list
 
 //détail de la photo
 case ('detail'):
@@ -910,9 +902,9 @@ case ('detail'):
 		</td>
 	</tr>
 </table>
-
 <?php
-break;
+break;//detail
+
 case ('map'):
 	if(!GOOGLEMAP_ACTIVATE) {break;}
 	list($continue, $photodir, $dir) = verify_directories();
@@ -963,7 +955,8 @@ else
 {
 	echo '</div><div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
 }
-break;
+break;//map
+
 case ('gallery_map'):
 	if(!GOOGLEMAP_ACTIVATE) {break;}
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
