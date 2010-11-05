@@ -698,7 +698,6 @@ default:
 ?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html_indexes; ?>
-
 	<br>
 	<table>
 	<?php
@@ -728,7 +727,7 @@ default:
 			}
 		}
 		?>
-	<?php (is_int($k/ICO_PER_LINE) ? print "<tr>": print "");  ?>
+	<?php print is_int($k/ICO_PER_LINE) ? "<tr>": "";  ?>
 		<td>
 			<table>
 				<tr>
@@ -752,7 +751,7 @@ default:
 			</table>
 		</td>
 	<?php
-		(is_int(($k+1)/ICO_PER_LINE) ? print "</tr>": print "");
+		print is_int(($k+1)/ICO_PER_LINE) ? "</tr>": "";
 		$k++;
 	}
 	?>
@@ -857,9 +856,7 @@ case ('list'):
 	break;//Fin : listing des miniatures dans un répertoire photo spécifié
 
 
-////////////////////
 //détail de la photo
-////////////////////
 case ('detail'):
 	list($continue, $photodir, $dir) = verify_directories();
 	if(!$continue) {break;}
@@ -870,7 +867,7 @@ case ('detail'):
 			array("jpeg", "jpg", "gif", "png"));
 
 	$dim = IMAGE_STDDIM;
-	//
+
 	if ($photo == "" || !isset($listFile[$photo-1])) {//on vérifie que la photo existe bien
 		echo_message_with_history_back(NO_PHOTO_TO_DISPLAY);
 		break;
@@ -944,10 +941,7 @@ case ('map'):
 			array("jpeg", "jpg", "gif", "png"));
 
 	$kml_path =  "./" . PHOTOS_DIR . "/" . $photodir. ".kml";
-	//echo $kml_path ;
 	if(!file_exists($kml_path) || $create_kml_file="true") {
-	//if(true){
-	//Creer le fichier .kml
 	$at_least_one = false;
 	for ($i=0;$i < count($listFile); $i++) {
 	
@@ -958,20 +952,14 @@ case ('map'):
 			$name= $file_to_add;
 			if($iptcs != null)
 			{
-				$html_code = "<a href=\"$url_path_datas$photodir/" . $file_to_add ."\"><img src=\"$url_path_datas$photodir/". THUMBS_DIR . "/__$file_to_add\"></a><br/>";
-				$html_code = $html_code . "<span class=\"legend\">";
-				$html_code = $html_code . my_nl2br($legend);
-				$html_code = $html_code . "</span><br/>\n";
-				$html_code = $html_code . $tags."<br/>\n";
+				$html_code = "<a href=\"$url_path_datas$photodir/$file_to_add\"><img src=\"$url_path_datas$photodir/". THUMBS_DIR . "/__$file_to_add\"></a><br/>
+					<span class=\"legend\">" . my_nl2br($legend) . "</span><br/>\n $tags<br/>\n";
 			}
-			$kml_file = $kml_file . "<Placemark><name>" . $name . "</name><description><![CDATA[";
-			$kml_file = $kml_file . $html_code;
-			$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+			$kml_file = $kml_file . "<Placemark><name>$name</name><description><![CDATA[$html_code]]></description><Point><coordinates>$decimal_long,$decimal_lat</coordinates></Point></Placemark>";
 			$at_least_one = true;
 		}
 	}
 
-	//Ecrire le fichier
 	if($at_least_one){
 		write_kml_file($kml_file,$kml_path);
 	}
@@ -979,7 +967,6 @@ case ('map'):
 //Afficher une carte google map
 if(file_exists($kml_path)) {
 	$kml_url = $url_path_datas. $photodir.".kml";
-//	echo $kml_url ;
 	echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
 	echo "</div>";
 	add_map($kml_url);
