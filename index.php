@@ -170,29 +170,29 @@ function create_miniature($photodir, $filename)
 		}
 }
 
-function display_pages($page_uri,$page_num, $totalPages)
+function display_pages_indexes($page_uri,$page_num, $totalPages)
 {
-	$pages_html = '<div class="fdcolor1" align="center"><span class="Style2">';
+	$pages_indexes = '<div class="fdcolor1" align="center"><span class="Style2">';
 	if($totalPages == 1)
-		return $pages_html . "</span></div>";
+		return $pages_indexes . "</span></div>";
 
 	if ($page_num > 1) {
-		$pages_html .= "<a href=\"$page_uri" . ($page_num-1) .'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
+		$pages_indexes .= "<a href=\"$page_uri" . ($page_num-1) .'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
 	}
 
 	for ($l =1; $l <= $totalPages; $l++) {
-		if($l > 1) $pages_html .= " &nbsp;|&nbsp;";
+		if($l > 1) $pages_indexes .= " &nbsp;|&nbsp;";
 		if ($page_num != $l) {
-			$pages_html .= "<a href=\"$page_uri" . $l .'" class="Style2">' .$l .'</a>';
+			$pages_indexes .= "<a href=\"$page_uri" . $l .'" class="Style2">' .$l .'</a>';
 		} else {
-			$pages_html .= "<b>$l</b>";
+			$pages_indexes .= "<b>$l</b>";
 		}
 	}
 	if ($page_num < $totalPages) {
-		$pages_html .= " &nbsp;|&nbsp;<a href=\"$page_uri" . ($page_num+1) .'" class="Style2">&raquo;</a>';
+		$pages_indexes .= " &nbsp;|&nbsp;<a href=\"$page_uri" . ($page_num+1) .'" class="Style2">&raquo;</a>';
 	}
-	$pages_html .= '</span></div>';
-	return $pages_html;
+	$pages_indexes .= '</span></div>';
+	return $pages_indexes;
 }
 
 
@@ -440,22 +440,9 @@ function scan_invalid_char($dir2scan) {
 ///fonction pour créer une miniature de la 1ère image du sous dossier photo
 function create_icon($dir2iconize) {
 	$dir = PHOTOS_DIR."/".$dir2iconize; //chemin vers le répertoire dont on doit créer l'icone
-	if ($handle = opendir($dir)) {
-		$cFile = 0;
-		while (false !== ($file = readdir($handle))) {
-			if($file != "." && $file != ".."){
-				if(is_file($dir . "/" . $file)){
-					$listFile[$cFile] = $file;
-					$cFile++;
-				}
-			}
-		}
-		closedir($handle);
-	}
-
-	if (ALPHABETIC_ORDER == true) {
-		usort($listFile,"strnatcmp");
-	}
+	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
+			array(".", ".."),
+			array("jpeg", "jpg", "gif", "png"));
 
 	//$extract = scandir($dir);//scan des "array" du répertoire
 	$first_dir_item = $listFile[0]; // on extrait la valeur du premier fichier du répertoire (après "." et "..")
@@ -527,29 +514,20 @@ function create_icon($dir2iconize) {
 ///fonction pour trouver une image ayant des données GPS
 function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas) {
 	$dir = PHOTOS_DIR."/".$dir2findgps; //chemin vers le répertoire dont on doit créer l'icone
-	if ($handle = opendir($dir)) {
-		$cFile = 0;
-		while (false !== ($file = readdir($handle))) {
-			if($file != "." && $file != ".."){
-				if(is_file($dir . "/" . $file)){
-					$listFile[$cFile] = $file;
-					$cFile++;
-				}
-			}
-		}
-		closedir($handle);
-	}
+	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
+			array(".", ".."),
+			array("jpeg", "jpg", "gif", "png"));
 
 	for($i=0;$i<$cFile;$i++){
 		$decimal_lat = 0;
 		$decimal_long = 0;
 		list($succes, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($dir.'/'.$listFile[$i]);
 		if($succes){
-				$html_code = "<a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
-				$kml_file = $kml_file . "<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[";
-				$kml_file = $kml_file . $html_code;
-				$kml_file = $kml_file . "]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
-				return array(true, $kml_file);
+			$html_code = "<a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>
+							<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[
+							$html_code
+							]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+			return array(true, $kml_file);
 		}
 	}
 	return array(false, "");
@@ -588,7 +566,6 @@ function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2
 ///fonction pour tronquer un nom trop long
 function wordTruncate($str) {
 	$str_to_count = html_entity_decode($str);
-	//echo strlen($str_to_count);
 	if (strlen($str_to_count) <= PHOTONAME_MAXCHAR+6) {
 		return $str;
 	} else {
@@ -609,7 +586,7 @@ function wordTruncate($str) {
 	<style type="text/css">
 		html { height: 100% }
 		body { height: 100%; margin: 0px; padding: 0px }
-	 	#map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
+		#map_canvas { height: 100% ; margin-left: auto; margin-right: auto; }
 	</style>
 <?php }
 
@@ -619,10 +596,6 @@ if($here =="list" && $activate_slideshow){?>
 	<link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
 	<script src="js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
-		$(document).ready(function(){
-			$("a[rel^='prettyPhoto']").prettyPhoto();
-		});
-
 		$(document).ready(function(){
 			$("a[rel^='prettyPhoto']").prettyPhoto({
 				//Parameters slideshow : you can modify to your wish!!!
@@ -710,12 +683,9 @@ else
 }
 ini_set('max_execution_time', 120); //2 mn max
 switch ($here) {
-///////////////////////////////////////////////////////////////
 //listing des répertoires photos sur la page d'index par défaut
-///////////////////////////////////////////////////////////////
 default:
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
-	// listage des répertoires et fichiers
 	list($listDir, $listFile) = list_directory("./".PHOTOS_DIR, ALPHABETIC_ORDER,
 			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME, IMAGE_400, IMAGE_800),
 			array("jpeg", "jpg", "gif", "png"));
@@ -723,11 +693,11 @@ default:
 	$total_icons = count($listDir);
 	$totalPages = ceil($total_icons/ICO_PER_PAGE);
 	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
-	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
+	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
 	echo '<div class="fdgris">' . construct_header(O,PHOTOS_DIR, $total_icons, null, null, null);
 ?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
-   <?php echo $pages_html; ?>
+   <?php echo $pages_html_indexes; ?>
 
 	<br>
 	<table>
@@ -789,13 +759,10 @@ default:
 	</tr>
 	</table><br>
 	<?php
-	echo $pages_html;
+	echo $pages_html_indexes;
 	break;//Fin : listing des répertoires photos sur la page d'index par défaut
 
-
-//////////////////////////////////////////////////////////
 //listing des miniatures dans un répertoire photo spécifié
-//////////////////////////////////////////////////////////
 case ('list'):
 	list($continue, $photodir, $dir) = verify_directories();
 	$image_dir = $dir. "/" . IMAGE_STDDIM ."/";
@@ -845,7 +812,7 @@ case ('list'):
 		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
 	$totalPages =ceil(($total_files)/MINIATURES_PER_PAGE);
-	$pages_html = display_pages($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$photodir&amp;gallery_page_num=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
+	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$photodir&amp;gallery_page_num=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
 	$index_photo_min = (($thumb_page_num-1)*MINIATURES_PER_PAGE)+1;
 	if ($thumb_page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) )
 	{ $index_photo_max = (($thumb_page_num)*MINIATURES_PER_PAGE); } else { $index_photo_max = $total_files; }
@@ -856,7 +823,7 @@ case ('list'):
 			if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
 			if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
-	<?php echo $pages_html; ?>
+	<?php echo $pages_html_indexes; ?>
 	<table>
 		<tr>
 	<?php
@@ -865,7 +832,6 @@ case ('list'):
 	$k=0;
 	for ($i = $total_thumbFloor - MINIATURES_PER_PAGE; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
 		list($image_file_name, $datas) = $file_datas[$i];
-		//list($succes, $exifs, $iptcs, $legend, $tags) = $datas;
 		$legend = get_file_metadata_to_display('./' .$dir.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
 		if(!in_array("__".$image_file_name, $listFileThumb))
 		{
@@ -887,7 +853,7 @@ case ('list'):
 	?>
 	</table><br>
 <?php
-	echo $pages_html;
+	echo $pages_html_indexes;
 	break;//Fin : listing des miniatures dans un répertoire photo spécifié
 
 
