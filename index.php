@@ -311,11 +311,8 @@ function handle_error ($errno, $errstr, $errfile, $errline){
 }
 
 function write_kml_file($kml_placemarks, $kml_path){
-	//echo $kml_path;
 	$kml_content = '<?xml version= "1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>'
 	               . $kml_placemarks . '</Document></kml>';
-	//echo $kml_content;
-	//Ecrire le fichier
 	$fh = fopen($kml_path, 'w') or die("can't open file");
 	fwrite($fh, $kml_content);
 	fclose($fh);
@@ -371,13 +368,10 @@ function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
 	//Hémisphère (N, S, W ou E):
 	$hem=$exif_hem;
 
-	///Altitude:
-	//$alt=$exif["GPS"]["GPSAltitude"][0];
+	///Altitude: $alt=$exif["GPS"]["GPSAltitude"][0];
 
-	if ($hem === "N" || $hem === "E")
-	{ $gps_ref2 = 1; }
-	else
-	{ $gps_ref2 = -1; }
+	if ($hem === "N" || $hem === "E") { $gps_ref2 = 1; }
+	else { $gps_ref2 = -1; }
 	return $gps_ref2 *($deg + $min / 60 + $sec/3600) ;
 }
 
@@ -407,14 +401,11 @@ function extract_iptc_data($iptcs, $iptc_entry_code, $label){
 
 ///fonction qui retourne un nombre correspondant à une donnée GPS
 function divide_gps_coordinates($a){
-  // evaluate the string fraction and return a float //	
-    $e = explode('/', $a);
-  // prevent division by zero //
-    if (!$e[0] || !$e[1]) {
-      return 0;
-    }	else{
-    return $e[0] / $e[1];
-    }
+	// evaluate the string fraction and return a float //
+	$e = explode('/', $a);
+	// prevent division by zero //
+	if (!$e[0] || !$e[1]) { return 0; }
+	else{ return $e[0] / $e[1]; }
 }
 
 ///fonction qui renomme les dossiers comprenant des caractères interdits
@@ -524,9 +515,7 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 		list($succes, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($dir.'/'.$listFile[$i]);
 		if($succes){
 			$html_code = "<a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>
-							<Placemark><name>" . $dir2findgps . "</name><description><![CDATA[
-							$html_code
-							]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+				<Placemark><name>$dir2findgps</name><description><![CDATA[$html_code]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
 			return array(true, $kml_file);
 		}
 	}
@@ -538,7 +527,8 @@ function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2
 	$dir = PHOTOS_DIR."/".$dirname; //chemin vers le répertoire à dont on doit créer l'icone
 	$dir_where2save = ($dir_where2save ? "/".$dir_where2save : "");
 	$file_prefixe = ($file_prefixe ? $file_prefixe : "");
-	list($width, $height, $type, $attr) = getimagesize($dir."/".$file2miniaturize);//on liste les valeur de l'image
+	$pathFile2miniaturize = $dir."/".$file2miniaturize;
+	list($width, $height, $type, $attr) = getimagesize($pathFile2miniaturize);//on liste les valeur de l'image
 	if ($width >= $height) {
 		$newwidth = $dimensionmax;
 		$newheight = ($dimensionmax*$height)/$width;
@@ -548,13 +538,13 @@ function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2
 	}
 	$miniature = imagecreatetruecolor($newwidth, $newheight);
 	if ($type == 1) {
-		$image = imagecreatefromgif($dir."/".$file2miniaturize);
+		$image = imagecreatefromgif($pathFile2miniaturize);
 	}
 	if ($type == 2) {
-		$image = imagecreatefromjpeg($dir."/".$file2miniaturize);
+		$image = imagecreatefromjpeg($pathFile2miniaturize);
 	}
 	if ($type == 3) {
-		$image = imagecreatefrompng($dir."/".$file2miniaturize);
+		$image = imagecreatefrompng($pathFile2miniaturize);
 	}
 	imagecopyresampled($miniature, $image, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 	imagedestroy($image);
@@ -663,9 +653,7 @@ if($here =="list" && $activate_slideshow){?>
 				inline_markup: '<div class="pp_inline clearfix">{content}</div>',
 				custom_markup: ''
 			<?php }
-					else{
-						echo "fullscreen:false, /* true/false */";
-					}
+				else{ echo "fullscreen:false, /* true/false */"; }
 			?>
 			});
 		});
@@ -804,9 +792,9 @@ case ('list'):
 				$descriptions.="''";
 			}
 		}
-		$images='images = [' . $images . '];';
-		$titles='titles = [' . $titles . '];';
-		$descriptions='descriptions = ['.$descriptions.'];';
+		$images="images = [$images];";
+		$titles="titles = [$titles];";
+		$descriptions="descriptions = [$descriptions];";
 
 		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
@@ -1008,9 +996,7 @@ case ('gallery_map'):
 	}
 	if(file_exists($kml_path)) {
 		$kml_url = $url_path_datas . $kml_gallery_filename;
-	//	echo $kml_url ;
-		echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
-		echo "</div>";
+		echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span></div>';
 		add_map($kml_url);
 	}
 	else
@@ -1018,7 +1004,6 @@ case ('gallery_map'):
 		echo '</div><div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
 	}
 break;
-//fin du switch
 }
 if(DISPLAY_FOOTER)
 	echo '<div class="fdgris"><span class="Style2">Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span>

@@ -6,7 +6,7 @@ require("en.php"); //English
 // - Répendre 2 num_page sur les pages de google map
 // - Suppression des fichiers miniatures et resize
 // - slideshow : améliorer placement dans le bandeau d'informations
-// - Mettre à la norme html5
+// - Mettre à la norme html5 (gérer encodage utf8)
 // - slideshow : compter le temps de latence APRES l'affichage de l'image
 
 // - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
