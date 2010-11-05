@@ -362,10 +362,7 @@ function verify_directories(){
 	return array (true, $photodir, $dir);
 }
 
-
-///////////////////////////////////////////////////////////////////////
-//fonction qui convertit les données GPS de degrés, minutes, secondes en decimal
-///////////////////////////////////////////////////////////////////////
+///fonction qui convertit les données GPS de degrés, minutes, secondes en decimal
 function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
 {
 	$deg=divide_gps_coordinates($exif_deg);
@@ -383,17 +380,15 @@ function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
 	{ $gps_ref2 = -1; }
 	return $gps_ref2 *($deg + $min / 60 + $sec/3600) ;
 }
-///////////////////////////////////////////////////////////////////////
-//fonction qui extrait et met en forme une donnée exif
-///////////////////////////////////////////////////////////////////////
+
+///fonction qui extrait et met en forme une donnée exif
 function extract_exif_data($exifs, $field1, $field2, $label){
 	if (isset($exifs[$field1][$field2]))
 		return $label . utf8_decode($exifs[$field1][$field2]);
 	else return "";
 }
-///////////////////////////////////////////////////////////////////////
-//fonction qui extrait et met en forme une donnée IPTC
-///////////////////////////////////////////////////////////////////////
+
+///fonction qui extrait et met en forme une donnée IPTC
 function extract_iptc_data($iptcs, $iptc_entry_code, $label){
 	if(!array_key_exists($iptc_entry_code, $iptcs) || count($iptcs[$iptc_entry_code])==0)
 		return "";
@@ -410,9 +405,7 @@ function extract_iptc_data($iptcs, $iptc_entry_code, $label){
 	return $label . $display_string;
 }
 
-///////////////////////////////////////////////////////////////////////
-//fonction qui retourne un nombre correspondant à une donnée GPS
-///////////////////////////////////////////////////////////////////////
+///fonction qui retourne un nombre correspondant à une donnée GPS
 function divide_gps_coordinates($a){
   // evaluate the string fraction and return a float //	
     $e = explode('/', $a);
@@ -424,9 +417,7 @@ function divide_gps_coordinates($a){
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//fonction qui renomme les dossiers comprenant des caractères interdits
-///////////////////////////////////////////////////////////////////////
+///fonction qui renomme les dossiers comprenant des caractères interdits
 function scan_invalid_char($dir2scan) {
 	if ($handle = opendir($dir2scan)) {
 		while (false !== ($file = readdir($handle))) {
@@ -446,9 +437,7 @@ function scan_invalid_char($dir2scan) {
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-//fonction pour créer une miniature de la 1ère image du sous dossier photo
-//////////////////////////////////////////////////////////////////////////
+///fonction pour créer une miniature de la 1ère image du sous dossier photo
 function create_icon($dir2iconize) {
 	$dir = PHOTOS_DIR."/".$dir2iconize; //chemin vers le répertoire dont on doit créer l'icone
 	if ($handle = opendir($dir)) {
@@ -533,16 +522,9 @@ function create_icon($dir2iconize) {
 		imagejpeg($handle, $dir."/".ICO_FILENAME, GLOBAL_JPG_QUALITY);
 		imagedestroy($handle);
 	}
-	//ancienne methode moins bonne
-	//imagecopyresampled(image de destination, image source, int dst_x, int dst_y, int src_x, int src_y, int dst_w, int dst_h, int src_w, int src_h);
-	//imagecopyresampled($newHandle, $handle, 0, 0,((($width - ICO_WIDTH)/2) <= ICO_WIDTH ? ICO_WIDTH-(($width - ICO_WIDTH)/2) : ($width - ICO_WIDTH)/2), ((($height - ICO_HEIGHT)/2) <= 0 ? ICO_HEIGHT-(($height - ICO_HEIGHT)/2) : ($height - ICO_HEIGHT)/2), ICO_WIDTH, ICO_HEIGHT, ICO_WIDTH*2, ICO_HEIGHT*2);
-	//imagedestroy($handle);
-	//imagejpeg($NewThumb, $dir."/".ICO_FILENAME, GLOBAL_JPG_QUALITY);
-	//imagedestroy($newhandle);
 }
-//////////////////////////////////////////////////////////////////////////
-//fonction pour trouver une image ayant des données GPS
-//////////////////////////////////////////////////////////////////////////
+
+///fonction pour trouver une image ayant des données GPS
 function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas) {
 	$dir = PHOTOS_DIR."/".$dir2findgps; //chemin vers le répertoire dont on doit créer l'icone
 	if ($handle = opendir($dir)) {
@@ -573,9 +555,7 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 	return array(false, "");
 }
 
-/////////////////////////////////////////////////////////////////////
-//fonction pour créer toutes les miniatures du répertoire en question
-/////////////////////////////////////////////////////////////////////
+///fonction pour créer toutes les miniatures du répertoire en question
 function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2save, $file_prefixe) {
 	$dir = PHOTOS_DIR."/".$dirname; //chemin vers le répertoire à dont on doit créer l'icone
 	$dir_where2save = ($dir_where2save ? "/".$dir_where2save : "");
@@ -605,9 +585,7 @@ function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2
 
 }
 
-/////////////////////////////////////////
-//fonction pour tronquer un nom trop long
-/////////////////////////////////////////
+///fonction pour tronquer un nom trop long
 function wordTruncate($str) {
 	$str_to_count = html_entity_decode($str);
 	//echo strlen($str_to_count);
@@ -635,7 +613,7 @@ function wordTruncate($str) {
 	</style>
 <?php }
 
-$activate_slideshow = SLIDESHOW_ACTIVATE; //TODO : ajouter la vérification de la présence de la lirairie
+$activate_slideshow = SLIDESHOW_ACTIVATE; //TODO : ajouter la vérification de la présence de la librairie
 if($here =="list" && $activate_slideshow){?>
 	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
