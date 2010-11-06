@@ -114,4 +114,6 @@ define('NO_PHOTO_WITH_GPS_DATA','No photo contains GPS datas :(');
 define('SLIDESHOW','Slideshow');
 define('OPEN_IN_GOOGLE_MAP','Open in google map');
 define('TAGS','Tags : ');
+
+///File under Licence CECILL
 ?>

@@ -2,6 +2,8 @@
 require("conf_en.php");
 //require("conf_fr.php");
 
+///File under Licence CECILL
+
 //error_reporting(E_ALL); // afficher les erreurs
 error_reporting(0); // ne pas afficher les erreurs
 
@@ -18,7 +20,7 @@ $thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1
 function construct_header($level, $photodir, $total_images, $photo_name, $index_photo_min, $index_photo_max)
 {
 	//HOME
-	$header = '<span class="Style1"><a class="Style1 tooltip" href="#">©<em style="width:230px"><span></span>No copyright, just copyleft :)<br/>
+	$header = '<span class="Style1"><a class="Style1 tooltip" href="#">©<em style="width:230px"><span></span>Facile Gallery<br/>No copyright, just copyleft :)<br/>
 Based on (modified) :<br>- Php Photo Module (CeCILL) / Jensen SIU
 <br>- PrettyPhoto (CC-Attribution) / Stephane Caron </em></a>&nbsp;// ';
 	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vérification que le numéro de page existe bien
