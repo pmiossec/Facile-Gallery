@@ -1,8 +1,7 @@
 <?php 
-//require("fr.php"); //Français
-require("en.php"); //English
+/////// Ce fichier a pour but de servir comme documentation, configuration et traduction
 
-//TODO:
+//A Faire / ToDo:
 // - Répendre 2 num_page sur les pages de google map
 // - Suppression des fichiers miniatures et resize
 // - slideshow : améliorer placement dans le bandeau d'informations
