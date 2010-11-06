@@ -3,7 +3,12 @@ ________________________
 
 by Philippe Miossec 
 ________________________
-
+Main Features
+- gallery (GIF, JPG, PNG)
+- Slideshow full screen
+- Exif/IPTC displaying
+- GPS Datas displaying (within google map)
+________________________
 Based on the work off :
 - Php Photo Module (CECILL) by Jensen SIU  http://www.atelier-r.net/scripts.php
 - PrettyPhoto (CC-Attribution) by Stephane Caron http://www.no-margin-for-errors.com

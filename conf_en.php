@@ -1,8 +1,8 @@
 <?php
 /// Facile Gallery
-// => This file is used for documentation, configuration and translation of
+// => This file is used for documentation, configuration and translation
 /// I. Summary
-//This php file's goal is to produce a easy to use image gallery with only copying images on the server (and no database)
+//This php file's goal is to produce an easy to use image gallery with only copying images on the server (and no database)
 
 /// II. Main Features
 // gallery (GIF, JPG, PNG), slideshow, Exif/IPTC displaying, GPS Datas displaying (within google map)
