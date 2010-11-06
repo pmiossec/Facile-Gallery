@@ -16,9 +16,9 @@
 // 4. Copier tous les fichiers images dans des sous-répertoire du répertoire défini ci-dessous par le paramètre 'PHOTOS_DIR'
 // 5. Allez visiter votre gallerie :) (La 1ère consultation peut être lente du fait de la génération de la gallerie)
 
-///IV Trick
-// 1. Even if all is automatic, if you add new files in a folder, you sould regenerate the kml file if you have google map activated
-// To do that, just add the parameter to the uri '&create=true'
+///IV Astuce
+// 1. Même si le fonctionnement de la galerie est automatique, lorsque vous ajoutez des images à une sous-gallerie existante,
+// les fichiers ne sont pas pris en compte dans google map. Il faut régénérer le fichier kml en ajoutant le paramètre '&create=true' à l'url'
 // 2. La configuration du panorama se trouve actuellement dans le fichier "index.php" ( cherchez la chaine "prettyPhoto(")
 
 /// Paramètres de configuration
