@@ -1,57 +1,57 @@
-<?php 
-/////// Ce fichier a pour but de servir comme documentation, configuration et traduction
+<?php
+///Facile Gallery
+// => Ce fichier a pour but de servir comme documentation, configuration et traduction
 
-//A Faire / ToDo:
-// - Répendre 2 num_page sur les pages de google map
-// - Suppression des fichiers miniatures et resize
-// - slideshow : améliorer placement dans le bandeau d'informations
-// - Mettre à la norme html5 (gérer encodage utf8)
-// - slideshow : compter le temps de latence APRES l'affichage de l'image
+/// I. Résumé
+// Le but de ce fichier php est de fournir une gallerie d'image facile d'utilisation,
+// uniquement en copier les images sur le serveur (et sans base de données)''
 
-// - intégrer la carte pour ne pas qu'elle soit sur une autre page ?!?
-// - Fusionner les pushpins pour afficher les données des plusieurs photos sur le même pushpin (3max)
-// - Googlemap : comprendre pourquoi le dossier Ecosse ne passe pas  et la 1ere image dans Corbeille (activer les messages d'erreur!!!))
-// - afficher les propriétés de l'image sur le côté ?!?
+/// II. Principales fonctionnalité
+// gallerie (GIF, JPG, PNG), panorama, Affichage des données Exif/IPTC displaying, affichage des données GPS (avec google map)
 
-//Trick : To regenerate kml google map file, just add the parameter to the uri '&create=true'
+///III. Installation / Configuration
+// 1. Editer le fichier "index.php" et modifier la 2onde ligne de façon à avoir require("conf_fr.php");
+// 2. Adapter ce fichier de configuration à vos besoins
+// 3. Copier tous les fichiers de la gallerie sur le serveur web
+// 4. Copier tous les fichiers images dans des sous-répertoire du répertoire défini ci-dessous par le paramètre 'PHOTOS_DIR'
+// 5. Allez visiter votre gallerie :) (La 1ère consultation peut être lente du fait de la génération de la gallerie)
 
-/*
-Ce script offre la possibilité d'afficher des images de format GIF, JPG ou PNG.
-*/
-define('ALPHABETIC_ORDER', true); // Classer les fichiers et les dossiers par ordre alphabétique / false pour non classé
+///IV Trick
+// Even if all is automatic, if you add new files in a folder, you sould regenerate the kml file if you have google map activated
+// To do that, just add the parameter to the uri '&create=true'
+
+/// Paramètres de configuration
+//Paramètres principaux
 define('PHOTOS_DIR', 'photos'); //nom du répertoire un seront stockés les sous répertoires de photos
+define('ALPHABETIC_ORDER', true); // Classer les fichiers et les dossiers par ordre alphabétique / false pour non classé
 define('THUMBS_DIR', 'miniatures'); // nom des répertoires contenant les fichiers de miniatures
-define('ICO_FILENAME', '_icon.jpg'); // nom de l'icone créée à partir de la 1ère image de chaque répertoire
-define('ICO_WIDTH', '250'); // largeur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
-define('ICO_HEIGHT', '150'); // hauteur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
-define('MINIATURE_MAXDIM', '150'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('SPACE_AROUND_MINIATURE', '10'); // Espace blanc autours des miniatures
 define('GLOBAL_JPG_QUALITY', '50'); // taux de compression des jpg créés
-/* 
-La capacité du script à créer vos miniatures photo dépend de la rapidité d'execution de votre serveur :
-plus vous choisissez d'afficher de photos par page, plus il sera lent à la première execution.
-Une fois créées, les photos restent sur le serveur.
- */
-define('MINIATURES_PER_PAGE', 18); //nombre de miniatures à afficher par page
-define('MINIATURES_PER_LINE', 6); //nombre de miniatures à afficher par ligne dans les tableaux
 define('HOME_NAME', 'Mes Photos'); //nom de la page principale
-define('ICO_PER_PAGE', 12); //nombre de miniatures à afficher sur la page d'accueil
-define('ICO_PER_LINE', 4); //nombre de miniatures à afficher par ligne sur la page d'accueil
 define('IMAGE_STDDIM', '800'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
-define('IMAGE_400', '400'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
-define('IMAGE_800', '1024'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
-define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
-define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
-define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
 define('DISPLAY_FOOTER', true); //Afficher le pied de page
 define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the directory display in the tooltip
 
+//Page principale
+define('ICO_FILENAME', '_icon.jpg'); // nom de l'icone créée à partir de la 1ère image de chaque répertoire
+define('ICO_WIDTH', '250'); // largeur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
+define('ICO_HEIGHT', '150'); // hauteur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
+define('ICO_LINES', 3); //nombre de lignes de miniatures à afficher sur la page d'accueil
+define('ICO_PER_LINE', 4); //nombre de miniatures à afficher par ligne sur la page d'accueil
 
-/***********************************************
- ***************EXIF tags to display************
- **********************************************/
-//Reorder and comment/uncomment, change label to display the iptc you want
+//Page des miniatures
+define('MINIATURE_MAXDIM', '150'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
+define('MINIATURES_LINES', 3); //nombre de lignes de miniatures à afficher par page
+define('MINIATURES_PER_LINE', 6); //nombre de miniatures à afficher par ligne dans les tableaux
+
+//Fonctionalités additionelles
+define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
+define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
+define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
+
+/// EXIF tags to display
+//Retrier, commenter/décommenter et changer le libellé pour afficher les données EXIF souhaitées
 //ex: array(code1 , code2, 'Label')
 // code1 & code2 : don't touch!
 // Label : do want you want :)
@@ -67,50 +67,46 @@ array('EXIF' , 'FocalLength', 'Longueur de la focale'),
 array('EXIF' , 'Description', 'Description')
 );
 
-/***********************************************
- ***************IPTC tags to display************
- **********************************************/
-//Reorder and comment/uncomment, change label to display the iptc you want
+/// IPTC tags to display
+//Retrier, commenter/décommenter et changer le libellé pour afficher les données IPTC souhaitées
 //ex: array(code , 'Label')
-// code : don't touch!
-// Label : do want you want :)
+// code : ne pas changer!
+// Label : mettre le libellé souhaité :)
 $iptc_to_display = array(
-array('2#025' , 'Tags'),//tableau à plusieurs cases' , '64 par mots clé'),
+array('2#025' , 'Tags'),
 array('2#122' , 'Auteur'),
-//array('2#120' , 'Légende / résumé'),//2000
+//array('2#120' , 'Légende / résumé'),
 //array('2#118' , 'Contact'),
-//array('2#116' , 'Copyright'),//128'),
-//array('2#115' , 'Source'),//32'),
-//array('2#110' , 'Crédit'),//32'),
-//array('2#105' , 'Titre'),//256'),
+//array('2#116' , 'Copyright'),
+//array('2#115' , 'Source'),
+//array('2#110' , 'Crédit'),
+//array('2#105' , 'Titre'),
 //array('2#103' , 'Référence à la transmission'),
-//array('2#101' , 'Pays'),//64'),
-//array('2#100' , 'Code du pays'),//3'),
-//array('2#095' , 'Province / état'),//32'),
+//array('2#101' , 'Pays'),
+//array('2#100' , 'Code du pays'),
+//array('2#095' , 'Province / état'),
 //array('2#092' , 'Région'),
-//array('2#090' , 'Ville'),//32'),
+//array('2#090' , 'Ville'),
 //array('2#085' , 'Titre du créateur'),
-//array('2#080' , 'Créateur'),//64'),
-//array('2#075' , 'Cycle de l\'objet'),//3 valeurs possibles : a = matin, b = après midi, c = soir' , '1'),
+//array('2#080' , 'Créateur'),
+//array('2#075' , 'Cycle de l\'objet'), //3 valeurs possibles : a = matin, b = après midi, c = soir'
 //array('2#070' , 'Version du programme'),
-//array('2#065' , 'Programme'),//15'),
-//array('2#060' , 'Heure de création'),//HHMMSS'),
-//array('2#055' , 'Date de création'),//16'),
-//array('2#040' , 'Instruction spéciale'),//256'),
-//array('2#035' , 'Heure de sortie / disponibilité'),//HHMMSS'),
-//array('2#030' , 'Date de sortie / disponibilité'),//16'),
+//array('2#065' , 'Programme'),
+//array('2#060' , 'Heure de création'),
+//array('2#055' , 'Date de création'),
+//array('2#040' , 'Instruction spéciale'),
+//array('2#035' , 'Heure de sortie / disponibilité'), //HHMMSS'
+//array('2#030' , 'Date de sortie / disponibilité'), //16'
 //array('2#026' , 'Location'),
 //array('2#022' , 'Identifiant'),
-//array('2#020' , 'Catégorie supplémentaire'),//tableau à plusieurs cases'),
-//array('2#015' , 'Catégorie'),//3'),
-//array('2#010' , 'Priorité'),//valeurs de 0 à 8 : 0 aucun, 1 = haut, 8 = faible' , '1'),
+//array('2#020' , 'Catégorie supplémentaire'), //tableau à plusieurs cases
+//array('2#015' , 'Catégorie'),
+//array('2#010' , 'Priorité'), //valeurs de 0 à 8 : 0 aucun, 1 = haut, 8 = faible'
 //array('2#007' , 'Statut éditorial'),
-//array('2#005' , 'Nom de l\'objet'),//64'),
+//array('2#005' , 'Nom de l\'objet'),
 );
 
-/***********************************************
- *******************Translation*****************
- **********************************************/
+/// Translations
 define('PHOTO_DIR_NEEDED','Vous devez sp&eacute;cifier un r&eacute;pertoire photo !');
 define('PHOTO_DIR_NOT_EXISTING','Ce r&eacute;pertoire photo n\'existe pas !');
 define('DISPLAY_MAP','Afficher la carte');

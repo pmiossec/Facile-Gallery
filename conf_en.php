@@ -1,57 +1,55 @@
 <?php
-/////// This file is used for documentation, configuration and translation
+/// Facile Gallery
+// => This file is used for documentation, configuration and translation of
 /// I. Summary
-//This php file's goal is to produce a easy to use image gallery with only copying images on the server
+//This php file's goal is to produce a easy to use image gallery with only copying images on the server (and no database)
 
 /// II. Main Features
-// gallery (GIF, JPG, PNG), slideshow, Exif/IPTC managing, GPS Datas managing (with google map)
+// gallery (GIF, JPG, PNG), slideshow, Exif/IPTC displaying, GPS Datas displaying (within google map)
 
-///III. INstallation / Configuration
+///III. Installation / Configuration
 // 1. Edit the "index.php" file and modify the 2ond line which should be require("conf_en.php");
 // 2. Adapt this configuration file to your needs
-// 3. Copy all the gallery files on your server
-// 4. Copy all your images files
-// 5. Visit your web site
+// 3. Copy all the gallery files on your web server
+// 4. Copy all your images files in subfolders of the folder define below in the parameter 'PHOTOS_DIR'
+// 5. Visit your web site :) (It could be slower the first time due to the images gallery generation)
 
 ///IV Trick
 // Even if all is automatic, if you add new files in a folder, you sould regenerate the kml file if you have google map activated
 // To do that, just add the parameter to the uri '&create=true'
 
-/*
-Ce script offre la possibilité d'afficher des images de format GIF, JPG ou PNG.
-*/
-define('ALPHABETIC_ORDER', true); // Classer les fichiers et les dossiers par ordre alphabétique / false pour non classé
-define('PHOTOS_DIR', 'photos'); //nom du répertoire un seront stockés les sous répertoires de photos
-define('THUMBS_DIR', 'miniatures'); // nom des répertoires contenant les fichiers de miniatures
-define('ICO_FILENAME', '_icon.jpg'); // nom de l'icone créée à partir de la 1ère image de chaque répertoire
-define('ICO_WIDTH', '250'); // largeur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
-define('ICO_HEIGHT', '150'); // hauteur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
-define('MINIATURE_MAXDIM', '150'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
-define('SPACE_AROUND_MINIATURE', '10'); // Espace blanc autours des miniatures
-define('GLOBAL_JPG_QUALITY', '50'); // taux de compression des jpg créés
-/*
-La capacité du script à créer vos miniatures photo dépend de la rapidité d'execution de votre serveur :
-plus vous choisissez d'afficher de photos par page, plus il sera lent à la première execution.
-Une fois créées, les photos restent sur le serveur.
- */
-define('MINIATURES_PER_PAGE', 18); //nombre de miniatures à afficher par page
-define('MINIATURES_PER_LINE', 6); //nombre de miniatures à afficher par ligne dans les tableaux
-define('HOME_NAME', 'Mes Photos'); //nom de la page principale
-define('ICO_PER_PAGE', 12); //nombre de miniatures à afficher sur la page d'accueil
-define('ICO_PER_LINE', 4); //nombre de miniatures à afficher par ligne sur la page d'accueil
-define('IMAGE_STDDIM', '800'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
-define('IMAGE_400', '400'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
-define('IMAGE_800', '1024'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
-define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
+/// Configuration parameters
+//Global params
+define('PHOTOS_DIR', 'photos'); //name of the folder where subfolders containing images files are stored
+define('ALPHABETIC_ORDER', true); // true : Order files in alphabetic order, false : do not order
+define('THUMBS_DIR', 'miniatures'); // name of the folder where thumbnails created are stored
+define('SPACE_AROUND_MINIATURE', '10'); // Space around the thumbnails
+define('GLOBAL_JPG_QUALITY', '50'); // jpeg compression rate for images created
+define('HOME_NAME', 'Mes Photos'); //name of the main page
+define('IMAGE_STDDIM', '800'); // maximum width or height of the image displayed
+define('PHOTONAME_MAXCHAR', 20); // Maximum of characters displayed for a image name
+define('DISPLAY_FOOTER', true); //Display footer line (with credits)
+define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the directory display in the tooltip
+
+//Main page
+define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
+define('ICO_WIDTH', '250'); // width of the thumbnail image displayed in the main page
+define('ICO_HEIGHT', '150'); // height of the thumbnail image displayed in the main page
+define('ICO_LINES', 3); //lines number of thumbnails displayed in the main page
+define('ICO_PER_LINE', 4); //number of thumbnails per lines displayed in the main page
+
+//Thumbnail page
+define('MINIATURE_MAXDIM', '150'); // maximum width or height of the thumbnails generated for the thumbnail page
+define('MINIATURES_LINES', 3); //lines number of thumbnails displayed in the thumbnail page
+define('MINIATURES_PER_LINE', 6); //number of thumbnails per lines displayed in the thumbnail page
+
+//Aditional features
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
 define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
-define('DISPLAY_FOOTER', true); //Afficher le pied de page
-define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the directory display in the tooltip
 
-
-/// EXIF tags to display
-//Reorder and comment/uncomment, change label to display the iptc you want
+/// EXIF tags to display (in tooltips and in the detail page)
+//Reorder and comment/uncomment, change label to display the EXIF datas you want
 //ex: array(code1 , code2, 'Label')
 // code1 & code2 : don't touch!
 // Label : do want you want :)
@@ -67,46 +65,46 @@ array('EXIF' , 'FocalLength', 'Focal length'),
 array('EXIF' , 'Description', 'Description')
 );
 
-/// IPTC tags to display
-//Reorder and comment/uncomment, change label to display the iptc you want
+/// IPTC tags to display (in tooltips and in the detail page)
+//Reorder and comment/uncomment, change label to display the IPTC datas you want
 //ex: array(code , 'Label')
 // code : don't touch!
 // Label : do want you want :)
 $iptc_to_display = array(
-array('2#025' , 'Tags'),//tableau à plusieurs cases' , '64 par mots clé'),
+array('2#025' , 'Tags'),
 array('2#122' , 'Auteur'),
-//array('2#120' , 'Légende / résumé'),//2000
+//array('2#120' , 'Legend / summary'),
 //array('2#118' , 'Contact'),
-//array('2#116' , 'Copyright'),//128'),
-//array('2#115' , 'Source'),//32'),
-//array('2#110' , 'Crédit'),//32'),
-//array('2#105' , 'Titre'),//256'),
+//array('2#116' , 'Copyright'),
+//array('2#115' , 'Source'),
+//array('2#110' , 'Credit'),
+//array('2#105' , 'Title'),
 //array('2#103' , 'Référence à la transmission'),
-//array('2#101' , 'Pays'),//64'),
-//array('2#100' , 'Code du pays'),//3'),
-//array('2#095' , 'Province / état'),//32'),
-//array('2#092' , 'Région'),
-//array('2#090' , 'Ville'),//32'),
-//array('2#085' , 'Titre du créateur'),
-//array('2#080' , 'Créateur'),//64'),
-//array('2#075' , 'Cycle de l\'objet'),//3 valeurs possibles : a = matin, b = après midi, c = soir' , '1'),
-//array('2#070' , 'Version du programme'),
-//array('2#065' , 'Programme'),//15'),
-//array('2#060' , 'Heure de création'),//HHMMSS'),
-//array('2#055' , 'Date de création'),//16'),
-//array('2#040' , 'Instruction spéciale'),//256'),
-//array('2#035' , 'Heure de sortie / disponibilité'),//HHMMSS'),
-//array('2#030' , 'Date de sortie / disponibilité'),//16'),
+//array('2#101' , 'Country'),
+//array('2#100' , 'Country code'),
+//array('2#095' , 'Province / stata'),
+//array('2#092' , 'Region'),
+//array('2#090' , 'City'),
+//array('2#085' , 'Creator title'),
+//array('2#080' , 'Creator'),
+//array('2#075' , 'Object cycle'), //3 valeurs possibles : a = matin, b = après midi, c = soir'
+//array('2#070' , 'Program version'),
+//array('2#065' , 'Programm'),
+//array('2#060' , 'Creation Hour'),
+//array('2#055' , 'Creation Date'),
+//array('2#040' , 'Special instruction'),
+//array('2#035' , 'Output Hour / disponibility'), //HHMMSS'
+//array('2#030' , 'Ouptut date / disponibility'), //16'
 //array('2#026' , 'Location'),
 //array('2#022' , 'Identifiant'),
-//array('2#020' , 'Catégorie supplémentaire'),//tableau à plusieurs cases'),
-//array('2#015' , 'Catégorie'),//3'),
-//array('2#010' , 'Priorité'),//valeurs de 0 à 8 : 0 aucun, 1 = haut, 8 = faible' , '1'),
-//array('2#007' , 'Statut éditorial'),
-//array('2#005' , 'Nom de l\'objet'),//64'),
+//array('2#020' , 'Other category'), //tableau à plusieurs cases
+//array('2#015' , 'Category'),
+//array('2#010' , 'Priority'), //valeurs de 0 à 8 : 0 aucun, 1 = haut, 8 = faible'
+//array('2#007' , 'Editorial Status'),
+//array('2#005' , 'Object name'),
 );
 
-/// Translation
+/// Translations
 define('PHOTO_DIR_NEEDED','You must specify a photo directory !');
 define('PHOTO_DIR_NOT_EXISTING','This photo directory do not exist !');
 define('DISPLAY_MAP','Display the map');

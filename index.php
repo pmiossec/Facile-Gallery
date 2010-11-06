@@ -667,12 +667,13 @@ switch ($here) {
 //listing des répertoires photos sur la page d'index par défaut
 default:
 	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
+	$ico_per_page = ICO_LINES * ICO_PER_LINE;
 	list($listDir, $listFile) = list_directory("./".PHOTOS_DIR, ALPHABETIC_ORDER,
-			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME, IMAGE_400, IMAGE_800),
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
 			array("jpeg", "jpg", "gif", "png"));
 
 	$total_icons = count($listDir);
-	$totalPages = ceil($total_icons/ICO_PER_PAGE);
+	$totalPages = ceil($total_icons/$ico_per_page);
 	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
 	echo '<div class="fdgris">' . construct_header(O,PHOTOS_DIR, $total_icons, null, null, null);
@@ -683,7 +684,7 @@ default:
 	<table>
 	<?php
 	$k=0;
-	for ($i = (ICO_PER_PAGE*$page_num) - ICO_PER_PAGE; $i < ($total_icons > (ICO_PER_PAGE*($page_num)) ? ICO_PER_PAGE*$page_num : $total_icons); $i++) {
+	for ($i = $ico_per_page*($page_num-1); $i < ($total_icons > ($ico_per_page*($page_num)) ? $ico_per_page*$page_num : $total_icons); $i++) {
 		//création du répertoire miniatures et images
 		$thumb_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . THUMBS_DIR . "/";
 		$image_dir = PHOTOS_DIR . "/" . $listDir[$i] . "/" . IMAGE_STDDIM . "/";
@@ -744,6 +745,7 @@ default:
 
 //listing des miniatures dans un répertoire photo spécifié
 case ('list'):
+	$miniatures_per_page = MINIATURES_LINES * MINIATURES_PER_LINE;
 	list($continue, $photodir, $dir) = verify_directories();
 	$image_dir = $dir. "/" . IMAGE_STDDIM ."/";
 	$thumb_dir = $dir. "/" . THUMBS_DIR ."/";
@@ -791,11 +793,11 @@ case ('list'):
 
 		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
-	$totalPages =ceil(($total_files)/MINIATURES_PER_PAGE);
+	$totalPages =ceil(($total_files)/$miniatures_per_page);
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$photodir&amp;gallery_page_num=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
-	$index_photo_min = (($thumb_page_num-1)*MINIATURES_PER_PAGE)+1;
-	if ($thumb_page_num < ( ceil(($total_files)/MINIATURES_PER_PAGE)) )
-	{ $index_photo_max = (($thumb_page_num)*MINIATURES_PER_PAGE); } else { $index_photo_max = $total_files; }
+	$index_photo_min = (($thumb_page_num-1)*$miniatures_per_page)+1;
+	if ($thumb_page_num < ( ceil(($total_files)/$miniatures_per_page)) )
+	{ $index_photo_max = (($thumb_page_num)*$miniatures_per_page); } else { $index_photo_max = $total_files; }
 
 	echo '<div class="fdgris">'. construct_header(1, $photodir, $total_files, null , $index_photo_min, $index_photo_max);
 	?>
@@ -808,9 +810,9 @@ case ('list'):
 		<tr>
 	<?php
 	//si les références correspondent :
-	$total_thumbFloor = MINIATURES_PER_PAGE*$thumb_page_num;
+	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
 	$k=0;
-	for ($i = $total_thumbFloor - MINIATURES_PER_PAGE; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
+	for ($i = $total_thumbFloor - $miniatures_per_page; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
 		list($image_file_name, $datas) = $file_datas[$i];
 		$legend = get_file_metadata_to_display('./' .$dir.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
 		if(!in_array("__".$image_file_name, $listFileThumb))
