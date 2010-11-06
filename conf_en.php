@@ -15,8 +15,9 @@
 // 5. Visit your web site :) (It could be slower the first time due to the images gallery generation)
 
 ///IV Trick
-// Even if all is automatic, if you add new files in a folder, you sould regenerate the kml file if you have google map activated
+// 1. Even if all is automatic, if you add new files in a folder, you sould regenerate the kml file if you have google map activated
 // To do that, just add the parameter to the uri '&create=true'
+// 2. Configuration of the parameters of the slideshow are actually in the "index.php" file (look for the string "prettyPhoto(")
 
 /// Configuration parameters
 //Global params
@@ -29,7 +30,7 @@ define('HOME_NAME', 'Mes Photos'); //name of the main page
 define('IMAGE_STDDIM', '800'); // maximum width or height of the image displayed
 define('PHOTONAME_MAXCHAR', 20); // Maximum of characters displayed for a image name
 define('DISPLAY_FOOTER', true); //Display footer line (with credits)
-define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the directory display in the tooltip
+define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the sub-directory display as a tooltip (could be placed in each subgallery folder)
 
 //Main page
 define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page

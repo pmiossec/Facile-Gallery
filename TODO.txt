@@ -1,0 +1,7 @@
+A faire :
+- Répendre 2 num_page sur les pages de google map
+- Suppression des fichiers miniatures et resize
+- slideshow : améliorer placement dans le bandeau d'informations
+- Mettre à la norme html5 (gérer encodage utf8)
+- slideshow : compter le temps de latence APRES l'affichage de l'image (ou commencer à afficher l'image qu'une fois chargée')
+- afficher les propriétés de l'image sur le côté ?!? ou par dessus (ou que ça prenne moins de place)

@@ -1,0 +1,14 @@
+Facile Gallery 0.1
+________________________
+
+by Philippe Miossec 
+________________________
+
+Based on the work off :
+- Php Photo Module (CECILL) by Jensen SIU  http://www.atelier-r.net/scripts.php
+- PrettyPhoto (CC-Attribution) by Stephane Caron http://www.no-margin-for-errors.com
+
+Due to that, the licence of the php files are under the CECILL licence and the others under the CC-Attribution licence.
+________________________
+
+Installation / Documentation in the "conf_??.php" file (where ?? corresponding to your tongue).

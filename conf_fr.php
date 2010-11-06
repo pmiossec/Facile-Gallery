@@ -17,8 +17,9 @@
 // 5. Allez visiter votre gallerie :) (La 1ère consultation peut être lente du fait de la génération de la gallerie)
 
 ///IV Trick
-// Even if all is automatic, if you add new files in a folder, you sould regenerate the kml file if you have google map activated
+// 1. Even if all is automatic, if you add new files in a folder, you sould regenerate the kml file if you have google map activated
 // To do that, just add the parameter to the uri '&create=true'
+// 2. La configuration du panorama se trouve actuellement dans le fichier "index.php" ( cherchez la chaine "prettyPhoto(")
 
 /// Paramètres de configuration
 //Paramètres principaux
@@ -31,7 +32,7 @@ define('HOME_NAME', 'Mes Photos'); //nom de la page principale
 define('IMAGE_STDDIM', '800'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
 define('DISPLAY_FOOTER', true); //Afficher le pied de page
-define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the directory display in the tooltip
+define('FOLDER_INFO_FILENAME', 'infos.txt'); //Nom du fichier dont le contenus sera affiché comme un tooltip (peut être placé dans chaque répertoire de sous-gallerie )
 
 //Page principale
 define('ICO_FILENAME', '_icon.jpg'); // nom de l'icone créée à partir de la 1ère image de chaque répertoire

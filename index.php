@@ -1,5 +1,6 @@
 <?php 
-require("conf_fr.php");
+require("conf_en.php");
+//require("conf_fr.php");
 
 //error_reporting(E_ALL); // afficher les erreurs
 error_reporting(0); // ne pas afficher les erreurs
