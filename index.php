@@ -20,8 +20,8 @@ $thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1
 function construct_header($level, $photodir, $total_images, $photo_name, $index_photo_min, $index_photo_max)
 {
 	//HOME
-	$header = '<span class="Style1"><a class="Style1 tooltip" href="#">©<em style="width:230px"><span></span>Facile Gallery<br/>No copyright, just copyleft :)<br/>
-Based on (modified) :<br>- Php Photo Module (CeCILL) / Jensen SIU
+	$header = '<span class="Style1"><a class="Style1 tooltip" href="#">©<em style="width:230px"><span></span>Facile Gallery ( by Philippe Miossec. See on GitHub)<br/>No copyright, just copyleft :)<br/>
+Based on (modified version of) :<br>- Php Photo Module (CeCILL) / Jensen SIU
 <br>- PrettyPhoto (CC-Attribution) / Stephane Caron </em></a>&nbsp;// ';
 	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vérification que le numéro de page existe bien
 	;
@@ -1000,8 +1000,8 @@ case ('gallery_map'):
 break;
 }
 if(DISPLAY_FOOTER)
-	echo '<div class="fdgris"><span class="Style2">Php Photo Module 0.3.0 | auteur : <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a></span>
-<span class="Style2" style="float:right;">Slideshow by "<a class="Style2" href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron</span></div>';
+	echo '<div class="fdgris"><span class="Style2">This is <a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery</b></a> by Philippe Miossec</span><span class="Style2" style="float:right">Based on (modified version of ) : Php Photo Module 0.3.0 by <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> on <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+& Slideshow with "<a class="Style2" href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron</span></div>';
 ?><noscript>
 <!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
 Based on :
