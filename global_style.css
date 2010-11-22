@@ -16,6 +16,7 @@ div .cell_text {
 	border:  5px solid  #DDDDDD;
 	background-color: #666666;
 	padding: 2px;
+	text-align:center;
 }
 div .footer{
 	position:absolute;
