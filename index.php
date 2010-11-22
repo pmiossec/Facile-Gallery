@@ -684,7 +684,7 @@ default:
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html_indexes; ?>
 	<br>
-	<div class="table">
+	<div class="table" style="width:<?php echo ICO_PER_LINE * (ICO_WIDTH + 16)?>px;margin:auto">
 	<?php
 	$k=0;
 	for ($i = $ico_per_page*($page_num-1); $i < ($total_icons > ($ico_per_page*($page_num)) ? $ico_per_page*$page_num : $total_icons); $i++) {
@@ -714,7 +714,7 @@ default:
 		?>
 	<?php //print is_int($k/ICO_PER_LINE) ? '<div class="line"></div>' : "";  ?>
 		<div class="cell">
-			<div class="cell_image">
+			<div class="cell_image" style="height:<?php echo ICO_HEIGHT ?>px">
 				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
 			</div>
 			<div class="cell_text fdgris"><span class="Style2"><?php

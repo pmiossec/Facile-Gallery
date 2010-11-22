@@ -1,6 +1,4 @@
 div .table {
-	width : 1228px;
-	margin: 0px auto;
 }
 div .ligne {
 	clear:both;
@@ -11,6 +9,8 @@ div .cell {
 }
 div .cell_image {
 	border:  5px solid #DDDDDD;
+	padding: 0px;
+	margin : 0px;
 }
 div .cell_text {
 	border:  5px solid  #DDDDDD;
@@ -93,6 +93,8 @@ body {
 }
 .imageborder {
 	border: 1px solid #666666;
+	padding: 0px;
+	margin: 0px;
 }
 .legend{
 	font-weight: bold;
