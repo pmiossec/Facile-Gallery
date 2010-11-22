@@ -684,7 +684,7 @@ default:
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html_indexes; ?>
 	<br>
-	<table>
+	<div class="table">
 	<?php
 	$k=0;
 	for ($i = $ico_per_page*($page_num-1); $i < ($total_icons > ($ico_per_page*($page_num)) ? $ico_per_page*$page_num : $total_icons); $i++) {
@@ -712,16 +712,12 @@ default:
 			}
 		}
 		?>
-	<?php print is_int($k/ICO_PER_LINE) ? "<tr>": "";  ?>
-		<td>
-			<table>
-				<tr>
-					<td>
-						<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em style=\"width:250px\"><span></span>$legend</em>");?></a>
-					</td>
-				</tr>
-				<tr>
-					<td class="fdgris"><span class="Style2"><?php
+	<?php //print is_int($k/ICO_PER_LINE) ? '<div class="line"></div>' : "";  ?>
+		<div class="cell">
+			<div class="cell_image">
+				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+			</div>
+			<div class="cell_text fdgris"><span class="Style2"><?php
 				$titre_album = str_replace($separateurs, ' ', $listDir[$i]);
 				$nbmots = explode(" ", $titre_album);
 				$maxword2show = ((count($nbmots) < 6) ? count($nbmots) : 6);
@@ -731,17 +727,16 @@ default:
 					$wordnb++;
 				}
 				echo ((count($nbmots) > 6) ? " ..." : "");
-				?></span></td>
-			</tr>
-			</table>
-		</td>
+			?></span>
+			</div>
+		</div>
 	<?php
-		print is_int(($k+1)/ICO_PER_LINE) ? "</tr>": "";
+		print is_int(($k+1)/ICO_PER_LINE) ? '<div class="line"></div>': "";
 		$k++;
 	}
 	?>
-	</tr>
-	</table><br>
+	</div>
+	<br>
 	<?php
 	echo $pages_html_indexes;
 	break;//default
@@ -1000,7 +995,7 @@ case ('gallery_map'):
 break;
 }
 if(DISPLAY_FOOTER)
-	echo '<div class="fdgris"><span class="Style2">This is <a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery</b></a> by Philippe Miossec</span><span class="Style2" style="float:right">Based on (modified version of ) : Php Photo Module 0.3.0 by <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> on <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+	echo '<div class="footer"><span class="Style2">This is <a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery</b></a> by Philippe Miossec</span><span class="Style2" style="float:right">Based on (modified version of ) : Php Photo Module 0.3.0 by <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> on <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
 & Slideshow with "<a class="Style2" href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron</span></div>';
 ?><noscript>
 <!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->

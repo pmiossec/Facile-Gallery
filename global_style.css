@@ -1,3 +1,29 @@
+div .table {
+	width : 1228px;
+	margin: 0px auto;
+}
+div .ligne {
+	clear:both;
+}
+div .cell {
+	float: left;
+	margin: 2px;
+}
+div .cell_image {
+	border:  5px solid #DDDDDD;
+}
+div .cell_text {
+	border:  5px solid  #DDDDDD;
+	background-color: #666666;
+	padding: 2px;
+}
+div .footer{
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:100%;
+	height:15px;
+}
 .Style1 {
 	font-size: small;
 	font-weight: bold;
@@ -62,10 +88,7 @@ td.fdgris {
 	padding: 4px;
 }
 body {
-	margin-left: 0px;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
+	margin: 10px;
 }
 .imageborder {
 	border: 1px solid #666666;

@@ -1,4 +1,10 @@
 A faire :
+- div au lieu de table
+- gestion de sous répertoires
+- espace privé/publique
+- Commentaires disqus
+- possibilité de faire un zip
+- fichiers générés dans un autre répertoire
 - Répendre 2 num_page sur les pages de google map
 - Suppression des fichiers miniatures et resize
 - slideshow : améliorer placement dans le bandeau d'informations
