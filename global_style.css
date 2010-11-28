@@ -52,11 +52,6 @@ div.cell_image {
 	display: table-cell;
 	vertical-align: middle;}
 
-div.cell_image a{
-	padding: 0px;
-	margin : auto;
-}
-
 div.cell_text {
 	border:  5px solid  #DDDDDD;
 	background-color: #666666;
