@@ -44,9 +44,19 @@ div.cell {
 }
 div.cell_image {
 	border:  5px solid #DDDDDD;
+	background-color: #DDDDDD;
 	padding: 0px;
 	margin : 0px;
+	text-align:center;
+	/*vertical-align:center;*/
+	display: table-cell;
+	vertical-align: middle;}
+
+div.cell_image a{
+	padding: 0px;
+	margin : auto;
 }
+
 div.cell_text {
 	border:  5px solid  #DDDDDD;
 	background-color: #666666;

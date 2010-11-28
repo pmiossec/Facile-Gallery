@@ -92,21 +92,18 @@ function list_directory($dir2scan, $order_alphabetically, $exclude_file, $suppor
 
 function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_image, $legend, $gallery_page_num , $thumb_page_num)
 {
-	$cell_content = '<table>
-		<tr>
-			<td width="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE) .'" height="' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE)
-			. '" align="center" valign="middle">
+	$cell_content = '<div>
+		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE) .'px;height:' . (MINIATURE_MAXDIM + SPACE_AROUND_MINIATURE).'px">
 				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .'">
 					<img src="' . $thumb_dir."__".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>$legend</em>");
 	$cell_content .= '</a>
-			</td>
-		</tr>
-		<tr>
-			<td class="fdgris"><span class="Style2">' . wordTruncate(($index_image+1) ."|" . $image_file_name) .'</span></td>
-		</tr>
-	</table>';
+		</div>
+		<div class="cell_text">
+			<span class="Style2">' . wordTruncate(($index_image+1) ."|" . $image_file_name) .'</span>
+		</div>
+	</div>';
 	return $cell_content;
 }
 
