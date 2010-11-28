@@ -174,7 +174,7 @@ function create_miniature($photodir, $filename)
 
 function display_pages_indexes($page_uri,$page_num, $totalPages)
 {
-	$pages_indexes = '<div class="fdcolor1" align="center"><span class="Style2">';
+	$pages_indexes = '<div class="little_space_around main_color" align="center"><span class="Style2">';
 	if($totalPages == 1)
 		return $pages_indexes . "</span></div>";
 
@@ -679,9 +679,8 @@ td.fdgris {
 	text-align : center;
 }
 
-.fdcolor1 {
-	background-color: <?php echo MAIN_COLOR; ?>;
-	padding: 4px;
+.little_space_around {
+	padding: 2px;
 }
 body {
 	background-color: <?php echo PAGE_COLOR; ?>;
@@ -694,7 +693,6 @@ body {
 }
 .legend{
 	font-weight: bold;
-
 }
 /*Tooltip*/
 a.tooltip {
