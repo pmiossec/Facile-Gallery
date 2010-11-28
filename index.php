@@ -811,7 +811,7 @@ case ('list'):
 			if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
 	<?php echo $pages_html_indexes; ?>
-	<div class="table" style="width:<?php echo MINIATURES_PER_LINE * (MINIATURE_MAXDIM + THUMB_MARGIN)?>px;margin:auto;">
+	<div class="table" style="width:<?php echo MINIATURES_PER_LINE * (MINIATURE_MAXDIM + 20 )?>px;margin:auto;">
 	<?php
 	//si les références correspondent :
 	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
