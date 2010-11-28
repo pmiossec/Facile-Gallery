@@ -41,19 +41,26 @@ div.ligne {
 div.cell {
 	float: left;
 	margin: 2px;
-}
-div.cell_image {
 	border:  5px solid #DDDDDD;
+}
+
+div.cell_image {
+	border:  0px;
 	background-color: #DDDDDD;
 	padding: 0px;
 	margin : 0px;
 	text-align:center;
 	/*vertical-align:center;*/
 	display: table-cell;
-	vertical-align: middle;}
-
+	vertical-align: middle;
+}
+div.cell_image a{
+	border:  0px;
+	padding: 0px;
+	margin : 0px;
+}
+		
 div.cell_text {
-	border:  5px solid  #DDDDDD;
 	background-color: #666666;
 	padding: 2px;
 	text-align:center;
@@ -142,6 +149,11 @@ body {
   
 }
 /*Tooltip*/
+a.tooltip {
+	border:  0px;
+	padding: 0px;
+	margin : 0px;
+}
 a.tooltip em {
 	display:none;
 }

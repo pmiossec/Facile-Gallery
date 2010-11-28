@@ -92,8 +92,8 @@ function list_directory($dir2scan, $order_alphabetically, $exclude_file, $suppor
 
 function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_image, $legend, $gallery_page_num , $thumb_page_num)
 {
-	$cell_content = '<div>
-		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + THUMB_MARGIN) .'px;height:' . (MINIATURE_MAXDIM + THUMB_MARGIN).'px">
+	$cell_content = '<div class="cell">
+		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
 				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .'">
 					<img src="' . $thumb_dir."__".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
@@ -833,10 +833,7 @@ case ('list'):
 		}
 		?>
 		<?php
-			//(is_int($k/MINIATURES_PER_LINE) ? print "<tr>": print "");
-			echo '<div class="cell">'
-				. insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num)
-				. "</div>";
+			echo insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);
 			print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
 		$k++;
 	}
