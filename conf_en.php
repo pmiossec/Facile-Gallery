@@ -43,6 +43,7 @@ define('ICO_PER_LINE', 4); //number of thumbnails per lines displayed in the mai
 define('MINIATURE_MAXDIM', '150'); // maximum width or height of the thumbnails generated for the thumbnail page
 define('MINIATURES_LINES', 3); //lines number of thumbnails displayed in the thumbnail page
 define('MINIATURES_PER_LINE', 6); //number of thumbnails per lines displayed in the thumbnail page
+define('THUMB_MARGIN', 16); //margin around thumbnails
 
 //Aditional features
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map

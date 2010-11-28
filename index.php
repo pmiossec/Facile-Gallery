@@ -22,7 +22,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	//HOME
 	$header = '<span class="Style1">';
 	if(DISPLAY_COPYLEFT)
-		$header .= '<a class="Style1" href="javascript:myClick();">&nbsp;(?)&nbsp;</a>';
+		$header .= '&nbsp;<a class="Style1" href="javascript:myClick();">(?)</a>&nbsp;';
 	$header .= '// ';
 
 	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vérification que le numéro de page existe bien
@@ -692,7 +692,7 @@ default:
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html_indexes; ?>
 	<br>
-	<div class="table" style="width:<?php echo ICO_PER_LINE * (ICO_WIDTH + 16)?>px;margin:auto;">
+	<div class="table" style="width:<?php echo ICO_PER_LINE * (ICO_WIDTH + THUMB_MARGIN)?>px;margin:auto;">
 	<?php
 	$k=0;
 	for ($i = $ico_per_page*($page_num-1); $i < ($total_icons > ($ico_per_page*($page_num)) ? $ico_per_page*$page_num : $total_icons); $i++) {
@@ -814,8 +814,7 @@ case ('list'):
 			if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
 	<?php echo $pages_html_indexes; ?>
-	<table>
-		<tr>
+	<div class="table" style="width:<?php echo MINIATURES_PER_LINE * (MINIATURE_MAXDIM + THUMB_MARGIN)?>px;margin:auto;">
 	<?php
 	//si les références correspondent :
 	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
@@ -836,14 +835,17 @@ case ('list'):
 			}
 		}
 		?>
-		<?php (is_int($k/MINIATURES_PER_LINE) ? print "<tr>": print "");
-			echo "<td>" . insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num) . "</td>";
+		<?php
+			//(is_int($k/MINIATURES_PER_LINE) ? print "<tr>": print "");
+			echo '<div class="cell">'
+				. insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num)
+				. "</div>";
+			print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
 		$k++;
 	}
 	?>
-	</table><br>
+	</div><br>
 <?php
-	echo $pages_html_indexes;
 	break;//list
 
 //détail de la photo
@@ -1019,23 +1021,14 @@ break;
 	</div>
 </div>
 <script>
-	jQuery('#popup').click(function() {
-		alert("I said don't click jQuery href. Damn.");
-		$("#popup").style='display:bloc';
-	});
-
 	function myClick() {
-		//alert("I said don't click jQuery href. Damn.");
-		//$("#popup").style='display:bloc';
-		elem = document.getElementById("popup");
-    elem.style.display = 'block';
-
+	elem = document.getElementById("popup");
+	elem.style.display = 'block';
 	};
 	function closePopup()
 	{
-		elem = document.getElementById("popup");
-    elem.style.display = 'none';
+	elem = document.getElementById("popup");
+	elem.style.display = 'none';
 	}
-
 </script></body>
 </html>

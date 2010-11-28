@@ -45,6 +45,7 @@ define('ICO_PER_LINE', 4); //nombre de miniatures à afficher par ligne sur la pa
 define('MINIATURE_MAXDIM', '150'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('MINIATURES_LINES', 3); //nombre de lignes de miniatures à afficher par page
 define('MINIATURES_PER_LINE', 6); //nombre de miniatures à afficher par ligne dans les tableaux
+define('THUMB_MARGIN', 16); //espace autours de miniatures
 
 //Fonctionalités additionelles
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
