@@ -52,6 +52,13 @@ define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Ma
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
 define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
 
+//Style
+define('MAIN_COLOR', '#99CCCC'); // Couleur principale de la page
+define('LIGHT_COLOR', '#CCCCCC'); // Couleur claire autours des miniatures
+define('DARK_COLOR', '#666666'); // Couleur foncée autours des legendes
+define('PAGE_COLOR', '#FFFFFF'); // Couleur de la page
+define('TEXT_COLOR', '#FFFFFF'); // Couleur du texte
+
 /// EXIF tags to display
 //Retrier, commenter/décommenter et changer le libellé pour afficher les données EXIF souhaitées
 //ex: array(code1 , code2, 'Label')

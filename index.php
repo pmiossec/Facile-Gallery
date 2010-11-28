@@ -571,7 +571,172 @@ function wordTruncate($str) {
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=windows-1252">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-	<link href="global_style.css" rel="stylesheet" type="text/css">
+	<style type="text/css">
+.main_color
+{
+	background-color: <?php echo MAIN_COLOR; ?>;
+}
+.color_light
+{
+	background-color: <?php echo LIGHT_COLOR; ?>;
+}
+.color_dark
+{
+	background-color: <?php echo DARK_COLOR; ?>;
+}
+div.popup
+{
+	position: absolute;
+	top: 25%;
+	left: 25%;
+	width: 50%;
+	height: 50%;
+	padding: 5px;
+	z-index: 2500;
+}
+div.table {
+}
+div.ligne {
+	clear:both;
+}
+div.cell {
+	float: left;
+	margin: 2px;
+	border:  5px solid <?php echo LIGHT_COLOR; ?>;
+}
+
+div.cell_image {
+	border:  0px;
+	background-color: <?php echo LIGHT_COLOR; ?>;
+	padding: 0px;
+	margin : 0px;
+	text-align:center;
+	display: table-cell;
+	vertical-align: middle;
+}
+div.cell_image a{
+	border:  0px;
+	padding: 0px;
+	margin : 0px;
+}
+
+div.cell_text {
+	background-color: <?php echo DARK_COLOR; ?>;
+	padding: 2px;
+	text-align:center;
+}
+.Style1 {
+	font-size: small;
+	font-weight: bold;
+	color: <?php echo TEXT_COLOR; ?>;
+}
+a.Style1 {
+	text-decoration: underline;
+}
+a.Style1:hover {
+	text-decoration: none;
+}
+.Style2 {
+	font-size: xx-small;
+	color: <?php echo TEXT_COLOR; ?>;
+}
+a.Style2 {
+	text-decoration: underline;
+}
+a.Style2:hover {
+	text-decoration: none;
+}
+table{
+	margin-left:auto;
+	margin-right:auto;
+	border :0;
+	padding:1px;
+	spacing:1px;
+}
+
+body,td,th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+tr.tddeco {
+	border: 1px solid <?php echo DARK_COLOR; ?>;
+}
+td.tdover {
+	border: 1px solid <?php echo DARK_COLOR; ?>;
+	background-color: <?php echo PAGE_COLOR; ?>;
+}
+td.tdover:hover {
+	border: 1px solid <?php echo DARK_COLOR; ?>;
+}
+td {
+	background-color: <?php echo LIGHT_COLOR; ?>;
+}
+
+.fdgris {
+	background-color: <?php echo DARK_COLOR; ?>;
+	padding: 2px;
+}
+td.fdgris {
+	text-align : center;
+}
+
+.fdcolor1 {
+	background-color: <?php echo MAIN_COLOR; ?>;
+	padding: 4px;
+}
+body {
+	background-color: <?php echo PAGE_COLOR; ?>;
+	margin: 10px;
+}
+.imageborder {
+	border: 1px solid <?php echo DARK_COLOR; ?>;
+	padding: 0px;
+	margin: 0px;
+}
+.legend{
+	font-weight: bold;
+
+}
+/*Tooltip*/
+a.tooltip {
+	border:  0px;
+	padding: 0px;
+	margin : 0px;
+}
+a.tooltip em {
+	display:none;
+}
+a.tooltip:hover {
+	border: 0;
+	position: relative;
+	z-index: 500;
+	text-decoration:none;
+}
+a.tooltip:hover em {
+	font-style: normal;
+	font-size: xx-small;
+	display: block;
+	position: absolute;
+	top: 24px; /* At least the Height of the image*/
+	left: -5px;
+	padding: 5px;
+	color: #000;
+	border: 1px solid #bbb;
+	background: <?php echo MAIN_COLOR; ?>;
+	/*width:auto;*/
+	text-align:left;
+}
+a.tooltip:hover em span {
+	position: absolute;
+	top: -10px; /* -1 x Height of the image*/
+	left: 15px;
+	height: 10px; /* Height of the image*/
+	width: 19px; /* Width of the image*/
+	background: transparent url(tooltip.png);
+	margin:0;
+	padding: 0;
+	border: 0;
+}
+</style>
 <?php if(GOOGLEMAP_ACTIVATE) { ?>
 	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 	<style type="text/css">

@@ -48,7 +48,14 @@ define('THUMB_MARGIN', 16); //margin around thumbnails
 //Aditional features
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
-define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
+define('SLIDESHOW_FULLSCREEN', true); //Display slideshow in full screen
+
+//Style
+define('MAIN_COLOR', '#99CCCC'); // Main color of the page
+define('LIGHT_COLOR', '#CCCCCC'); // Light color around thumbnails
+define('DARK_COLOR', '#666666'); // dark color for legends
+define('PAGE_COLOR', '#FFFFFF'); // color of the page
+define('TEXT_COLOR', '#FFFFFF'); // color of the text
 
 /// EXIF tags to display (in tooltips and in the detail page)
 //Reorder and comment/uncomment, change label to display the EXIF datas you want
