@@ -31,7 +31,7 @@ define('GLOBAL_JPG_QUALITY', '50'); // taux de compression des jpg créés
 define('HOME_NAME', 'Mes Photos'); //nom de la page principale
 define('IMAGE_STDDIM', '800'); // largeur de l'image de miniature en pixel / ne pas dépasser la moitié de l'image originale
 define('PHOTONAME_MAXCHAR', 20); // Nb max de caractères pour un nom de photo
-define('DISPLAY_FOOTER', true); //Afficher le pied de page
+define('DISPLAY_COPYLEFT', true); //Afficher les informations non obstrusives de copyleft (laissez true s'il vous plait')
 define('FOLDER_INFO_FILENAME', 'infos.txt'); //Nom du fichier dont le contenus sera affiché comme un tooltip (peut être placé dans chaque répertoire de sous-gallerie )
 
 //Page principale

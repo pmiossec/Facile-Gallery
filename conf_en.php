@@ -29,7 +29,7 @@ define('GLOBAL_JPG_QUALITY', '50'); // jpeg compression rate for images created
 define('HOME_NAME', 'Mes Photos'); //name of the main page
 define('IMAGE_STDDIM', '800'); // maximum width or height of the image displayed
 define('PHOTONAME_MAXCHAR', 20); // Maximum of characters displayed for a image name
-define('DISPLAY_FOOTER', true); //Display footer line (with credits)
+define('DISPLAY_COPYLEFT', true); //Display non obstrusive copyleft credits (please keep true)
 define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the sub-directory display as a tooltip (could be placed in each subgallery folder)
 
 //Main page

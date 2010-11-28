@@ -1,29 +1,65 @@
-div .table {
+.main_color
+{
+	background-color: #99CCCC;
 }
-div .ligne {
+.color_light
+{
+	background-color: #CCCCCC;
+}
+.color_dark
+{
+	background-color: #666666;
+}
+div.popup
+{
+	position: absolute;
+	top: 25%;
+	left: 25%;
+	width: 50%;
+	height: 50%;
+	/*background-color: #CCCCCC;*/
+	padding: 5px;
+	z-index: 2500;
+	
+	/*width:500px;
+	 * margin:auto;
+	 * height:200px;
+	 * background-color : #DDDDDD;
+	 * border:1px solid #000000;
+	 * position: fixed;*/
+	/*width:500px;
+	 * height : 700px;
+	 * margin-left:auto;
+	 * margin-right:auto;
+	 * position:fixed;*/
+}
+div.table {
+}
+div.ligne {
 	clear:both;
 }
-div .cell {
+div.cell {
 	float: left;
 	margin: 2px;
 }
-div .cell_image {
+div.cell_image {
 	border:  5px solid #DDDDDD;
 	padding: 0px;
 	margin : 0px;
 }
-div .cell_text {
+div.cell_text {
 	border:  5px solid  #DDDDDD;
 	background-color: #666666;
 	padding: 2px;
 	text-align:center;
 }
-div .footer{
+div.footer{
+	background-color: #666666;
 	position:absolute;
-	bottom:0;
+	bottom:5;
 	left:0;
 	width:100%;
-	height:15px;
+	height:17px;
 }
 .Style1 {
 	font-size: small;

@@ -20,9 +20,11 @@ $thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1
 function construct_header($level, $photodir, $total_images, $photo_name, $index_photo_min, $index_photo_max)
 {
 	//HOME
-	$header = '<span class="Style1"><a class="Style1 tooltip" href="#">©<em style="width:230px"><span></span>Facile Gallery ( by Philippe Miossec. See on GitHub)<br/>No copyright, just copyleft :)<br/>
-Based on (modified version of) :<br>- Php Photo Module (CeCILL) / Jensen SIU
-<br>- PrettyPhoto (CC-Attribution) / Stephane Caron </em></a>&nbsp;// ';
+	$header = '<span class="Style1">';
+	if(DISPLAY_COPYLEFT)
+		$header .= '<a class="Style1" href="javascript:myClick();">&nbsp;(?)&nbsp;</a>';
+	$header .= '// ';
+
 	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vérification que le numéro de page existe bien
 	;
 	if($level!=0)
@@ -433,7 +435,7 @@ function create_icon($dir2iconize) {
 			array("jpeg", "jpg", "gif", "png"));
 
 	//$extract = scandir($dir);//scan des "array" du répertoire
-	$first_dir_item = $listFile[0]; // on extrait la valeur du premier fichier du répertoire (après "." et "..")
+	$first_dir_item = $listFile[0]; // create icon with the first image
 
 	list($srcWidth, $srcHeight, $type, $attr) = getimagesize($dir."/".$first_dir_item);//on liste les valeur de l'image
 	//$miniature = imagecreatetruecolor(ICO_WIDTH, ICO_HEIGHT);
@@ -563,6 +565,12 @@ function wordTruncate($str) {
 <!DOCTYPE html>
 <html>
 <head>
+	<noscript>
+	<!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
+	Based on :
+	- Php script by "Php Photo Module" 0.2.3 by <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
+	- Slideshow by "<a href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron
+	</noscript>
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=windows-1252">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -684,7 +692,7 @@ default:
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html_indexes; ?>
 	<br>
-	<div class="table" style="width:<?php echo ICO_PER_LINE * (ICO_WIDTH + 16)?>px;margin:auto">
+	<div class="table" style="width:<?php echo ICO_PER_LINE * (ICO_WIDTH + 16)?>px;margin:auto;">
 	<?php
 	$k=0;
 	for ($i = $ico_per_page*($page_num-1); $i < ($total_icons > ($ico_per_page*($page_num)) ? $ico_per_page*$page_num : $total_icons); $i++) {
@@ -738,7 +746,9 @@ default:
 	</div>
 	<br>
 	<?php
-	echo $pages_html_indexes;
+	//echo '<div class="footer">';
+	//echo $pages_html_indexes;
+	//echo '</div>';
 	break;//default
 
 //listing des miniatures dans un répertoire photo spécifié
@@ -994,14 +1004,38 @@ case ('gallery_map'):
 	}
 break;
 }
-if(DISPLAY_FOOTER)
-	echo '<div class="footer"><span class="Style2">This is <a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery</b></a> by Philippe Miossec</span><span class="Style2" style="float:right">Based on (modified version of ) : Php Photo Module 0.3.0 by <a href="http://www.jensen-siu.net" target="_blank" class="Style2" title="Graphiste - Concepteur multimedia">Jensen SIU</a> on <a href="http://www.atelier-r.net" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
-& Slideshow with "<a class="Style2" href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron</span></div>';
-?><noscript>
-<!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
-Based on :
-- Php script by "Php Photo Module" 0.2.3 by <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
-- Slideshow by "<a href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron
-</noscript>
-</body>
+?>
+<div id="popup" class="popup color_light" style="display:none">
+	<div class="color_light" style="height:10%">About Facile Gallery</div>
+	<div class="color_dark" style="height:80%">
+		<span class="Style2"><a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery (on GitHub)</b></a> by Philippe Miossec<br/>
+		Based on the work of :<br/>
+		- Gallery : <a class="Style2" href="http://www.atelier-r.net/scripts.php" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Php Photo Module / Atelier R</a> (CECILL license) / <a class="Style2" href="http://www.jensen-siu.net/" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a><br/>
+		- Slideshow : <a class="Style2" href="http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/">PrettyPhoto</a> (CC-Attribution license) / <a class="Style2" href="http://www.no-margin-for-errors.com/" target="_blank">Stephane Caron</a><br/>
+		</span>
+	</div>
+	<div class="color_light" align="center">
+		<input type="button" value="Close" onClick="javascript:closePopup();" />
+	</div>
+</div>
+<script>
+	jQuery('#popup').click(function() {
+		alert("I said don't click jQuery href. Damn.");
+		$("#popup").style='display:bloc';
+	});
+
+	function myClick() {
+		//alert("I said don't click jQuery href. Damn.");
+		//$("#popup").style='display:bloc';
+		elem = document.getElementById("popup");
+    elem.style.display = 'block';
+
+	};
+	function closePopup()
+	{
+		elem = document.getElementById("popup");
+    elem.style.display = 'none';
+	}
+
+</script></body>
 </html>
