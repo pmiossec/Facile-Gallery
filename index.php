@@ -562,15 +562,15 @@ function wordTruncate($str) {
 <!DOCTYPE html>
 <html>
 <head>
-	<noscript>
-	<!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
-	Based on :
-	- Php script by "Php Photo Module" 0.2.3 by <a href="http://www.jensen-siu.net" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a> | distribution sur : <a href="http://www.atelier-r.net" target="_blank" title="Annuaire cooperatif du graphisme et du multimedia">Atelier R</a>
-	- Slideshow by "<a href="http://www.no-margin-for-errors.com" target="_blank">PrettyPhoto</a>" by Stephane Caron
-	</noscript>
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=windows-1252">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<noscript>
+	<!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
+	Based on :
+	- Php script by "Php Photo Module" 0.2.3 ( http://www.atelier-r.net/scripts.php ) / Jensen SIU  (http://www.jensen-siu.net )
+	- Slideshow by PrettyPhoto ( http://www.no-margin-for-errors.com ) / Stephane Caron
+	</noscript>
 	<style type="text/css">
 .main_color
 {
