@@ -36,8 +36,8 @@ define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of t
 define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
 define('ICO_WIDTH', '250'); // width of the thumbnail image displayed in the main page
 define('ICO_HEIGHT', '150'); // height of the thumbnail image displayed in the main page
-define('ICO_LINES', 3); //lines number of thumbnails displayed in the main page
-define('ICO_PER_LINE', 4); //number of thumbnails per lines displayed in the main page
+define('ICO_LINES', 6); //lines number of thumbnails displayed in the main page
+define('ICO_PER_LINE', 2); //number of thumbnails per lines displayed in the main page
 
 //Thumbnail page
 define('MINIATURE_MAXDIM', '150'); // maximum width or height of the thumbnails generated for the thumbnail page

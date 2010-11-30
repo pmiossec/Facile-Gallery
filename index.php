@@ -572,6 +572,31 @@ function wordTruncate($str) {
 	- Slideshow by PrettyPhoto ( http://www.no-margin-for-errors.com ) / Stephane Caron
 	</noscript>
 	<style type="text/css">
+ body{
+  margin:0;
+  padding:50px 0 0 0;
+ }
+ div.header{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:50px;
+ }
+ @media screen{
+  body>div.header{
+   position: fixed;
+  }
+ }
+ * html body{
+  overflow:hidden;
+ }
+ * html div.table{
+ 	padding-top:50px;
+	height:100%;
+  overflow:auto;
+ }
+
 .main_color
 {
 	background-color: <?php echo MAIN_COLOR; ?>;
@@ -847,10 +872,11 @@ default:
 	$totalPages = ceil($total_icons/$ico_per_page);
 	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
-	echo '<div class="fdgris">' . construct_header(O,PHOTOS_DIR, $total_icons, null, null, null);
+	echo '<div class="header"><div class="fdgris">' . construct_header(O,PHOTOS_DIR, $total_icons, null, null, null);
 ?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
    <?php echo $pages_html_indexes; ?>
+	</div>
 	<br>
 	<div class="table" style="width:<?php echo ICO_PER_LINE * (ICO_WIDTH + THUMB_MARGIN)?>px;margin:auto;">
 	<?php

@@ -1,6 +1,6 @@
 A faire :
 - précédent/suivant en "sur-impression" l'image principale pour que çà ne prenne pas trop de place
-- div au lieu de table
+- div au lieu de table (a faire également dans détail)
 - gestion de sous répertoires
 - espace privé/publique
 - Commentaires disqus
