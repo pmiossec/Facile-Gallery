@@ -572,30 +572,28 @@ function wordTruncate($str) {
 	- Slideshow by PrettyPhoto ( http://www.no-margin-for-errors.com ) / Stephane Caron
 	</noscript>
 	<style type="text/css">
- body{
-  margin:0;
-  padding:50px 0 0 0;
- }
- div.header{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:50px;
- }
- @media screen{
-  body>div.header{
-   position: fixed;
-  }
- }
- * html body{
-  overflow:hidden;
- }
- * html div.table{
- 	padding-top:50px;
-	height:100%;
-  overflow:auto;
- }
+body{
+	margin:0;
+	padding:35px 0 0 0;
+}
+div.header{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:35px;
+}
+@media screen{
+	body>div.header{
+	position: fixed;
+	}
+}
+* html body{
+	overflow:hidden;
+}
+div.table{
+	padding-top:35px;
+}
 
 .main_color
 {
@@ -618,8 +616,6 @@ div.popup
 	height: 50%;
 	padding: 5px;
 	z-index: 2500;
-}
-div.table {
 }
 div.ligne {
 	clear:both;
