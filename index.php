@@ -113,6 +113,20 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 	return $cell_content;
 }
 
+function insert_subdir_cell($photodir, $directory_name, $thumb_dir, $image_file_name, $index_image, $legend, $gallery_page_num , $thumb_page_num)
+{
+	$cell_content = '<div class="cell">
+		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'/'. $directory_name .'&amp;image_num=' . ($index_image+1) .'">
+				dir</a>
+		</div>
+		<div class="cell_text">
+			<span class="Style2">' . $directory_name .'</span>
+		</div>
+	</div>';
+	return $cell_content;
+}
+
 
 function get_file_metadata_to_display($filepath,$exif_to_display, $iptc_to_display, $display_gps_data)
 {
@@ -1007,6 +1021,10 @@ case ('list'):
 	</div>
 	<div class="table" style="width:<?php echo MINIATURES_PER_LINE * (MINIATURE_MAXDIM + 20 )?>px;margin:auto;">
 	<?php
+	$total_dirs = count($listDir);
+	for ($i = 0; $i < $total_dirs; $i++) {
+			echo insert_subdir_cell($photodir, $listDir[$i] , $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);
+	}
 	//si les références correspondent :
 	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
 	$k=0;
