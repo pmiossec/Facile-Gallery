@@ -572,6 +572,7 @@ function wordTruncate($str) {
 	- Slideshow by PrettyPhoto ( http://www.no-margin-for-errors.com ) / Stephane Caron
 	</noscript>
 	<style type="text/css">
+/* For the fixed header (begin) */
 body{
 	margin:0;
 	padding:35px 0 0 0;
@@ -594,6 +595,7 @@ div.header{
 div.table{
 	padding-top:35px;
 }
+/*For the fixed header (end) */
 
 .main_color
 {
@@ -989,13 +991,14 @@ case ('list'):
 	if ($thumb_page_num < ( ceil(($total_files)/$miniatures_per_page)) )
 	{ $index_photo_max = (($thumb_page_num)*$miniatures_per_page); } else { $index_photo_max = $total_files; }
 
-	echo '<div class="fdgris">'. construct_header(1, $photodir, $total_files, null , $index_photo_min, $index_photo_max);
+	echo '<div class="header"><div class="fdgris">'. construct_header(1, $photodir, $total_files, null , $index_photo_min, $index_photo_max);
 	?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&amp;dir=<?php echo $photodir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
 			if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
 			if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
 	<?php echo $pages_html_indexes; ?>
+	</div>
 	<div class="table" style="width:<?php echo MINIATURES_PER_LINE * (MINIATURE_MAXDIM + 20 )?>px;margin:auto;">
 	<?php
 	//si les références correspondent :
