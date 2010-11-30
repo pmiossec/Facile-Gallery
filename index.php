@@ -37,20 +37,26 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	{
 		$header .= '</a>';
 		$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//vérification que le numéro de page existe bien
-		$header .= '&raquo; ';
-		if($level == 2)
+		//$header .= '&raquo; ';
+		$subdirs = explode(DIRECTORY_SEPARATOR, $photodir);
+		$dir = "";
+		$last = count($subdirs) - $level == 2 ? 0 :1 ;
+		for($iDir=0;$iDir<$last;$iDir++)
 		{
-			$header .= '<a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$photodir.'&amp;gallery_page_num=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .'">';
-		}
-		$header .= str_replace($separateurs, ' ', $photodir);
-		if($level == 2)
-		{
+			if($iDir!=0) $dir .= "/";
+			$dir .= $subdirs[$iDir];
+			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;gallery_page_num=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .'">';
+			$header .= str_replace($separateurs, ' ', $subdirs[$iDir]);
 			$image_num = (isset($_GET['image_num']) ? $_GET['image_num'] : "1");//vérification que le numéro de page existe bien
-			$header .= '</a> &raquo; ' . $photo_name . ' n&deg;'. $image_num .' / ' . $total_images;
+			$header .= '</a>';
+		}
+		if($level == 2)
+		{
+			$header .= ' &raquo; ' . $photo_name . ' n&deg;'. $image_num .' / ' . $total_images;
 		}
 		if($level == 1)
 		{
-			$header .= ' ('. $index_photo_min .' -> ' . $index_photo_max . ' / ' . $total_images . ')';
+			$header .= '&raquo; ' . str_replace($separateurs, ' ', $subdirs[$last]) . ' ('. $index_photo_min .' -> ' . $index_photo_max . ' / ' . $total_images . ')';
 		}
 	}
 	$header .= '</span>';
