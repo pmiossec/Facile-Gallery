@@ -907,7 +907,7 @@ default:
 	<?php //print is_int($k/ICO_PER_LINE) ? '<div class="line"></div>' : "";  ?>
 		<div class="cell">
 			<div class="cell_image" style="height:<?php echo ICO_HEIGHT ?>px">
-				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($listDir[$i]) . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo PHOTOS_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
 			</div>
 			<div class="cell_text fdgris"><span class="Style2"><?php
 				$titre_album = str_replace($separateurs, ' ', $listDir[$i]);
@@ -1075,7 +1075,7 @@ case ('detail'):
 				<td align="center" valign="middle">
 			<?php if ($photo >= 0 && $photo < $total_images) { ?>
 						<a href="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $listFile[$photo]; ?>">
-							<img src="<?php echo PHOTOS_DIR . "/" . rawurlencode($photodir) . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> class="imageborder">
+							<img src="<?php echo PHOTOS_DIR . "/" . $photodir . "/" . $dim . "/" . $listFile[$photo]; ?>" alt="<?php echo $listFile[$photo]; ?>" <?php echo $attr; ?> class="imageborder">
 						</a><?php
 					} else { echo_message_with_history_back( NO_PHOTO_TO_DISPLAY ); } ?>
 				</td>
