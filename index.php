@@ -345,7 +345,7 @@ function verify_directories(){
 	}
 	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
 	$photodir = preg_replace("/\\\\/", "", $photodir);
-	$str2clean = array("." => "", "/" => "");
+	$str2clean = array("." => "");
 	$photodir = strtr($photodir, $str2clean);
 	$dir = PHOTOS_DIR . "/" . $photodir; //chemin vers le répertoire qui contient les miniatures
 	if (!file_exists($dir)) {//on vérifie que le répertoire photo existe bien
