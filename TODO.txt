@@ -1,5 +1,5 @@
 A faire :
-- gestion de sous répertoires
+- gestion de sous répertoires (reste: bien gérer la mise en page, générer et afficher des miniatures, gerer le n° de pages "génériques" pour tous les sous répertoires)
 - espace privé/publique
 - Commentaires disqus
 - précédent/suivant en "sur-impression" l'image principale pour que çà ne prenne pas trop de place
