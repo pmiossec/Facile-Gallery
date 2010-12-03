@@ -37,7 +37,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	{
 		$header .= '</a>';
 		$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//vérification que le numéro de page existe bien
-
+		//$header .= '&raquo; ';
 		$subdirs = explode(DIRECTORY_SEPARATOR, $photodir);
 		$dir = "";
 		$last = count($subdirs) - $level == 2 ? 0 :1 ;
@@ -56,16 +56,11 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 		}
 		if($level == 1)
 		{
-			$header .= '&raquo; ' . beautify_name($subdirs[$last]) . ' ('. $index_photo_min .' -> ' . $index_photo_max . ' / ' . $total_images . ')';
+			$header .= '&raquo; ' . str_replace($separateurs, ' ', $subdirs[$last]) . ' ('. $index_photo_min .' -> ' . $index_photo_max . ' / ' . $total_images . ')';
 		}
 	}
 	$header .= '</span>';
 	return $header;
-}
-
-function beautify_name(name)
-{
-	return str_replace($separateurs, ' ', name);
 }
 
 function list_directory($dir2scan, $order_alphabetically, $exclude_file, $supported_extensions)
@@ -118,15 +113,15 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 	return $cell_content;
 }
 
-function insert_subdir_cell($photodir, $directory_name, $thumb_dir, $image_file_name, $index_image, $legend, $gallery_page_num , $thumb_page_num)
+function insert_subdir_cell($photodir, $thumb_dir, $image_file_name, $index_image, $legend, $gallery_page_num , $thumb_page_num)
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'/'. $directory_name .'&amp;image_num=' . ($index_image+1) .'">
-				dir</a>
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .'">
+				<img src="' . $photodir . '/'. $thumb_dir."/__".$image_file_name .'" alt="' . $image_file_name .'" class="imageborder" /></a>
 		</div>
 		<div class="cell_text">
-			<span class="Style2">' . beautify_name($directory_name) .'</span>
+			<span class="Style2">' . $directory_name .'</span>
 		</div>
 	</div>';
 	return $cell_content;
@@ -529,7 +524,7 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
 			array(".", ".."), array("jpeg", "jpg", "gif", "png"));
 
-	for($i=0;$i<$cFile;$i++){
+	for($i=0;$i<count($listFile);$i++){
 		$decimal_lat = 0;
 		$decimal_long = 0;
 		list($succes, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($dir.'/'.$listFile[$i]);
@@ -541,6 +536,43 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 	}
 	return array(false, "");
 }
+
+function create_thumbs_of_dir($photodir, $dirname)
+{
+	$full_dir = $photodir."/".$dirname;
+	echo $full_dir;
+	list($listDir, $listFile) = list_directory($full_dir, ALPHABETIC_ORDER,
+			array(".", "..", THUMBS_DIR , IMAGE_STDDIM, ICO_FILENAME),
+			array("jpeg", "jpg", "gif", "png"));
+	$thumb_dir = $full_dir. "/" . THUMBS_DIR ."/";
+	if (!file_exists($thumb_dir)) { mkdir($thumb_dir); }
+	list($listDirThumb, $listFileThumb) = list_directory($thumb_dir, ALPHABETIC_ORDER, null, null);
+	echo count($listFile);
+	for($i=0;$i<count($listFile);$i++){
+		echo $listFile[$i];
+		create_thumb($full_dir, $listFile[$i],$listFileThumb);
+	}
+	if(count($listFile) != 0) return $listFile[0];
+	return null;
+}
+
+function create_thumb($photodir,$image_file_name, $listFileThumb)
+{
+	//TODO remplacer code ligne 1058 env. par l'appel à cette fonction!!!
+		if(!in_array("__".$image_file_name, $listFileThumb))
+		{
+			create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
+		}
+		else
+		{
+			list($width, $height, $type, $attr) = getimagesize($photodir . "/" . THUMBS_DIR . "/__" .$image_file_name);
+			if($width != MINIATURE_MAXDIM && $height != MINIATURE_MAXDIM)
+			{
+				create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
+			}
+		}
+}
+
 
 ///fonction pour créer toutes les miniatures du répertoire en question
 function create_newimage($dirname, $file2miniaturize, $dimensionmax, $dir_where2save, $file_prefixe) {
@@ -1027,8 +1059,10 @@ case ('list'):
 	<div class="table" style="width:<?php echo MINIATURES_PER_LINE * (MINIATURE_MAXDIM + 20 )?>px;margin:auto;">
 	<?php
 	$total_dirs = count($listDir);
+	echo $total_dirs;
 	for ($i = 0; $i < $total_dirs; $i++) {
-			echo insert_subdir_cell($photodir, $listDir[$i] , $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);
+			$image_file_name = create_thumbs_of_dir($dir, $listDir[$i]);
+			echo insert_subdir_cell($dir.'/'.$listDir[$i], THUMBS_DIR, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);
 	}
 	//si les références correspondent :
 	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
@@ -1036,7 +1070,8 @@ case ('list'):
 	for ($i = $total_thumbFloor - $miniatures_per_page; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
 		list($image_file_name, $datas) = $file_datas[$i];
 		$legend = get_file_metadata_to_display('./' .$dir.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
-		if(!in_array("__".$image_file_name, $listFileThumb))
+		create_thumb($photodir,$image_file_name,$listFileThumb);
+		/*if(!in_array("__".$image_file_name, $listFileThumb))
 		{
 			create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
 		}
@@ -1047,7 +1082,7 @@ case ('list'):
 			{
 				create_newimage($photodir, $image_file_name, MINIATURE_MAXDIM, THUMBS_DIR, "__");
 			}
-		}
+		}*/
 		?>
 		<?php
 			echo insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);

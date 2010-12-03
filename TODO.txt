@@ -1,4 +1,5 @@
 A faire :
+- changer create_newimage($dirname pour que $dirname soit un chemin complet depuis le rep photo
 - gestion de sous répertoires (reste: bien gérer la mise en page, générer et afficher des miniatures, gerer le n° de pages "génériques" pour tous les sous répertoires)
 - espace privé/publique
 - Commentaires disqus
