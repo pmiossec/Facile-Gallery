@@ -594,7 +594,8 @@ function create_thumbs_of_dir($album_dir_way, $file_format_managed)
 	if(count($listFileThumb) > count($listFile))
 	{
 		for($i=0;$i<count($listFileThumb);$i++){
-			unlink($listFileThumb[$i]);
+			if(!file_exists($album_dir_path ."/" . $listFileThumb[$i]))
+				unlink($listFileThumb[$i]);
 		}
 	}
 	for($i=0;$i<count($listFile);$i++){
@@ -1052,10 +1053,11 @@ case ('list'): //album thumb listing
 
 		echo '<script type="text/javascript" charset="utf-8">' , $images , $titles , $descriptions, 'function slideshow(){$.prettyPhoto.open(images,titles,descriptions);}</script>';
 	}
-	$totalPages =ceil(($total_files)/$miniatures_per_page);
+	$total_dirs = count($listDir);
+	$totalPages =ceil(($total_files + $total_dirs)/$miniatures_per_page);
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$album_dir&amp;gallery_page_num=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
 	$index_photo_min = (($thumb_page_num-1)*$miniatures_per_page)+1;
-	if ($thumb_page_num < ( ceil(($total_files)/$miniatures_per_page)) )
+	if ($thumb_page_num < $totalPages )
 	{ $index_photo_max = (($thumb_page_num)*$miniatures_per_page); } else { $index_photo_max = $total_files; }
 
 	echo '<div class="header"><div class="fdgris">'. construct_header(1, $album_dir, $total_files, null , $index_photo_min, $index_photo_max);
@@ -1068,23 +1070,23 @@ case ('list'): //album thumb listing
 	</div>
 	<div class="table" style="width:<?php echo MINIATURES_PER_LINE * (MINIATURE_MAXDIM + 20 )?>px;margin:auto;">
 	<?php
-	$total_dirs = count($listDir);
-	//echo $total_dirs;
-	for ($i = 0; $i < $total_dirs; $i++) {
+	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
+	$borne_min = $total_thumbFloor - $miniatures_per_page;
+	$k=0;
+	if($total_dirs > $borne_min)
+	for ($i = $borne_min; $i < (($total_dirs > $total_thumbFloor) ? $total_thumbFloor : $total_dirs); $i++) {
 		$image_file_name = create_thumbs_of_dir($album_dir. "/" . $listDir[$i], $file_format_managed);
 		echo insert_subdir_cell($album_dir, $listDir[$i], $thumb_dir, $image_file_name, $i, "", $gallery_page_num , $thumb_page_num);
+		print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
+		$k++;
 	}
 	//si les références correspondent :
-	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
-	$k=0;
-	for ($i = $total_thumbFloor - $miniatures_per_page; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
+	for ($i = $borne_min + $k; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
 		list($image_file_name, $datas) = $file_datas[$i];
 		$legend = get_file_metadata_to_display('./' .$album_dir_path.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
 		create_thumb($album_dir_path . "/" . $image_file_name , $thumb_dir . "/" . $image_file_name);
-		?>
-		<?php
-			echo insert_thumbnail_cell($album_dir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);
-			print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
+		echo insert_thumbnail_cell($album_dir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);
+		print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
 		$k++;
 	}
 	?>

@@ -25,7 +25,7 @@ define('PHOTOS_DIR', 'photos'); //name of the folder where subfolders containing
 define('ALPHABETIC_ORDER', true); // true : Order files in alphabetic order, false : do not order
 define('SPACE_AROUND_MINIATURE', '10'); // Space around the thumbnails
 define('GLOBAL_JPG_QUALITY', '50'); // jpeg compression rate for images created
-define('HOME_NAME', 'Mes Photos'); //name of the main page
+define('HOME_NAME', 'My Photos'); //name of the main page
 define('IMAGE_STDDIM', '800'); // maximum width or height of the image displayed
 define('PHOTONAME_MAXCHAR', 20); // Maximum of characters displayed for a image name
 define('DISPLAY_COPYLEFT', true); //Display non obstrusive copyleft credits (please keep true)
