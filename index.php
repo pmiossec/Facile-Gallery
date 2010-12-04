@@ -7,39 +7,60 @@ require("conf_en.php");
 define('CACHE_DIR', '____cache'); //name of the folder where all the datas generated are placed
 define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
 
+session_start();
+$private = (isset($_GET['private']) ? $_GET['private'] : "") == "1";
+
+if(PRIVATE_GALLERY_ACTIVATE && $private)
+{
+	$private_dir = PHOTOS_DIR;
+	// check user & pwd:
+	if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) || !isset($_SESSION["login"])){
+		header('WWW-Authenticate: Basic realm="'. AUTH_REQUIRED .'"');
+		header('HTTP/1.0 401 Unauthorized');
+		$_SESSION["login"] = true;
+		die('<a href="?">'. PUBLIC_GALLERY .'</a>');
+	}
+	else
+	{
+
+		$usr = $_SERVER['PHP_AUTH_USER'];
+		$pwd = $_SERVER['PHP_AUTH_PW'];
+		$login_successful = false;
+		for($i=0;$i<count($auth_right_and_path);$i++)
+		{
+			if($usr ==$auth_right_and_path[$i][0] && $pwd ==$auth_right_and_path[$i][1])
+			{
+				$login_successful = true;
+				$private_dir = $auth_right_and_path[$i][2];
+				break;
+			}
+		}
+		if($login_successful)
+		{
+			define('PHOTOS_DIR_ROOT', $private_dir);
+		}else
+		{
+			unset($_SESSION["login"]);
+			die('<a href="?">'. PUBLIC_GALLERY .'</a>');
+		}
+	}
+}
+else
+{
+	unset($_SESSION["login"]);
+	define('PHOTOS_DIR_ROOT', PHOTOS_DIR);
+}
+echo PHOTOS_DIR_ROOT;
+
 //error_reporting(E_ALL); // afficher les erreurs
 error_reporting(0); // ne pas afficher les erreurs
 
-/*
-chown("___cache", "philippe.miossec");
-chown("__cache", "philippe.miossec");
-chown("_cache", "philippe.miossec");
-chmod("___cache", 0777);
-chmod("__cache", 0777);
-chmod("_cache", 0777);
-echo substr(sprintf('%o', fileperms('__cache')), -4) . "<br/>";
-echo substr(sprintf('%o', fileperms('_cache')), -4) . "<br/>";
-rmdir("___cache");
-rmdir("__cache");
-rmdir("_cache");
-return;
-
-/*echo substr(sprintf('%o', fileperms('__cache')), -4) . "<br/>";
-echo substr(sprintf('%o', fileperms('_cache')), -4) . "<br/>";
-chmod("__cache", 0777);
-chmod("_cache", 0777);
-echo substr(sprintf('%o', fileperms('__cache')), -4) . "<br/>";
-echo substr(sprintf('%o', fileperms('_cache')), -4) . "<br/>";
-rmdir("__cache");
-rmdir("_cache");
-return;
-*/
 $separateurs = array('_', '-', '.');
 $file_format_managed = array("jpeg", "jpg", "gif", "png");
 $directory = $_SERVER["SCRIPT_NAME"];
 $directory = substr($directory, 0, strrpos($directory,"/")+1);
 $url_path_script = "http://" . $_SERVER["SERVER_NAME"]. $directory . basename(__FILE__);
-$url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR ."/";
+$url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR_ROOT ."/";
 $url_path_cache = "http://" . $_SERVER["SERVER_NAME"]. $directory . CACHE_DIR ."/";
 
 $here = (isset($_GET['here']) ? $_GET['here'] : "");
@@ -391,7 +412,7 @@ function verify_directories(){
 	$album_dir = preg_replace("/\\\\/", "", $album_dir);
 	$str2clean = array("." => "");
 	$album_dir = strtr($album_dir, $str2clean);
-	$album_path = PHOTOS_DIR . "/" . $album_dir;
+	$album_path = PHOTOS_DIR_ROOT . "/" . $album_dir;
 	if (!file_exists($album_path)) {
 		echo_message_with_history_back(PHOTO_DIR_NOT_EXISTING);
 		return array (false, '', '', '', '');
@@ -483,7 +504,7 @@ function create_album_icon($dir2iconize,$file_format_managed) {
 		}
 
 	if(!$need_to_create) return;
-	$path_dir2iconize = PHOTOS_DIR."/".$dir2iconize; //chemin vers le répertoire dont on doit créer l'icone
+	$path_dir2iconize = PHOTOS_DIR_ROOT."/".$dir2iconize; //chemin vers le répertoire dont on doit créer l'icone
 	list($listDir, $listFile) = list_directory($path_dir2iconize, ALPHABETIC_ORDER,
 			array(".", ".."),
 			$file_format_managed);
@@ -583,7 +604,7 @@ function find_file_with_gps_data($dir_root, $dir2findgps, $url_path_script, $url
 
 function create_thumbs_of_dir($album_dir_way, $file_format_managed)
 {
-	$album_dir_path = PHOTOS_DIR ."/".$album_dir_way;
+	$album_dir_path = PHOTOS_DIR_ROOT ."/".$album_dir_way;
 	$cache_dir_path = CACHE_DIR ."/".$album_dir_way;
 	echo $full_dir;
 	list($listDir, $listFile) = list_directory($album_dir_path, ALPHABETIC_ORDER,
@@ -956,9 +977,9 @@ ini_set('max_execution_time', 120); //2 mn max
 switch ($here) {
 //listing des répertoires photos sur la page d'index par défaut
 default:
-	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
+	scan_invalid_char(PHOTOS_DIR_ROOT); //scan des répertoires qui contiennent des caractères interdits
 	$ico_per_page = ICO_LINES * ICO_PER_LINE;
-	list($listDir, $listFile) = list_directory("./".PHOTOS_DIR, ALPHABETIC_ORDER,
+	list($listDir, $listFile) = list_directory("./".PHOTOS_DIR_ROOT, ALPHABETIC_ORDER,
 			array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
 			$file_format_managed);
 
@@ -966,9 +987,11 @@ default:
 	$totalPages = ceil($total_icons/$ico_per_page);
 	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
-	echo '<div class="header"><div class="fdgris">' . construct_header(0,PHOTOS_DIR, $total_icons, null, null, null);
+	echo '<div class="header"><div class="fdgris">' . construct_header(0,PHOTOS_DIR_ROOT, $total_icons, null, null, null);
 ?>
-	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php } ?></div>
+	<?php if(GOOGLEMAP_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span>&nbsp;<?php } ?>
+	<?php if(PRIVATE_GALLERY_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; echo !$private ? '?private=1' : '' ?>" class="Style2"><?php echo $private ? PUBLIC_GALLERY : PRIVATE_GALLERY ?></a></span>&nbsp;<?php } ?>
+	</div>
    <?php echo $pages_html_indexes; ?>
 	</div>
 	<br>
@@ -976,7 +999,7 @@ default:
 	<?php
 	$k=0;
 	for ($i = $ico_per_page*($page_num-1); $i < ($total_icons > ($ico_per_page*($page_num)) ? $ico_per_page*$page_num : $total_icons); $i++) {
-		$tooltip_filepath = PHOTOS_DIR . "/" . $listDir[$i] . "/" . FOLDER_INFO_FILENAME;
+		$tooltip_filepath = PHOTOS_DIR_ROOT . "/" . $listDir[$i] . "/" . FOLDER_INFO_FILENAME;
 		$legend = null;
 		if (file_exists($tooltip_filepath)) {
 			$legend = file_get_contents($tooltip_filepath);
@@ -1223,7 +1246,7 @@ break;//map
 
 case ('gallery_map'):
 	if(!GOOGLEMAP_ACTIVATE) {break;}
-	scan_invalid_char(PHOTOS_DIR); //scan des répertoires qui contiennent des caractères interdits
+	scan_invalid_char(PHOTOS_DIR_ROOT); //scan des répertoires qui contiennent des caractères interdits
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
@@ -1233,11 +1256,11 @@ case ('gallery_map'):
 	$placemarks = "";
 	if(!file_exists($kml_path) || $create_kml_file="true") {
 		$at_least_one = false;
-		list($listDir, $listFile) = list_directory(PHOTOS_DIR, ALPHABETIC_ORDER,
+		list($listDir, $listFile) = list_directory(PHOTOS_DIR_ROOT, ALPHABETIC_ORDER,
 			array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
 			$file_format_managed);
 		for($iDir=0;$iDir< count($listDir); $iDir++){
-			list($find_one, $placemark) = find_file_with_gps_data(PHOTOS_DIR, $listDir[$iDir], $url_path_script, $url_path_cache);
+			list($find_one, $placemark) = find_file_with_gps_data(PHOTOS_DIR_ROOT, $listDir[$iDir], $url_path_script, $url_path_cache);
 			if($find_one)
 			{
 				$placemarks .= $placemark ;

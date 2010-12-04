@@ -3,11 +3,15 @@
 // => Ce fichier a pour but de servir comme documentation, configuration et traduction
 
 /// I. Résumé
-// Le but de ce fichier php est de fournir une gallerie d'image facile d'utilisation,
+// Le but de ce fichier php est de fournir une galerie d'image facile d'utilisation,
 // uniquement en copier les images sur le serveur (et sans base de données)''
 
 /// II. Principales fonctionnalité
-// gallerie (GIF, JPG, PNG), panorama, Affichage des données Exif/IPTC displaying, affichage des données GPS (avec google map)
+// Galerie (GIF, JPG, PNG) avec gestion des sous galeries
+// Panorama
+// Affichage des données Exif/IPTC
+// Affichage des données GPS (avec google map)
+// Gestion DES galeries privées (avec accès par mot de passe)
 
 ///III. Installation / Configuration
 // 1. Editer le fichier "index.php" et modifier la 2onde ligne de façon à avoir require("conf_fr.php");
@@ -23,8 +27,8 @@
 
 /// Paramètres de configuration
 //Paramètres principaux
+define('PHOTOS_DIR', 'photos'); //nom du répertoire de la galerie publique où seront stockés les sous répertoires de photos (utilisez un client ftp pour mettre les images dans ce répertoire)
 define('ALPHABETIC_ORDER', true); // Classer les fichiers et les dossiers par ordre alphabétique / false pour non classé
-define('PHOTOS_DIR', 'photos'); //nom du répertoire un seront stockés les sous répertoires de photos
 define('THUMBS_DIR', 'miniatures'); // nom des répertoires contenant les fichiers de miniatures
 define('SPACE_AROUND_MINIATURE', '10'); // Espace blanc autours des miniatures
 define('GLOBAL_JPG_QUALITY', '50'); // taux de compression des jpg créés
@@ -48,8 +52,17 @@ define('THUMB_MARGIN', 16); //espace autours de miniatures
 
 //Fonctionalités additionelles
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
-define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
+define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow
 define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
+
+//Authentification
+define('PRIVATE_GALLERY_ACTIVATE', true); //Activation des galleries privées
+//tableau de paramètres permettant de donnez accès aux différentes galeries privé
+//Note : differents login/mot_de_passe peuvent être urilisé pour donner accès à la gallerie privée à plusieurs personnes
+//ex: array(login , mot_de_passe, 'répertoire de la gallerie privée')
+$auth_right_and_path = array(
+array('login','pwd','private')
+);
 
 //Style
 define('MAIN_COLOR', '#99CCCC'); // Couleur principale de la page
@@ -123,6 +136,9 @@ define('NO_PHOTO_WITH_GPS_DATA','Aucune photo ne contient de données GPS :(');
 define('SLIDESHOW','Diaporama');
 define('OPEN_IN_GOOGLE_MAP','Ouvrir sur google map');
 define('TAGS','Tags : ');
+define('AUTH_REQUIRED', 'Enterez un login/mot de passe pour accéder à une galerie privée.');
+define('PRIVATE_GALLERY', 'Galerie privée');
+define('PUBLIC_GALLERY', 'Galerie publique');
 
 ///File under Licence CECILL
 ?>

@@ -5,7 +5,11 @@
 //This php file's goal is to produce an easy to use image gallery with only copying images on the server (and no database)
 
 /// II. Main Features
-// gallery (GIF, JPG, PNG), slideshow, Exif/IPTC displaying, GPS Datas displaying (within google map)
+// Gallery (GIF, JPG, PNG) with sub galleries
+// Slideshow (full screen)
+// Exif/IPTC displaying
+// GPS Datas displaying (within google map)
+// Private GallerieS (with login access)
 
 ///III. Installation / Configuration
 // 1. Edit the "index.php" file and modify the 2ond line which should be require("conf_en.php");
@@ -21,7 +25,7 @@
 
 /// Configuration parameters
 //Global params
-define('PHOTOS_DIR', 'photos'); //name of the folder where subfolders containing images files are stored
+define('PHOTOS_DIR', 'photos'); //name of the folder of the public gallery where subfolders containing images files are stored (use a ftp client to upload your images in this directory)
 define('ALPHABETIC_ORDER', true); // true : Order files in alphabetic order, false : do not order
 define('SPACE_AROUND_MINIATURE', '10'); // Space around the thumbnails
 define('GLOBAL_JPG_QUALITY', '50'); // jpeg compression rate for images created
@@ -44,9 +48,18 @@ define('MINIATURES_PER_LINE', 6); //number of thumbnails per lines displayed in 
 define('THUMB_MARGIN', 16); //margin around thumbnails
 
 //Aditional features
-define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
-define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow (necessite prettyphoto : http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/)
+define('GOOGLEMAP_ACTIVATE', true); // Enable GPS Images in Google Map
+define('SLIDESHOW_ACTIVATE', true); // Enable Slideshow
 define('SLIDESHOW_FULLSCREEN', true); //Display slideshow in full screen
+
+//Authentification
+define('PRIVATE_GALLERY_ACTIVATE', true); //Enable a private gallery define below
+//array of parameters permitting to create different private galleries
+//Note : different login/password could have the same directory to give access for different persons
+//ex: array(login , password, 'directory of the private gallery')
+$auth_right_and_path = array(
+array('login','pwd','private')
+);
 
 //Style
 define('MAIN_COLOR', '#99CCCC'); // Main color of the page
@@ -120,6 +133,9 @@ define('NO_PHOTO_WITH_GPS_DATA','No photo contains GPS datas :(');
 define('SLIDESHOW','Slideshow');
 define('OPEN_IN_GOOGLE_MAP','Open in google map');
 define('TAGS','Tags : ');
+define('AUTH_REQUIRED', 'Enter a login/password to access a private gallery.');
+define('PRIVATE_GALLERY', 'Private Gallery');
+define('PUBLIC_GALLERY', 'Public Gallery');
 
 ///File under Licence CECILL
 ?>
