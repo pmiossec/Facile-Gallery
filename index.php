@@ -555,8 +555,8 @@ function create_album_icon($dir2iconize,$file_format_managed) {
 }
 
 ///fonction pour trouver une image ayant des données GPS
-function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas) {
-	$dir = PHOTOS_DIR."/".$dir2findgps; //chemin vers le répertoire dont on doit créer l'icone
+function find_file_with_gps_data($dir_root, $dir2findgps, $url_path_script, $url_path_datas) {
+	$dir = $dir_root."/".$dir2findgps;
 	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
 			array(".", ".."), $file_format_managed);
 
@@ -565,9 +565,17 @@ function find_file_with_gps_data($dir2findgps,$url_path_script, $url_path_datas)
 		$decimal_long = 0;
 		list($succes, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($dir.'/'.$listFile[$i]);
 		if($succes){
-			$html_code = "<a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>
-				<Placemark><name>$dir2findgps</name><description><![CDATA[$html_code]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
-			return array(true, $kml_file);
+			$html_code = "<a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
+			$html_code = "<Placemark><name>$dir2findgps</name><description><![CDATA[$html_code]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
+			return array(true, $html_code);
+		}
+	}
+	//try to find in subdirs
+	for($i=0;$i<count($listDir);$i++){
+		list($find_one, $html_code) = find_file_with_gps_data($dir, $listDir[$iDir], $url_path_script, $url_path_cache);
+		if($find_one)
+		{
+			return array(true, $html_code);
 		}
 	}
 	return array(false, "");
@@ -1218,7 +1226,7 @@ case ('gallery_map'):
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
-	$kml_gallery_filename = "gallery.kml";
+	$kml_gallery_filename = "__gallery.kml";
 	$kml_path =  "./" . CACHE_DIR . "/" .$kml_gallery_filename ;
 	$placemarks = "";
 	if(!file_exists($kml_path) || $create_kml_file="true") {
@@ -1227,7 +1235,7 @@ case ('gallery_map'):
 			array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
 			$file_format_managed);
 		for($iDir=0;$iDir< count($listDir); $iDir++){
-			list($find_one, $placemark) = find_file_with_gps_data($listDir[$iDir], $url_path_script, $url_path_cache);
+			list($find_one, $placemark) = find_file_with_gps_data(PHOTOS_DIR, $listDir[$iDir], $url_path_script, $url_path_cache);
 			if($find_one)
 			{
 				$placemarks .= $placemark ;
