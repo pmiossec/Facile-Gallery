@@ -1090,7 +1090,7 @@ case ('list'): //album thumb listing
 		$k++;
 	}
 	?>
-	</div><br>
+	</div>
 <?php
 	break;//list
 
