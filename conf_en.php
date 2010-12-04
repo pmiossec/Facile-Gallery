@@ -54,11 +54,14 @@ define('SLIDESHOW_FULLSCREEN', true); //Display slideshow in full screen
 
 //Authentification
 define('PRIVATE_GALLERY_ACTIVATE', true); //Enable a private gallery define below
+define('ENCRYPTED_PASSWORD', false); //true : the passwords should be encrypted with sha1, false : the passwords are written in clear
+//Trick:to encrypt with sha1, you can use the php script with the parameter "encode=" (ex: encode=my_pass) ans copy/paste the result
 //array of parameters permitting to create different private galleries
 //Note : different login/password could have the same directory to give access for different persons
 //ex: array(login , password, 'directory of the private gallery')
 $auth_right_and_path = array(
-array('login','pwd','private')
+array('login','pwd','private'), //exemple login/pwd without sha1 encryption
+array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exemple login/pwd with sha1 encryption
 );
 
 //Style

@@ -7,7 +7,13 @@ require("conf_en.php");
 define('CACHE_DIR', '____cache'); //name of the folder where all the datas generated are placed
 define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
 
+if(isset($_GET['encode']))
+{
+	die(sha1($_GET['encode']));
+}
+
 session_start();
+
 $private = (isset($_GET['private']) ? $_GET['private'] : "") == "1";
 
 if(PRIVATE_GALLERY_ACTIVATE && $private)
@@ -25,6 +31,10 @@ if(PRIVATE_GALLERY_ACTIVATE && $private)
 
 		$usr = $_SERVER['PHP_AUTH_USER'];
 		$pwd = $_SERVER['PHP_AUTH_PW'];
+		if(ENCRYPTED_PASSWORD)
+		{
+			$pwd = sha1($pwd);
+		}
 		$login_successful = false;
 		for($i=0;$i<count($auth_right_and_path);$i++)
 		{
@@ -41,7 +51,7 @@ if(PRIVATE_GALLERY_ACTIVATE && $private)
 		}else
 		{
 			unset($_SESSION["login"]);
-			die('<a href="?">'. PUBLIC_GALLERY .'</a>');
+			die('<a href="?">'. PUBLIC_GALLERY .'</a>'.$pwd);
 		}
 	}
 }

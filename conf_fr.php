@@ -57,11 +57,14 @@ define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
 
 //Authentification
 define('PRIVATE_GALLERY_ACTIVATE', true); //Activation des galleries privées
+define('ENCRYPTED_PASSWORD', false); //true : les mots de passes sont saisis avec le chiffrage sha1, false : les mots de passe sont stockés en clair
+//astuce:to encrypt with sha1, you can use the php script with the parameter "encode=" (ex: encode=my_pass) ans copy/paste the result
 //tableau de paramètres permettant de donnez accès aux différentes galeries privé
 //Note : differents login/mot_de_passe peuvent être urilisé pour donner accès à la gallerie privée à plusieurs personnes
 //ex: array(login , mot_de_passe, 'répertoire de la gallerie privée')
 $auth_right_and_path = array(
-array('login','pwd','private')
+array('login','pwd','private'), //exemple login/mot_de_passe sans chiffrage sha1
+array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exemple login/mot_de_passe avec chiffrage sha1
 );
 
 //Style
