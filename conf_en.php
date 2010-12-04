@@ -23,7 +23,6 @@
 //Global params
 define('PHOTOS_DIR', 'photos'); //name of the folder where subfolders containing images files are stored
 define('ALPHABETIC_ORDER', true); // true : Order files in alphabetic order, false : do not order
-define('THUMBS_DIR', 'miniatures'); // name of the folder where thumbnails created are stored
 define('SPACE_AROUND_MINIATURE', '10'); // Space around the thumbnails
 define('GLOBAL_JPG_QUALITY', '50'); // jpeg compression rate for images created
 define('HOME_NAME', 'Mes Photos'); //name of the main page
@@ -33,7 +32,6 @@ define('DISPLAY_COPYLEFT', true); //Display non obstrusive copyleft credits (ple
 define('FOLDER_INFO_FILENAME', 'infos.txt'); //Filename of the informations of the sub-directory display as a tooltip (could be placed in each subgallery folder)
 
 //Main page
-define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
 define('ICO_WIDTH', '250'); // width of the thumbnail image displayed in the main page
 define('ICO_HEIGHT', '150'); // height of the thumbnail image displayed in the main page
 define('ICO_LINES', 3); //lines number of thumbnails displayed in the main page

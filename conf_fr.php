@@ -23,8 +23,8 @@
 
 /// Paramètres de configuration
 //Paramètres principaux
-define('PHOTOS_DIR', 'photos'); //nom du répertoire un seront stockés les sous répertoires de photos
 define('ALPHABETIC_ORDER', true); // Classer les fichiers et les dossiers par ordre alphabétique / false pour non classé
+define('PHOTOS_DIR', 'photos'); //nom du répertoire un seront stockés les sous répertoires de photos
 define('THUMBS_DIR', 'miniatures'); // nom des répertoires contenant les fichiers de miniatures
 define('SPACE_AROUND_MINIATURE', '10'); // Espace blanc autours des miniatures
 define('GLOBAL_JPG_QUALITY', '50'); // taux de compression des jpg créés
@@ -35,7 +35,6 @@ define('DISPLAY_COPYLEFT', true); //Afficher les informations non obstrusives de
 define('FOLDER_INFO_FILENAME', 'infos.txt'); //Nom du fichier dont le contenus sera affiché comme un tooltip (peut être placé dans chaque répertoire de sous-gallerie )
 
 //Page principale
-define('ICO_FILENAME', '_icon.jpg'); // nom de l'icone créée à partir de la 1ère image de chaque répertoire
 define('ICO_WIDTH', '250'); // largeur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
 define('ICO_HEIGHT', '150'); // hauteur de l'image de l'icone en pixel / ne pas dépasser la moitié de l'image originale
 define('ICO_LINES', 3); //nombre de lignes de miniatures à afficher sur la page d'accueil
