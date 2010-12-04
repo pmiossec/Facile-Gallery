@@ -1093,11 +1093,22 @@ case ('detail'):
 			array(".", ".." , IMAGE_STDDIM, ICO_FILENAME),
 			$file_format_managed);
 
+	list($listDirResized, $listFileResized) = list_directory($images_dir_path, false,
+			array(".", ".."),
+			$file_format_managed);
+
 	if ($photo == "" || !isset($listFile[$photo-1])) {
 		echo_message_with_history_back(NO_PHOTO_TO_DISPLAY);
 		break;
 	}
-	if()
+	//delete all when orphans!!
+	if(count($listFile)< count($listFileResized))
+	{
+		for($i=0;$i<count($listFileResized);$i++){
+			if(!file_exists($album_dir_path ."/" . $listFileResized[$i]))
+				unlink($images_dir_path ."/" . $listFileResized[$i]);
+		}
+	}
 	$photo = $photo -1;
 	$image_path = $images_dir_path . "/" . $listFile[$photo];
 	create_newimage($album_dir_path ."/" .$listFile[$photo], $image_path, IMAGE_STDDIM);

@@ -6,7 +6,6 @@ A faire :
 - div au lieu de table (a faire également dans détail)
 - possibilité de faire un zip
 - Répendre 2 num_page sur les pages de google map
-- Suppression/cleaning des fichiers miniatures et resize non utiles
 - slideshow : améliorer placement dans le bandeau d'informations (et peut-être un fond noir serait plus beau)
 - Mettre à la norme html5 (gérer encodage utf8)
 - slideshow : compter le temps de latence APRES l'affichage de l'image (ou commencer à afficher l'image qu'une fois chargée')
