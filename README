@@ -4,11 +4,11 @@ ________________________
 by Philippe Miossec 
 ________________________
 Main Features
-- gallery (GIF, JPG, PNG)
+- gallery (GIF, JPG, PNG) with sub galleries
 - Slideshow full screen
 - Exif/IPTC displaying
 - GPS Datas displaying (within google map)
-- Manage subdirectories
+- Private GallerieS (with login access)
 ________________________
 Based on the work off :
 - Php Photo Module (CECILL) by Jensen SIU  http://www.atelier-r.net/scripts.php
