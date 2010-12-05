@@ -15,6 +15,10 @@ if(isset($_GET['encode']))
 session_start();
 
 $private = (isset($_GET['private']) ? $_GET['private'] : "") == "1";
+if($private)
+	define('PRIVATE_PARAM', '&private=1');
+else
+	define('PRIVATE_PARAM', '');
 
 if(PRIVATE_GALLERY_ACTIVATE && $private)
 {
@@ -51,7 +55,7 @@ if(PRIVATE_GALLERY_ACTIVATE && $private)
 		}else
 		{
 			unset($_SESSION["login"]);
-			die('<a href="?">'. PUBLIC_GALLERY .'</a>'.$pwd);
+			die('<a href="?">'. PUBLIC_GALLERY .'</a>');
 		}
 	}
 }
@@ -60,7 +64,6 @@ else
 	unset($_SESSION["login"]);
 	define('PHOTOS_DIR_ROOT', PHOTOS_DIR);
 }
-echo PHOTOS_DIR_ROOT;
 
 //error_reporting(E_ALL); // afficher les erreurs
 error_reporting(0); // ne pas afficher les erreurs
@@ -93,7 +96,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	;
 	if($level!=0)
 	{
-		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&amp;gallery_page_num=' . $gallery_page_num . '">';
+		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&amp;gallery_page_num=' . $gallery_page_num . PRIVATE_PARAM . '">';
 	}
 	$header .= HOME_NAME;
 	//Directory
@@ -115,7 +118,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 		{
 			if($iDir!=0) $dir .= "/";
 			$dir .= $subdirs[$iDir];
-			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;gallery_page_num=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .'">';
+			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;gallery_page_num=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .PRIVATE_PARAM .'">';
 			$header .= str_replace($separateurs, ' ', $subdirs[$iDir]);
 			$image_num = (isset($_GET['image_num']) ? $_GET['image_num'] : "1");//vérification que le numéro de page existe bien
 			$header .= '</a>';
@@ -170,7 +173,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
 					<img src="' . $thumb_dir."/".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>$legend</em>");
@@ -187,7 +190,7 @@ function insert_subdir_cell($album_dir, $sub_album_dir, $thumb_dir, $image_file_
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($album_dir . "/" .$sub_album_dir) .'&amp;image_num=' . ($index_image+1) .'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($album_dir . "/" .$sub_album_dir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM .'">
 				<img src="' . $thumb_dir."/". $sub_album_dir . "/" .$image_file_name .'" alt="' . $image_file_name .'" class="imageborder" /></a>
 		</div>
 		<div class="cell_text">
@@ -254,19 +257,19 @@ function display_pages_indexes($page_uri,$page_num, $totalPages)
 		return $pages_indexes . "</span></div>";
 
 	if ($page_num > 1) {
-		$pages_indexes .= "<a href=\"$page_uri" . ($page_num-1) .'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
+		$pages_indexes .= "<a href=\"$page_uri" . ($page_num-1) .PRIVATE_PARAM.'" class="Style2">&laquo;</a> &nbsp;|&nbsp;';
 	}
 
 	for ($l =1; $l <= $totalPages; $l++) {
 		if($l > 1) $pages_indexes .= " &nbsp;|&nbsp;";
 		if ($page_num != $l) {
-			$pages_indexes .= "<a href=\"$page_uri" . $l .'" class="Style2">' .$l .'</a>';
+			$pages_indexes .= "<a href=\"$page_uri" . $l .PRIVATE_PARAM.'" class="Style2">' .$l .'</a>';
 		} else {
 			$pages_indexes .= "<b>$l</b>";
 		}
 	}
 	if ($page_num < $totalPages) {
-		$pages_indexes .= " &nbsp;|&nbsp;<a href=\"$page_uri" . ($page_num+1) .'" class="Style2">&raquo;</a>';
+		$pages_indexes .= " &nbsp;|&nbsp;<a href=\"$page_uri" . ($page_num+1) .PRIVATE_PARAM.'" class="Style2">&raquo;</a>';
 	}
 	$pages_indexes .= '</span></div>';
 	return $pages_indexes;
@@ -999,8 +1002,9 @@ default:
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
 	echo '<div class="header"><div class="fdgris">' . construct_header(0,PHOTOS_DIR_ROOT, $total_icons, null, null, null);
 ?>
-	<?php if(GOOGLEMAP_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map" class="Style2"><?php echo DISPLAY_MAP ?></a></span>&nbsp;<?php } ?>
-	<?php if(PRIVATE_GALLERY_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; echo !$private ? '?private=1' : '' ?>" class="Style2"><?php echo $private ? PUBLIC_GALLERY : PRIVATE_GALLERY ?></a></span>&nbsp;<?php } ?>
+	<?php if(GOOGLEMAP_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map<?php echo PRIVATE_PARAM; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span>&nbsp;<?php }
+		if( GOOGLEMAP_ACTIVATE && PRIVATE_GALLERY_ACTIVATE){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
+		if(PRIVATE_GALLERY_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; echo !$private ? '?private=1' : '' ?>" class="Style2"><?php echo $private ? PUBLIC_GALLERY : PRIVATE_GALLERY ?></a></span>&nbsp;<?php } ?>
 	</div>
    <?php echo $pages_html_indexes; ?>
 	</div>
@@ -1018,7 +1022,7 @@ default:
 		?>
 		<div class="cell">
 			<div class="cell_image" style="height:<?php echo ICO_HEIGHT ?>px">
-				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; ?>"><img src="<?php echo CACHE_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; echo PRIVATE_PARAM; ?>"><img src="<?php echo CACHE_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
 			</div>
 			<div class="cell_text fdgris"><span class="Style2"><?php
 				$titre_album = str_replace($separateurs, ' ', $listDir[$i]);
@@ -1095,7 +1099,7 @@ case ('list'): //album thumb listing
 
 	echo '<div class="header"><div class="fdgris">'. construct_header(1, $album_dir, $total_files, null , $index_photo_min, $index_photo_max);
 	?>
-	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&amp;dir=<?php echo $album_dir; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
+	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&amp;dir=<?php echo $album_dir; echo PRIVATE_PARAM; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
 			if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
 			if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
 
@@ -1207,7 +1211,7 @@ case ('map'):
 	list($continue, $album_dir, $album_dir_path, $thumb_dir, $images_dir_path) = verify_directories();
 	if(!$continue) {break;}
 ?>
-<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;dir=<?php echo $album_dir ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $album_dir); ?></a></span>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default<?php echo PRIVATE_PARAM; ?>" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;dir=<?php echo $album_dir; echo PRIVATE_PARAM ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $album_dir); ?></a></span>
 <?php
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
@@ -1258,7 +1262,7 @@ case ('gallery_map'):
 	if(!GOOGLEMAP_ACTIVATE) {break;}
 	scan_invalid_char(PHOTOS_DIR_ROOT); //scan des répertoires qui contiennent des caractères interdits
 ?>
-<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default" class="Style1"><?php echo HOME_NAME ?></a></span>
+<div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default<?php echo PRIVATE_PARAM; ?>" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
 	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
 	$kml_gallery_filename = "__gallery.kml";
