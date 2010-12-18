@@ -9,7 +9,8 @@
 // Slideshow (full screen)
 // Exif/IPTC displaying
 // GPS Datas displaying (within google map)
-// Private GallerieS (with login access)
+// Multiple private galleries (with login access)
+// Adapt easily the gallery to your colors
 
 ///III. Installation / Configuration
 // 1. Edit the "index.php" file and modify the 2ond line which should be require("conf_en.php");
@@ -65,10 +66,10 @@ array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exe
 );
 
 //Style
-define('MAIN_COLOR', '#99CCCC'); // Main color of the page
+define('MAIN_COLOR', '#CC7722'); // Theme color of the page
 define('LIGHT_COLOR', '#CCCCCC'); // Light color around thumbnails
 define('DARK_COLOR', '#666666'); // dark color for legends
-define('PAGE_COLOR', '#FFFFFF'); // color of the page
+define('PAGE_COLOR', '#000000'); // background color of the page
 define('TEXT_COLOR', '#FFFFFF'); // color of the text
 
 /// EXIF tags to display (in tooltips and in the detail page)

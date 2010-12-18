@@ -11,14 +11,15 @@
 // Panorama
 // Affichage des données Exif/IPTC
 // Affichage des données GPS (avec google map)
-// Gestion DES galeries privées (avec accès par mot de passe)
+// Gestion de galeries privées multiples (avec accès par mot de passe)
+// Adapatation facile des couleurs de la gallerie à vos souhaits
 
 ///III. Installation / Configuration
 // 1. Editer le fichier "index.php" et modifier la 2onde ligne de façon à avoir require("conf_fr.php");
 // 2. Adapter ce fichier de configuration à vos besoins
 // 3. Copier tous les fichiers de la gallerie sur le serveur web
 // 4. Copier tous les fichiers images dans des sous-répertoire du répertoire défini ci-dessous par le paramètre 'PHOTOS_DIR'
-// 5. Allez visiter votre gallerie :) (La 1ère consultation peut être lente du fait de la génération de la gallerie)
+// 5. Allez visiter votre galerie :) (La 1ère consultation peut être lente du fait de la génération de la gallerie)
 
 ///IV Astuce
 // 1. Même si le fonctionnement de la galerie est automatique, lorsque vous ajoutez des images à une sous-gallerie existante,
@@ -68,10 +69,10 @@ array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exe
 );
 
 //Style
-define('MAIN_COLOR', '#99CCCC'); // Couleur principale de la page
+define('MAIN_COLOR', '#CC7722'); // Couleur thème de la page
 define('LIGHT_COLOR', '#CCCCCC'); // Couleur claire autours des miniatures
 define('DARK_COLOR', '#666666'); // Couleur foncée autours des legendes
-define('PAGE_COLOR', '#FFFFFF'); // Couleur de la page
+define('PAGE_COLOR', '#000000'); // Couleur de fond de la page
 define('TEXT_COLOR', '#FFFFFF'); // Couleur du texte
 
 /// EXIF tags to display
