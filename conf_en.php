@@ -96,7 +96,7 @@ array('EXIF' , 'Description', 'Description')
 // Label : do want you want :)
 $iptc_to_display = array(
 array('2#025' , 'Tags'),
-array('2#122' , 'Auteur'),
+array('2#122' , 'Autor'),
 //array('2#120' , 'Legend / summary'),
 //array('2#118' , 'Contact'),
 //array('2#116' , 'Copyright'),

@@ -77,9 +77,9 @@ define('TEXT_COLOR', '#FFFFFF'); // Couleur du texte
 
 /// EXIF tags to display
 //Retrier, commenter/décommenter et changer le libellé pour afficher les données EXIF souhaitées
-//ex: array(code1 , code2, 'Label')
-// code1 & code2 : don't touch!
-// Label : do want you want :)
+//ex: array(code1 , code2, 'Libellé')
+// code1 & code2 : Ne pas modifier!
+// Label : mettre ce qu'il vous plait :)
 $exif_to_display = array(
 array('WINXP' , 'Title', 'Titre'),
 array('WINXP' , 'Comments', 'Commentaire'),
