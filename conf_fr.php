@@ -73,6 +73,18 @@ array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exe
 define('COMMENTS_ACTIVATE', false); // Activer les commentaires sur les photos
 define('DISQUS_SHORTNAME', 'XXX'); // shortname du forum disqus
 
+/* Si vous configurez PAGE_COLOR (cf partie "Style" ci-dessous) de façon sombre,
+ veuillez placer les lignes ci-dessous dans le champs texte "Custom CSS" de la page "Appearance" Settings de disqus
+ pour voir les commentaires de façon satisfaisante
+#dsq-content #dsq-comments .dsq-comment-body {color: #fff;}
+#dsq-content #dsq-comments .dsq-comment-header {color: #fff;}
+div#dsq-new-post.dsq-post-area h3 {color: #fff;}
+#dsq-content .dsq-request-user-stats span.dsq-request-user-stat {color: #fff;}
+#dsq-comments-title {color: #fff;}
+#dsq-content .dsq-options span.dsq-item-sort {color: #fff;}
+#dsq-content #dsq-comments .dsq-collapsed-comment span {color: #fff;}
+*/
+
 //Style
 define('MAIN_COLOR', '#CC7722'); // Couleur thème de la page
 define('LIGHT_COLOR', '#CCCCCC'); // Couleur claire autours des miniatures

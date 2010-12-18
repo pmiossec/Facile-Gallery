@@ -70,6 +70,17 @@ array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exe
 define('COMMENTS_ACTIVATE', false); // Enable comments on photos
 define('DISQUS_SHORTNAME', 'XXX'); // disqus forum shortname
 
+/* If you configure a dark PAGE_COLOR (see "Style" part below),
+ please place these lines in the "Custom CSS" of the "Appearance" Settings page from disqus to see comments well
+#dsq-content #dsq-comments .dsq-comment-body {color: #fff;}
+#dsq-content #dsq-comments .dsq-comment-header {color: #fff;}
+div#dsq-new-post.dsq-post-area h3 {color: #fff;}
+#dsq-content .dsq-request-user-stats span.dsq-request-user-stat {color: #fff;}
+#dsq-comments-title {color: #fff;}
+#dsq-content .dsq-options span.dsq-item-sort {color: #fff;}
+#dsq-content #dsq-comments .dsq-collapsed-comment span {color: #fff;}
+*/
+
 //Style
 define('MAIN_COLOR', '#CC7722'); // Theme color of the page
 define('LIGHT_COLOR', '#CCCCCC'); // Light color around thumbnails
