@@ -11,6 +11,7 @@
 // GPS Datas displaying (within google map)
 // Multiple private galleries (with login access)
 // Adapt easily the gallery to your colors
+// Possibility of visitors comments (using disqus : http://www.disqus.com)
 
 ///III. Installation / Configuration
 // 1. Edit the "index.php" file and modify the 2ond line which should be require("conf_en.php");
@@ -64,6 +65,10 @@ $auth_right_and_path = array(
 array('login','pwd','private'), //exemple login/pwd without sha1 encryption
 array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exemple login/pwd with sha1 encryption
 );
+
+//Disqus Comments to permit visitors comments on photos (see http://www.disqus.com before activation)
+define('COMMENTS_ACTIVATE', false); // Enable comments on photos
+define('DISQUS_SHORTNAME', 'XXX'); // disqus forum shortname
 
 //Style
 define('MAIN_COLOR', '#CC7722'); // Theme color of the page

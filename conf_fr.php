@@ -12,7 +12,8 @@
 // Affichage des données Exif/IPTC
 // Affichage des données GPS (avec google map)
 // Gestion de galeries privées multiples (avec accès par mot de passe)
-// Adapatation facile des couleurs de la gallerie à vos souhaits
+// Adaptation facile des couleurs de la gallerie à vos souhaits
+// Possibilité de permettre les commentaires par les visiteurs (en utilisant disqus : http://www.disqus.com)
 
 ///III. Installation / Configuration
 // 1. Editer le fichier "index.php" et modifier la 2onde ligne de façon à avoir require("conf_fr.php");
@@ -67,6 +68,10 @@ $auth_right_and_path = array(
 array('login','pwd','private'), //exemple login/mot_de_passe sans chiffrage sha1
 array('sha1exemple','37fa265330ad83eaa879efb1e2db6380896cf639','private'), //exemple login/mot_de_passe avec chiffrage sha1
 );
+
+//Commentaires Disqus pour permettre aux visiteurs de commenter les photos (cf http://www.disqus.com avant activation)
+define('COMMENTS_ACTIVATE', false); // Activer les commentaires sur les photos
+define('DISQUS_SHORTNAME', 'XXX'); // shortname du forum disqus
 
 //Style
 define('MAIN_COLOR', '#CC7722'); // Couleur thème de la page

@@ -8,7 +8,9 @@ Main Features
 - Slideshow full screen
 - Exif/IPTC displaying
 - GPS Datas displaying (within google map)
-- Private GallerieS (with login access)
+- Multiple private galleries (with login access)
+- Adapt easily the gallery to your colours
+- Possibility of visitors comments (using disqus : http://www.disqus.com)
 ________________________
 Based on the work off :
 - Php Photo Module (CECILL) by Jensen SIU  http://www.atelier-r.net/scripts.php
