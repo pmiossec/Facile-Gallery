@@ -1,10 +1,10 @@
 A faire :
-- gestion de sous répertoires (reste: gerer le n° de pages "génériques" pour tous les sous répertoires)
-- précédent/suivant en "sur-impression" l'image principale pour que çà ne prenne pas trop de place
-- div au lieu de table (a faire également dans détail)
-- possibilité de faire un zip
-- Répendre 2 num_page sur les pages de google map
-- slideshow : améliorer placement dans le bandeau d'informations (et peut-être un fond noir serait plus beau)
-- Mettre à la norme html5 (gérer encodage utf8)
-- slideshow : compter le temps de latence APRES l'affichage de l'image (ou commencer à afficher l'image qu'une fois chargée')
-- afficher les propriétés de l'image sur le côté ?!? ou par dessus (ou que ça prenne moins de place)
+- gestion de sous rÃ©pertoires (reste: gerer le nÂ° de pages "gÃ©nÃ©riques" pour tous les sous rÃ©pertoires)
+- prÃ©cÃ©dent/suivant en "sur-impression" l'image principale pour que Ã§Ã  ne prenne pas trop de place
+- div au lieu de table (a faire Ã©galement dans dÃ©tail)
+- possibilitÃ© de faire un zip
+- RÃ©pendre 2 num_page sur les pages de google map
+- slideshow : amÃ©liorer placement dans le bandeau d'informations (et peut-Ãªtre un fond noir serait plus beau)
+- Mettre Ã  la norme html5 (gÃ©rer encodage utf8)
+- slideshow : compter le temps de latence APRES l'affichage de l'image (ou commencer Ã  afficher l'image qu'une fois chargÃ©e')
+- afficher les propriÃ©tÃ©s de l'image sur le cÃ´tÃ© ?!? ou par dessus (ou que Ã§a prenne moins de place)

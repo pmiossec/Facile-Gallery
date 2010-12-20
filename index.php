@@ -7,6 +7,9 @@ require("conf_en.php");
 define('CACHE_DIR', '____cache'); //name of the folder where all the datas generated are placed
 define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
 
+//error_reporting(E_ALL); // afficher les erreurs
+error_reporting(0); // ne pas afficher les erreurs
+
 if(isset($_GET['encode']))
 {
 	die(sha1($_GET['encode']));
@@ -65,9 +68,6 @@ else
 	define('PHOTOS_DIR_ROOT', PHOTOS_DIR);
 }
 
-//error_reporting(E_ALL); // afficher les erreurs
-error_reporting(0); // ne pas afficher les erreurs
-
 $separateurs = array('_', '-', '.');
 $file_format_managed = array("jpeg", "jpg", "gif", "png");
 $directory = $_SERVER["SCRIPT_NAME"];
@@ -84,7 +84,7 @@ function my_mkdir($path)
 	mkdir($path, 0777, true);
 }
 
-function construct_header($level, $photodir, $total_images, $photo_name, $index_photo_min, $index_photo_max)
+function construct_header($level, $photodir, $total_images, $photo_name, $index_photo_min, $index_photo_max, $separateurs)
 {
 	//HOME
 	$header = '<span class="Style1">';
@@ -136,14 +136,16 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	return $header;
 }
 
-function list_directory($dir2scan, $order_alphabetically, $exclude_file, $supported_extensions)
+function list_directory($dir2scan, $order_alphabetically, $exclude_files, $supported_extensions)
 {
+	$listDir = null;
+	$listFile = null;
 	// listage des répertoires et fichiers
 	if ($handle = opendir($dir2scan)) {
 		$cDir = 0;
 		$cFile = 0;
 		while (false !== ($file = readdir($handle))) {
-		if(!in_array($file,$exclude_file)){
+		if($exclude_files==null || !in_array($file, $exclude_files)){
 			if(is_dir($dir2scan . "/" . $file)){
 				$listDir[$cDir] = $file;
 				$cDir++;
@@ -162,8 +164,8 @@ function list_directory($dir2scan, $order_alphabetically, $exclude_file, $suppor
 	   closedir($handle);
 	}
 	if ($order_alphabetically == true) {
-		usort($listDir,"strnatcmp");
-		usort($listFile,"strnatcmp");
+		if($listDir != null) usort($listDir,"strnatcmp");
+		if($listFile != null) usort($listFile,"strnatcmp");
 	}
 	return array($listDir,$listFile);
 }
@@ -507,11 +509,12 @@ function scan_invalid_char($dir2scan) {
 }
 
 function create_album_icon($dir2iconize,$file_format_managed) {
+		
 		$album_icon_path = CACHE_DIR . "/" . $dir2iconize . "/" . ICO_FILENAME;
 		$need_to_create = true;
 		if (file_exists($album_icon_path)) {
 			list($width, $height, $type, $attr) = getimagesize($album_icon_path);
-			if ($width != ICO_WIDTH || $height != ICO_HEIGHT) {
+			if ($width == ICO_WIDTH || $height == ICO_HEIGHT) {
 				$need_to_create = false;
 			}
 		}
@@ -522,19 +525,23 @@ function create_album_icon($dir2iconize,$file_format_managed) {
 			array(".", ".."),
 			$file_format_managed);
 
-	$first_dir_item = $listFile[0]; // create icon with the first image
+	$first_dir_item_path = $path_dir2iconize."/".$listFile[0]; // create icon with the first image
 
-	list($srcWidth, $srcHeight, $type, $attr) = getimagesize($path_dir2iconize."/".$first_dir_item);//on liste les valeur de l'image
+	list($srcWidth, $srcHeight, $type, $attr) = getimagesize($first_dir_item_path);//on liste les valeur de l'image
 	//$miniature = imagecreatetruecolor(ICO_WIDTH, ICO_HEIGHT);
 	if ($type == 1) {
-		$handle = imagecreatefromgif($path_dir2iconize."/".$first_dir_item);
-	}
+		$handle = imagecreatefromgif($first_dir_item_path);
+	} else
 	if ($type == 2) {
-		$handle = imagecreatefromjpeg($path_dir2iconize."/".$first_dir_item);
-	}
+		$handle = imagecreatefromjpeg($first_dir_item_path);
+	} else
 	if ($type == 3) {
-		$handle = imagecreatefrompng($path_dir2iconize."/".$first_dir_item);
+		$handle = imagecreatefrompng($first_dir_item_path);
+	} else {
+		echo "Error getting type and size of " . $first_dir_item_path;
+		return;
 	}
+	
 
 	if ($srcWidth >= ICO_WIDTH && $srcHeight >= ICO_HEIGHT)
 	{
@@ -693,10 +700,9 @@ function wordTruncate($str) {
 <html>
 <head>
 	<title><?php echo (isset($_GET['dir']) ? $_GET['dir'] : HOME_NAME);?></title>
-	<meta http-equiv="Content-Type" content="text/html;charset=windows-1252">
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<noscript>
-	<!-- Si vous retirez la reference ci dessus pour des raisons esthetiques, je vous remercie de laisser celle-ci que personne ne verra. Merci. -->
 	Based on :
 	- Php script by "Php Photo Module" 0.2.3 ( http://www.atelier-r.net/scripts.php ) / Jensen SIU  (http://www.jensen-siu.net )
 	- Slideshow by PrettyPhoto ( http://www.no-margin-for-errors.com ) / Stephane Caron
@@ -1000,7 +1006,7 @@ default:
 	$totalPages = ceil($total_icons/$ico_per_page);
 	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
-	echo '<div class="header"><div class="fdgris">' . construct_header(0,PHOTOS_DIR_ROOT, $total_icons, null, null, null);
+	echo '<div class="header"><div class="fdgris">' . construct_header(0,PHOTOS_DIR_ROOT, $total_icons, null, null, null, $separateurs);
 ?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map<?php echo PRIVATE_PARAM; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span>&nbsp;<?php }
 		if( GOOGLEMAP_ACTIVATE && PRIVATE_GALLERY_ACTIVATE){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
@@ -1097,7 +1103,7 @@ case ('list'): //album thumb listing
 	if ($thumb_page_num < $totalPages )
 	{ $index_photo_max = (($thumb_page_num)*$miniatures_per_page); } else { $index_photo_max = $total_files; }
 
-	echo '<div class="header"><div class="fdgris">'. construct_header(1, $album_dir, $total_files, null , $index_photo_min, $index_photo_max);
+	echo '<div class="header"><div class="fdgris">'. construct_header(1, $album_dir, $total_files, null , $index_photo_min, $index_photo_max, $separateurs);
 	?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&amp;dir=<?php echo $album_dir; echo PRIVATE_PARAM; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
 			if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
@@ -1169,7 +1175,7 @@ case ('detail'):
 	{
 		create_thumb($album_dir_path ."/" .$listFile[$photo+1], $thumb_dir  ."/" .$listFile[$photo+1]);
 	}
-	echo '<div class="fdgris">'.construct_header(2, $album_dir, $total_images, $listFile[$photo], null, null) . '</div>';
+	echo '<div class="fdgris">'.construct_header(2, $album_dir, $total_images, $listFile[$photo], null, null, $separateurs) . '</div>';
 ?>
 <table>
 	<tr>
