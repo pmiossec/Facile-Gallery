@@ -96,7 +96,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	;
 	if($level!=0)
 	{
-		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&amp;gallery_page_num=' . $gallery_page_num . PRIVATE_PARAM . '">';
+		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&amp;p=' . $gallery_page_num . PRIVATE_PARAM . '">';
 	}
 	$header .= HOME_NAME;
 	//Directory
@@ -118,7 +118,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 		{
 			if($iDir!=0) $dir .= "/";
 			$dir .= $subdirs[$iDir];
-			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;gallery_page_num=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .PRIVATE_PARAM .'">';
+			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;p=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .PRIVATE_PARAM .'">';
 			$header .= str_replace($separateurs, ' ', $subdirs[$iDir]);
 			$image_num = (isset($_GET['image_num']) ? $_GET['image_num'] : "1");//vérification que le numéro de page existe bien
 			$header .= '</a>';
@@ -175,7 +175,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;p='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
 					<img src="' . $thumb_dir."/".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>" .utf8_encode($legend). "</em>");
@@ -192,7 +192,7 @@ function insert_subdir_cell($album_dir, $sub_album_dir, $thumb_dir, $image_file_
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($album_dir . "/" .$sub_album_dir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM .'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;p='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($album_dir . "/" .$sub_album_dir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM .'">
 				<img src="' . $thumb_dir."/". $sub_album_dir . "/" .$image_file_name .'" alt="' . $image_file_name .'" class="imageborder" /></a>
 		</div>
 		<div class="cell_text">
@@ -1005,7 +1005,7 @@ default:
 	$total_icons = count($listDir);
 	$totalPages = ceil($total_icons/$ico_per_page);
 	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
-	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;gallery_page_num=", $page_num, $totalPages);
+	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;p=", $page_num, $totalPages);
 	echo '<div class="header"><div class="fdgris">' . construct_header(0,PHOTOS_DIR_ROOT, $total_icons, null, null, null, $separateurs);
 ?>
 	<?php if(GOOGLEMAP_ACTIVATE) { ?>&nbsp;<span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=gallery_map<?php echo PRIVATE_PARAM; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span>&nbsp;<?php }
@@ -1028,7 +1028,7 @@ default:
 		?>
 		<div class="cell">
 			<div class="cell_image" style="height:<?php echo ICO_HEIGHT ?>px">
-				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;gallery_page_num=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; echo PRIVATE_PARAM; ?>"><img src="<?php echo CACHE_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
+				<a class="tooltip" href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;p=<?php echo $page_num; ?>&amp;dir=<?php echo $listDir[$i]; echo PRIVATE_PARAM; ?>"><img src="<?php echo CACHE_DIR . "/" . $listDir[$i] . "/" . ICO_FILENAME ?>" alt="<?php echo str_replace($separateurs, ' ', $listDir[$i]); ?>" class="imageborder"><?php if(strlen($legend) != 0) echo my_nl2br("<em><span></span>$legend</em>");?></a>
 			</div>
 			<div class="cell_text fdgris"><span class="Style2"><?php
 				$titre_album = str_replace($separateurs, ' ', $listDir[$i]);
@@ -1098,7 +1098,7 @@ case ('list'): //album thumb listing
 	}
 	$total_dirs = count($listDir);
 	$totalPages =ceil(($total_files + $total_dirs)/$miniatures_per_page);
-	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$album_dir&amp;gallery_page_num=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
+	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$album_dir&amp;p=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
 	$index_photo_min = (($thumb_page_num-1)*$miniatures_per_page)+1;
 	if ($thumb_page_num < $totalPages )
 	{ $index_photo_max = (($thumb_page_num)*$miniatures_per_page); } else { $index_photo_max = $total_files; }
