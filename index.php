@@ -77,8 +77,8 @@ $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR_R
 $url_path_cache = "http://" . $_SERVER["SERVER_NAME"]. $directory . CACHE_DIR ."/";
 
 $here = (isset($_GET['here']) ? $_GET['here'] : "");
-$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vÈrification que le numÈro de page existe bien
-$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//vÈrification que le numÈro de page existe bien
+$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//v√©rification que le num√©ro de page existe bien
+$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//v√©rification que le num√©ro de page existe bien
 function my_mkdir($path)
 {
 	mkdir($path, 0777, true);
@@ -92,7 +92,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 		$header .= '&nbsp;<a class="Style1" href="javascript:myClick();">(?)</a>&nbsp;';
 	$header .= '// ';
 
-	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vÈrification que le numÈro de page existe bien
+	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//v√©rification que le num√©ro de page existe bien
 	;
 	if($level!=0)
 	{
@@ -103,7 +103,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 	if($level!=0)
 	{
 		$header .= '</a>';
-		$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//vÈrification que le numÈro de page existe bien
+		$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//v√©rification que le num√©ro de page existe bien
 		//$header .= '&raquo; ';
 		$subdirs = explode(DIRECTORY_SEPARATOR, $photodir);
 		$dir = "";
@@ -120,7 +120,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 			$dir .= $subdirs[$iDir];
 			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;gallery_page_num=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .PRIVATE_PARAM .'">';
 			$header .= str_replace($separateurs, ' ', $subdirs[$iDir]);
-			$image_num = (isset($_GET['image_num']) ? $_GET['image_num'] : "1");//vÈrification que le numÈro de page existe bien
+			$image_num = (isset($_GET['image_num']) ? $_GET['image_num'] : "1");//v√©rification que le num√©ro de page existe bien
 			$header .= '</a>';
 		}
 		if($level == 2)
@@ -138,7 +138,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 
 function list_directory($dir2scan, $order_alphabetically, $exclude_file, $supported_extensions)
 {
-	// listage des rÈpertoires et fichiers
+	// listage des r√©pertoires et fichiers
 	if ($handle = opendir($dir2scan)) {
 		$cDir = 0;
 		$cFile = 0;
@@ -176,7 +176,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;gallery_page_num='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
 					<img src="' . $thumb_dir."/".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
-					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>$legend</em>");
+					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>" .utf8_encode($legend). "</em>");
 	$cell_content .= '</a>
 		</div>
 		<div class="cell_text">
@@ -417,11 +417,11 @@ function echo_message_with_history_back($message)
 }
 function verify_directories(){
 	$album_dir = (isset($_GET['dir']) ? $_GET['dir'] : "");
-	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vÈrifie que le rÈpertoire photo existe bien
+	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on v√©rifie que le r√©pertoire photo existe bien
 		echo_message_with_history_back(PHOTO_DIR_NEEDED);
 		return array (false, '', '');
 	}
-	//on supprime les slash, antislash et points possibles pour Èviter les failles de sÈcuritÈ
+	//on supprime les slash, antislash et points possibles pour √©viter les failles de s√©curit√©
 	$album_dir = preg_replace("/\\\\/", "", $album_dir);
 	$str2clean = array("." => "");
 	$album_dir = strtr($album_dir, $str2clean);
@@ -437,13 +437,13 @@ function verify_directories(){
 	return array (true, $album_dir, $album_path, $album_cache_path, $cache_resized_image_dir);
 }
 
-///fonction qui convertit les donnÈes GPS de degrÈs, minutes, secondes en decimal
+///fonction qui convertit les donn√©es GPS de degr√©s, minutes, secondes en decimal
 function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
 {
 	$deg=divide_gps_coordinates($exif_deg);
 	$min=divide_gps_coordinates($exif_min);
 	$sec=divide_gps_coordinates($exif_sec);
-	//HÈmisphËre (N, S, W ou E):
+	//H√©misph√®re (N, S, W ou E):
 	$hem=$exif_hem;
 
 	///Altitude: $alt=$exif["GPS"]["GPSAltitude"][0];
@@ -453,14 +453,14 @@ function extract_gps_datas($exif_deg, $exif_min, $exif_sec, $exif_hem)
 	return $gps_ref2 *($deg + $min / 60 + $sec/3600) ;
 }
 
-///fonction qui extrait et met en forme une donnÈe exif
+///fonction qui extrait et met en forme une donn√©e exif
 function extract_exif_data($exifs, $field1, $field2, $label){
 	if (isset($exifs[$field1][$field2]))
 		return $label . utf8_decode($exifs[$field1][$field2]);
 	else return "";
 }
 
-///fonction qui extrait et met en forme une donnÈe IPTC
+///fonction qui extrait et met en forme une donn√©e IPTC
 function extract_iptc_data($iptcs, $iptc_entry_code, $label){
 	if(!array_key_exists($iptc_entry_code, $iptcs) || count($iptcs[$iptc_entry_code])==0)
 		return "";
@@ -477,7 +477,7 @@ function extract_iptc_data($iptcs, $iptc_entry_code, $label){
 	return $label . $display_string;
 }
 
-///fonction qui retourne un nombre correspondant ‡ une donnÈe GPS
+///fonction qui retourne un nombre correspondant √† une donn√©e GPS
 function divide_gps_coordinates($a){
 	// evaluate the string fraction and return a float //
 	$e = explode('/', $a);
@@ -486,19 +486,19 @@ function divide_gps_coordinates($a){
 	else{ return $e[0] / $e[1]; }
 }
 
-///fonction qui renomme les dossiers comprenant des caractËres interdits
+///fonction qui renomme les dossiers comprenant des caract√®res interdits
 function scan_invalid_char($dir2scan) {
 	if ($handle = opendir($dir2scan)) {
 		while (false !== ($file = readdir($handle))) {
-			if ($file != "." && $file != ".." && eregi("[]\[\‡·‚„‰Â¿¡¬√ƒ≈»… ÀËÈÍÎÃÕŒœÏÌÓÔ“”‘’÷ÚÛÙıˆŸ⁄€‹˘˙˚¸.!@#$%^&*+{}()'=$]", $file) && is_dir($dir2scan.'/'.$file)) {
+			if ($file != "." && $file != ".." && eregi("[]\[\√†√°√¢√£√§√•√Ä√Å√Ç√É√Ñ√Ö√à√â√ä√ã√®√©√™√´√å√ç√é√è√¨√≠√Æ√Ø√í√ì√î√ï√ñ√≤√≥√¥√µ√∂√ô√ö√õ√ú√π√∫√ª√º.!@#$%^&*+{}()'=$]", $file) && is_dir($dir2scan.'/'.$file)) {
 					$newfilename = $file;
 					$newfilename = eregi_replace("[]\[\.!@#$%^&*+{}()'=$]", "_", $newfilename);
-					$newfilename = eregi_replace("[‡·‚„‰Â¿¡¬√ƒ≈]", "a", $newfilename);
-					$newfilename = eregi_replace("[»… ÀËÈÍÎ]", "e", $newfilename);
-					$newfilename = eregi_replace("[«Á]", "c", $newfilename);
-					$newfilename = eregi_replace("[ÃÕŒœÏÌÓÔ]", "i", $newfilename);
-					$newfilename = eregi_replace("[“”‘’÷ÚÛÙıˆ]", "o", $newfilename);
-					$newfilename = eregi_replace("[Ÿ⁄€‹˘˙˚¸]", "u", $newfilename);
+					$newfilename = eregi_replace("[√†√°√¢√£√§√•√Ä√Å√Ç√É√Ñ√Ö]", "a", $newfilename);
+					$newfilename = eregi_replace("[√à√â√ä√ã√®√©√™√´]", "e", $newfilename);
+					$newfilename = eregi_replace("[√á√ß]", "c", $newfilename);
+					$newfilename = eregi_replace("[√å√ç√é√è√¨√≠√Æ√Ø]", "i", $newfilename);
+					$newfilename = eregi_replace("[√í√ì√î√ï√ñ√≤√≥√¥√µ√∂]", "o", $newfilename);
+					$newfilename = eregi_replace("[√ô√ö√õ√ú√π√∫√ª√º]", "u", $newfilename);
 					rename($dir2scan.'/'.$file, $dir2scan.'/'.$newfilename);
 			}
 		}
@@ -517,7 +517,7 @@ function create_album_icon($dir2iconize,$file_format_managed) {
 		}
 
 	if(!$need_to_create) return;
-	$path_dir2iconize = PHOTOS_DIR_ROOT."/".$dir2iconize; //chemin vers le rÈpertoire dont on doit crÈer l'icone
+	$path_dir2iconize = PHOTOS_DIR_ROOT."/".$dir2iconize; //chemin vers le r√©pertoire dont on doit cr√©er l'icone
 	list($listDir, $listFile) = list_directory($path_dir2iconize, ALPHABETIC_ORDER,
 			array(".", ".."),
 			$file_format_managed);
@@ -588,7 +588,7 @@ function create_album_icon($dir2iconize,$file_format_managed) {
 	}
 }
 
-///fonction pour trouver une image ayant des donnÈes GPS
+///fonction pour trouver une image ayant des donn√©es GPS
 function find_file_with_gps_data($dir_root, $dir2findgps, $url_path_script, $url_path_datas) {
 	$dir = $dir_root."/".$dir2findgps;
 	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
@@ -897,7 +897,7 @@ a.tooltip:hover em span {
 	</style>
 <?php }
 
-$activate_slideshow = SLIDESHOW_ACTIVATE; //TODO : ajouter la vÈrification de la prÈsence de la librairie
+$activate_slideshow = SLIDESHOW_ACTIVATE; //TODO : ajouter la v√©rification de la pr√©sence de la librairie
 if($here =="list" && $activate_slideshow){?>
 	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
@@ -988,9 +988,9 @@ else
 }
 ini_set('max_execution_time', 120); //2 mn max
 switch ($here) {
-//listing des rÈpertoires photos sur la page d'index par dÈfaut
+//listing des r√©pertoires photos sur la page d'index par d√©faut
 default:
-	scan_invalid_char(PHOTOS_DIR_ROOT); //scan des rÈpertoires qui contiennent des caractËres interdits
+	scan_invalid_char(PHOTOS_DIR_ROOT); //scan des r√©pertoires qui contiennent des caract√®res interdits
 	$ico_per_page = ICO_LINES * ICO_PER_LINE;
 	list($listDir, $listFile) = list_directory("./".PHOTOS_DIR_ROOT, ALPHABETIC_ORDER,
 			array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
@@ -1117,8 +1117,8 @@ case ('list'): //album thumb listing
 		print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
 		$k++;
 	}
-	//si les rÈfÈrences correspondent :
-	for ($i = $borne_min + $k; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'ÈlÈments ‡ afficher selon le numÈro de page
+	//si les r√©f√©rences correspondent :
+	for ($i = $borne_min + $k; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'√©l√©ments √† afficher selon le num√©ro de page
 		list($image_file_name, $datas) = $file_datas[$i];
 		$legend = get_file_metadata_to_display('./' .$album_dir_path.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
 		create_thumb($album_dir_path . "/" . $image_file_name , $thumb_dir . "/" . $image_file_name);
@@ -1131,7 +1131,7 @@ case ('list'): //album thumb listing
 <?php
 	break;//list
 
-//dÈtail de la photo
+//d√©tail de la photo
 case ('detail'):
 	list($continue, $album_dir, $album_dir_path, $thumb_dir, $images_dir_path) = verify_directories();
 	if(!$continue) {break;}
@@ -1159,7 +1159,7 @@ case ('detail'):
 	$photo = $photo -1;
 	$image_path = $images_dir_path . "/" . $listFile[$photo];
 	create_newimage($album_dir_path ."/" .$listFile[$photo], $image_path, IMAGE_STDDIM);
-	$total_images = count($listFile);// on compte le nombre d'ÈlÈments dans le dossier sans compter "." et ".."
+	$total_images = count($listFile);// on compte le nombre d'√©l√©ments dans le dossier sans compter "." et ".."
 	list($width, $height, $type, $attr) = getimagesize($image_path);
 	if ($photo > 0)
 	{
@@ -1191,7 +1191,7 @@ case ('detail'):
 				<td class="fdgris">
 					<span class="Style2">
 					<?php
-					echo my_nl2br(get_file_metadata_to_display($album_dir_path.'/'.$listFile[$photo],$exif_to_display, $iptc_to_display, true));
+					echo utf8_encode(my_nl2br(get_file_metadata_to_display($album_dir_path.'/'.$listFile[$photo],$exif_to_display, $iptc_to_display, true)));
 					?>
 					</span>
 				</td>
@@ -1275,7 +1275,7 @@ break;//map
 
 case ('gallery_map'):
 	if(!GOOGLEMAP_ACTIVATE) {break;}
-	scan_invalid_char(PHOTOS_DIR_ROOT); //scan des rÈpertoires qui contiennent des caractËres interdits
+	scan_invalid_char(PHOTOS_DIR_ROOT); //scan des r√©pertoires qui contiennent des caract√®res interdits
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default<?php echo PRIVATE_PARAM; ?>" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
