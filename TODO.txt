@@ -1,5 +1,9 @@
 A faire :
-- gestion de sous répertoires (reste: gerer le n° de pages "génériques" pour tous les sous répertoires)
+- gestion de sous répertoires (reste: gerer le n° de pages "génériques" pour tous les sous répertoires p=1,2,1)
+- Mettre un max_execution_time en fonction du nombre de photos du dossier
+- legère amélioration placement popup
+- pb discus & pages privées
+- fonction eregi qui est obsolète sous PHP 5.3 et peut-être remplacée par preg_match
 - précédent/suivant en "sur-impression" l'image principale pour que çà ne prenne pas trop de place
 - div au lieu de table (a faire également dans détail)
 - possibilité de faire un zip
@@ -8,3 +12,4 @@ A faire :
 - Mettre à la norme html5 (gérer encodage utf8)
 - slideshow : compter le temps de latence APRES l'affichage de l'image (ou commencer à afficher l'image qu'une fois chargée')
 - afficher les propriétés de l'image sur le côté ?!? ou par dessus (ou que ça prenne moins de place)
+- correction de warnings php lors de la génération des images
