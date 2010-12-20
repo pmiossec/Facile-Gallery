@@ -399,11 +399,11 @@ function write_kml_file($kml_placemarks, $kml_path){
 }
 
 function add_map($url_kml_file){
+	//DOC : http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 	echo '<div id="map_canvas" style="width:95%; height:95%"></div><br/>
 	<script type="text/javascript">
-	//DOC : http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 	function initialize() {
-		var myLatlng = new google.maps.LatLng(41.875696,-87.624207);
+		var myLatlng = new google.maps.LatLng(48.857798,2.296765);
 		var myOptions = { zoom: 11, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID }
 		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 		var ctaLayer = new google.maps.KmlLayer("' . $url_kml_file . '");
