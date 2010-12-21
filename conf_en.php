@@ -53,6 +53,7 @@ define('THUMB_MARGIN', 16); //margin around thumbnails
 define('GOOGLEMAP_ACTIVATE', true); // Enable GPS Images in Google Map
 define('SLIDESHOW_ACTIVATE', true); // Enable Slideshow
 define('SLIDESHOW_FULLSCREEN', true); //Display slideshow in full screen
+define('ZIP_DOWNLOAD_ACTIVATE', true); // Enable download photos throught zip files
 
 //Authentification
 define('PRIVATE_GALLERY_ACTIVATE', true); //Enable a private gallery define below
