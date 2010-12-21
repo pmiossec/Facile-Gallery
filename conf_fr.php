@@ -56,6 +56,7 @@ define('THUMB_MARGIN', 16); //espace autours de miniatures
 define('GOOGLEMAP_ACTIVATE', true); // Activation de la fonctionnalité Google Map
 define('SLIDESHOW_ACTIVATE', true); // Activation de la fonctionnalité Slideshow
 define('SLIDESHOW_FULLSCREEN', true); //Afficher le slideshow en plein écran
+define('ZIP_DOWNLOAD_ACTIVATE', true); // Permet le téléchargement des images grâce à des fichiers zip
 
 //Authentification
 define('PRIVATE_GALLERY_ACTIVATE', true); //Activation des galleries privées

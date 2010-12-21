@@ -4,6 +4,9 @@
 require("conf_en.php");
 //require("conf_fr.php");
 
+if(ZIP_DOWNLOAD_ACTIVATE)
+	require("zip.php");
+
 define('CACHE_DIR', '____cache'); //name of the folder where all the datas generated are placed
 define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
 
