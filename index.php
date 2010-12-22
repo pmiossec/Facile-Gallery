@@ -1154,21 +1154,23 @@ case ('list'): //album thumb listing
 	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
 	$borne_min = $total_thumbFloor - $miniatures_per_page;
 	$k=0;
+	//firectories
 	if($total_dirs > $borne_min)
-	for ($i = $borne_min; $i < (($total_dirs > $total_thumbFloor) ? $total_thumbFloor : $total_dirs); $i++) {
-		$image_file_name = create_thumbs_of_dir($album_dir. "/" . $listDir[$i], $file_format_managed);
-		echo insert_subdir_cell($album_dir, $listDir[$i], $thumb_dir, $image_file_name, $i, "", $gallery_page_num , $thumb_page_num);
-		print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
-		$k++;
+	{
+		for ($i = $borne_min; $k < $miniatures_per_page && $i < $total_dirs ; $i++,$k++) {
+			$image_file_name = create_thumbs_of_dir($album_dir. "/" . $listDir[$i], $file_format_managed);
+			echo insert_subdir_cell($album_dir, $listDir[$i], $thumb_dir, $image_file_name, $i, "", $gallery_page_num , $thumb_page_num);
+			print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
+		}
 	}
-	//si les références correspondent :
-	for ($i = $borne_min + $k; $i < ( ($total_files > $total_thumbFloor) ? $total_thumbFloor : $total_files); $i++) {//oncompte le nb d'éléments à afficher selon le numéro de page
-		list($image_file_name, $datas) = $file_datas[$i];
+	//images
+	$j = $borne_min + $k - $total_dirs;
+	for ($i = $borne_min + $k; $k < $miniatures_per_page && $i < $total_dirs + $total_files; $i++,$k++,$j++) {
+		list($image_file_name, $datas) = $file_datas[$j];
 		$legend = get_file_metadata_to_display('./' .$album_dir_path.'/'.$image_file_name, $exif_to_display, $iptc_to_display, false);
 		create_thumb($album_dir_path . "/" . $image_file_name , $thumb_dir . "/" . $image_file_name);
-		echo insert_thumbnail_cell($album_dir, $thumb_dir, $image_file_name, $i, $legend, $gallery_page_num , $thumb_page_num);
+		echo insert_thumbnail_cell($album_dir, $thumb_dir, $image_file_name, $j, $legend, $gallery_page_num , $thumb_page_num);
 		print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
-		$k++;
 	}
 	?>
 	</div>
