@@ -7,8 +7,8 @@ require("conf_en.php");
 define('CACHE_DIR', '____cache'); //name of the folder where all the datas generated are placed
 define('ICO_FILENAME', '_icon.jpg'); // name of the thumbnail image displayed in the main page
 
-//error_reporting(E_ALL); // afficher les erreurs
-error_reporting(0); // ne pas afficher les erreurs
+error_reporting(E_ALL); // afficher les erreurs
+//error_reporting(0); // ne pas afficher les erreurs
 
 if(isset($_GET['encode']))
 {
@@ -77,33 +77,70 @@ $url_path_datas = "http://" . $_SERVER["SERVER_NAME"]. $directory . PHOTOS_DIR_R
 $url_path_cache = "http://" . $_SERVER["SERVER_NAME"]. $directory . CACHE_DIR ."/";
 
 $here = (isset($_GET['here']) ? $_GET['here'] : "");
-$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vérification que le numéro de page existe bien
-$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//vérification que le numéro de page existe bien
+$p = extract_page_parameters();
+$gallery_page_num = get_page_parameter(count($p)-2);
+echo "skdjhfksj:".$gallery_page_num;
+$thumb_page_num = get_thumb_page_num();
 function my_mkdir($path)
 {
 	mkdir($path, 0777, true);
 }
+function extract_page_parameters()
+{
+	if(!isset($_GET['p'])) return null;
+	return explode ( ',', $_GET['p']);
+}
+function get_thumb_page_num()
+{
+	global $p;
+	if($p == null || count($p) <= 1 ) return 1;
+	return $p[count($p)-1];
+}
+function get_page_level($level)
+{
+	global $p;
 
+	if($p == null ) return 1;
+	$nb_p = count($p);
+	//echo "count:$nb_p";
+	if($level >= $nb_p) return 1;
+	return $p[$level];
+}
+
+function get_page_parameter($level)
+{
+	global $p;
+
+	if($p == null ) return "1";
+	$nb_p = count($p);
+	//echo "count:$nb_p";
+	if($nb_p == 1) return $p[0];
+	if(($level+1)>=$nb_p) return $_GET['p'];
+	$new_p = "";
+	for($i=0;$i<=$level;$i++)
+	{
+		if($i>0) $new_p.= ",";
+		$new_p.= $p[$i];
+	}
+	return $new_p;
+}
 function construct_header($level, $photodir, $total_images, $photo_name, $index_photo_min, $index_photo_max, $separateurs)
 {
-	//HOME
 	$header = '<span class="Style1">';
 	if(DISPLAY_COPYLEFT)
 		$header .= '&nbsp;<a class="Style1" href="javascript:myClick();">(?)</a>&nbsp;';
 	$header .= '// ';
 
-	$gallery_page_num = (isset($_GET['gallery_page_num']) ? $_GET['gallery_page_num'] : "1");//vérification que le numéro de page existe bien
-	;
+	//HOME
 	if($level!=0)
 	{
-		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&amp;p=' . $gallery_page_num . PRIVATE_PARAM . '">';
+		$header .= '<a class="Style1" href="'. $_SERVER["PHP_SELF"] .'?here=default&amp;p=' . get_page_parameter(0) . PRIVATE_PARAM . '">';
 	}
 	$header .= HOME_NAME;
 	//Directory
 	if($level!=0)
 	{
 		$header .= '</a>';
-		$thumb_page_num = (isset($_GET['thumb_page_num']) ? $_GET['thumb_page_num'] : "1");//vérification que le numéro de page existe bien
 		//$header .= '&raquo; ';
 		$subdirs = explode(DIRECTORY_SEPARATOR, $photodir);
 		$dir = "";
@@ -118,7 +155,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 		{
 			if($iDir!=0) $dir .= "/";
 			$dir .= $subdirs[$iDir];
-			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;p=' . $gallery_page_num . '&amp;thumb_page_num='.$thumb_page_num .PRIVATE_PARAM .'">';
+			$header .= '&raquo; <a class="Style1" href="' . $_SERVER["PHP_SELF"] . '?here=list&amp;dir='.$dir.'&amp;p=' . get_page_parameter($iDir+1) .PRIVATE_PARAM .'">';
 			$header .= str_replace($separateurs, ' ', $subdirs[$iDir]);
 			$image_num = (isset($_GET['image_num']) ? $_GET['image_num'] : "1");//vérification que le numéro de page existe bien
 			$header .= '</a>';
@@ -175,7 +212,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;p='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;p='.$gallery_page_num.','.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
 					<img src="' . $thumb_dir."/".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>" .utf8_encode($legend). "</em>");
@@ -192,7 +229,7 @@ function insert_subdir_cell($album_dir, $sub_album_dir, $thumb_dir, $image_file_
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;p='.$gallery_page_num.'&amp;thumb_page_num='.$thumb_page_num.'&amp;dir=' . rawurlencode($album_dir . "/" .$sub_album_dir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM .'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=list&amp;p='.$gallery_page_num.','.$thumb_page_num.'&amp;dir=' . rawurlencode($album_dir . "/" .$sub_album_dir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM .'">
 				<img src="' . $thumb_dir."/". $sub_album_dir . "/" .$image_file_name .'" alt="' . $image_file_name .'" class="imageborder" /></a>
 		</div>
 		<div class="cell_text">
@@ -729,7 +766,7 @@ div.header{
 	overflow:hidden;
 }
 div.table{
-	padding-top:35px;
+	padding-top:45px;
 }
 /*For the fixed header (end) */
 
@@ -1004,7 +1041,8 @@ default:
 
 	$total_icons = count($listDir);
 	$totalPages = ceil($total_icons/$ico_per_page);
-	$page_num = (isset($_GET['gallery_page_num']) && $_GET['gallery_page_num'] !== "" && $_GET['gallery_page_num'] <= $totalPages ? $_GET['gallery_page_num'] : "1");
+	$pn=get_page_level(0);
+	$page_num = $pn <= $totalPages ? $pn : $totalPages -1 ;
 	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=default&amp;p=", $page_num, $totalPages);
 	echo '<div class="header"><div class="fdgris">' . construct_header(0,PHOTOS_DIR_ROOT, $total_icons, null, null, null, $separateurs);
 ?>
@@ -1098,7 +1136,7 @@ case ('list'): //album thumb listing
 	}
 	$total_dirs = count($listDir);
 	$totalPages =ceil(($total_files + $total_dirs)/$miniatures_per_page);
-	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$album_dir&amp;p=$gallery_page_num&amp;thumb_page_num=", $thumb_page_num, $totalPages);
+	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$album_dir&amp;p=$gallery_page_num,", $thumb_page_num, $totalPages);
 	$index_photo_min = (($thumb_page_num-1)*$miniatures_per_page)+1;
 	if ($thumb_page_num < $totalPages )
 	{ $index_photo_max = (($thumb_page_num)*$miniatures_per_page); } else { $index_photo_max = $total_files; }
