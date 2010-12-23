@@ -78,9 +78,17 @@ $url_path_cache = "http://" . $_SERVER["SERVER_NAME"]. $directory . CACHE_DIR ."
 
 $here = (isset($_GET['here']) ? $_GET['here'] : "");
 $p = extract_page_parameters();
-$gallery_page_num = get_page_parameter(count($p)-2);
-echo "skdjhfksj:".$gallery_page_num;
+$gallery_page_num = get_page_parameter(get_deepth());
 $thumb_page_num = get_thumb_page_num();
+function get_deepth(){
+	global $here;
+	//return count($p)-1;
+	if($here=="list" || $here=="detail")
+	{
+		return 1 + substr_count ( $_GET['dir'] , "/");
+	}
+	return 0;
+}
 function my_mkdir($path)
 {
 	mkdir($path, 0777, true);
@@ -212,7 +220,7 @@ function insert_thumbnail_cell($photodir, $thumb_dir, $image_file_name, $index_i
 {
 	$cell_content = '<div class="cell">
 		<div class="cell_image" style="width:' . (MINIATURE_MAXDIM + 6) .'px;height:' . (MINIATURE_MAXDIM + 6).'px">
-				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;p='.$gallery_page_num.','.$thumb_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
+				<a class="tooltip" href="' . $_SERVER["PHP_SELF"] .'?here=detail&amp;p='.$gallery_page_num.'&amp;dir=' . rawurlencode($photodir) .'&amp;image_num=' . ($index_image+1) .PRIVATE_PARAM.'">
 					<img src="' . $thumb_dir."/".$image_file_name  .'" alt="' . $image_file_name .'" class="imageborder" />';
 
 					if(strlen($legend) != 0) $cell_content .= my_nl2br("<em style=\"width:300px\"><span></span>" .utf8_encode($legend). "</em>");
@@ -1136,7 +1144,7 @@ case ('list'): //album thumb listing
 	}
 	$total_dirs = count($listDir);
 	$totalPages =ceil(($total_files + $total_dirs)/$miniatures_per_page);
-	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$album_dir&amp;p=$gallery_page_num,", $thumb_page_num, $totalPages);
+	$pages_html_indexes = display_pages_indexes($_SERVER["PHP_SELF"] . "?here=list&amp;dir=$album_dir&amp;p=". get_page_parameter(get_deepth()-1) .",", $thumb_page_num, $totalPages);
 	$index_photo_min = (($thumb_page_num-1)*$miniatures_per_page)+1;
 	if ($thumb_page_num < $totalPages )
 	{ $index_photo_max = (($thumb_page_num)*$miniatures_per_page); } else { $index_photo_max = $total_files; }
@@ -1154,7 +1162,7 @@ case ('list'): //album thumb listing
 	$total_thumbFloor = $miniatures_per_page*$thumb_page_num;
 	$borne_min = $total_thumbFloor - $miniatures_per_page;
 	$k=0;
-	//firectories
+	//directories
 	if($total_dirs > $borne_min)
 	{
 		for ($i = $borne_min; $k < $miniatures_per_page && $i < $total_dirs ; $i++,$k++) {
@@ -1163,7 +1171,7 @@ case ('list'): //album thumb listing
 			print is_int(($k+1)/MINIATURES_PER_LINE) ? '<div class="line"></div>': "";
 		}
 	}
-	//images
+	//photos
 	$j = $borne_min + $k - $total_dirs;
 	for ($i = $borne_min + $k; $k < $miniatures_per_page && $i < $total_dirs + $total_files; $i++,$k++,$j++) {
 		list($image_file_name, $datas) = $file_datas[$j];
