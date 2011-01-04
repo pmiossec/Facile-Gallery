@@ -743,6 +743,48 @@ function wordTruncate($str) {
 		return htmlentities($str2);
 	}
 }
+
+//////////////////Zip
+	list($continue, $album_dir, $album_dir_path, $thumb_dir, $image_dir) = verify_directories();
+	if(!$continue) {break;}
+
+	list($listDir, $listFile) = list_directory($album_dir_path, ALPHABETIC_ORDER,
+			array(".", ".." , IMAGE_STDDIM, ICO_FILENAME),
+			$file_format_managed);
+	list($listDirThumb, $listFileThumb) = list_directory($thumb_dir, ALPHABETIC_ORDER, null, null);
+
+	$total_files = count($listFile);
+
+	if(ZIP_DOWNLOAD_ACTIVATE && isset($_GET['zip']) )
+	{
+		$zip = $_GET['zip'];
+		if($zip == "gallery")
+		{
+			for($i=0;$i<count($listFile);$i++)
+			{
+					$listFileZip[] = "./$album_dir_path/".$listFile[$i];
+			}
+			download_zip($listFileZip);
+			exit;
+		}
+		$indexListFile = split(',',$zip);
+		if(count($indexListFile) != 0)
+		{
+			for($i=0;$i<count($indexListFile);$i++)
+			{
+				$index = $indexListFile[$i]-1;
+				if($index>=0 && $index<$total_files)
+					$listFileZip[] = "./$album_dir_path/". $listFile[$index];
+			}
+			if(count($listFileZip) != 0)
+			{
+				download_zip($listFileZip);
+				exit;
+			}
+		}
+	}
+//////////////////End Zip
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -1112,6 +1154,7 @@ case ('list'): //album thumb listing
 	list($listDirThumb, $listFileThumb) = list_directory($thumb_dir, ALPHABETIC_ORDER, null, null);
 
 	$total_files = count($listFile);
+
 	for($i=0;$i<$total_files;$i++)
 	{
 		$file_datas[$i] = array($listFile[$i], get_file_metadata("./$album_dir_path/$listFile[$i]"));

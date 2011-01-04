@@ -3,10 +3,10 @@
 download_zip($files);
 */
 function download_zip($files,$zip_file = null,$custom_file_string = null){
-	if($zip_file == null || length($zip_file) == 0)
+	if($zip_file == null || strlen($zip_file) == 0)
 	{
 		$zip_file = "photos_";
-		if($zip_file == null || length($zip_file) == 0)
+		if($zip_file == null || strlen($zip_file) == 0)
 			$zip_file .= $custom_file_string ."_";
 		$zip_file .= date("Y-m-d_G-i-s").".zip";
 	}
