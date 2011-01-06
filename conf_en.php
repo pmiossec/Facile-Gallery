@@ -157,6 +157,7 @@ define('TAGS','Tags : ');
 define('AUTH_REQUIRED', 'Enter a login/password to access a private gallery.');
 define('PRIVATE_GALLERY', 'Private Gallery');
 define('PUBLIC_GALLERY', 'Public Gallery');
+define('DOWNLOAD_ZIP', 'Download...');
 
 ///File under Licence CECILL
 ?>

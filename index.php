@@ -139,7 +139,7 @@ function construct_header($level, $photodir, $total_images, $photo_name, $index_
 {
 	$header = '<span class="Style1">';
 	if(DISPLAY_COPYLEFT)
-		$header .= '&nbsp;<a class="Style1" href="javascript:myClick();">(?)</a>&nbsp;';
+		$header .= '&nbsp;<a class="Style1" href="javascript:showPopup(\'copyright\');">(?)</a>&nbsp;';
 	$header .= '// ';
 
 	//HOME
@@ -1197,9 +1197,13 @@ case ('list'): //album thumb listing
 
 	echo '<div class="header"><div class="fdgris">'. construct_header(1, $album_dir, $total_files, null , $index_photo_min, $index_photo_max, $separateurs);
 	?>
-	<?php if(GOOGLEMAP_ACTIVATE) { ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&amp;dir=<?php echo $album_dir; echo PRIVATE_PARAM; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
-			if( GOOGLEMAP_ACTIVATE && $activate_slideshow){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
-			if($activate_slideshow){?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php } ?></div>
+	<?php $previous = false;
+			if(GOOGLEMAP_ACTIVATE) { $previous = true; ?><span class="Style2" style="float:right;"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=map&amp;dir=<?php echo $album_dir; echo PRIVATE_PARAM; ?>" class="Style2"><?php echo DISPLAY_MAP ?></a></span><?php }
+			if($previous){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
+			if($activate_slideshow){ $previous = true; ?><span class="Style2" style="float:right;"><a href="#" onClick="slideshow();return false;" class="Style2"><?php echo SLIDESHOW ?></a></span><?php }
+			if($previous){?><span class="Style2" style="float:right;">&nbsp;&nbsp;|&nbsp;&nbsp;</span><?php }
+			if(ZIP_DOWNLOAD_ACTIVATE){?><span class="Style2" style="float:right;"><a href="#" onClick="showPopup('zipPopup');return false;" class="Style2"><?php echo DOWNLOAD_ZIP ?></a></span><?php } ?>
+			</div>
 
 	<?php echo $pages_html_indexes; ?>
 	</div>
@@ -1228,7 +1232,39 @@ case ('list'): //album thumb listing
 	}
 	?>
 	</div>
+<?php if(ZIP_DOWNLOAD_ACTIVATE){?>
+	<div id="zipPopup" class="popup color_light" style="display:none">
+		<div class="color_light" style="height:10%">Download images</div>
+		<div class="color_dark" style="height:80%">
+			<span class="Style2">
+Download the images from :<br/>
+<input type="radio" value="gallery" name="rDownload" id="rDownload_gallery" checked >All the gallery images</input><br/>
+<input type="radio" value="list" name="rDownload" id="rDownload_list">Specific image number :</input><input type="text" id="image_list" />(synthax:1,2,5)
+		</div>
+		<div class="color_light" align="center">
+			<input type="button" value="Close" onClick="javascript:closePopup('zipPopup');" />
+			<input type="button" value="Download!" onClick="javascript:download();" />
+		</div>
+	</div>
+	<script>
+		function download() {
+		radio = document.getElementById("rDownload_gallery");
+		checked = radio.checked;
+		closePopup('zipPopup');
+		if(checked)
+		{
+			document.location += "&zip=gallery";
+		}
+		else
+		{
+			images = document.getElementById("image_list").value;
+			document.getElementById("image_list").value = "";
+			document.location += "&zip="+ images;
+		}
+		};
+	</script>
 <?php
+	}
 	break;//list
 
 //détail de la photo
@@ -1411,7 +1447,7 @@ case ('gallery_map'):
 break;
 }
 ?>
-<div id="popup" class="popup color_light" style="display:none">
+<div id="copyright" class="popup color_light" style="display:none">
 	<div class="color_light" style="height:10%">About Facile Gallery</div>
 	<div class="color_dark" style="height:80%">
 		<span class="Style2"><a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery (on GitHub)</b></a> by Philippe Miossec<br/>
@@ -1421,17 +1457,17 @@ break;
 		</span>
 	</div>
 	<div class="color_light" align="center">
-		<input type="button" value="Close" onClick="javascript:closePopup();" />
+		<input type="button" value="Close" onClick="javascript:closePopup('copyright');" />
 	</div>
 </div>
 <script>
-	function myClick() {
-	elem = document.getElementById("popup");
+	function showPopup(popupId) {
+	elem = document.getElementById(popupId);
 	elem.style.display = 'block';
 	};
-	function closePopup()
+	function closePopup(popupId)
 	{
-	elem = document.getElementById("popup");
+	elem = document.getElementById(popupId);
 	elem.style.display = 'none';
 	}
 </script></body>
