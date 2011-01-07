@@ -12,6 +12,7 @@
 // Multiple private galleries (with login access)
 // Adapt easily the gallery to your colors
 // Possibility of visitors comments (using disqus : http://www.disqus.com)
+// Possibility of download photos zip file
 
 ///III. Installation / Configuration
 // 1. Edit the "index.php" file and modify the 2ond line which should be require("conf_en.php");

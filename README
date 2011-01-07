@@ -1,4 +1,4 @@
-Facile Gallery 0.1
+Facile Gallery 0.3
 ________________________
 
 by Philippe Miossec 
@@ -11,6 +11,7 @@ Main Features
 - Multiple private galleries (with login access)
 - Adapt easily the gallery to your colours
 - Possibility of visitors comments (using disqus : http://www.disqus.com)
+- Possibility of download photos zip file
 ________________________
 Based on the work off :
 - Php Photo Module (CECILL) by Jensen SIU  http://www.atelier-r.net/scripts.php

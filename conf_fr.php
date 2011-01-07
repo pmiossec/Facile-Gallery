@@ -14,6 +14,7 @@
 // Gestion de galeries privées multiples (avec accès par mot de passe)
 // Adaptation facile des couleurs de la gallerie à vos souhaits
 // Possibilité de permettre les commentaires par les visiteurs (en utilisant disqus : http://www.disqus.com)
+// Possibilité de télécharger des photos par fichier zip
 
 ///III. Installation / Configuration
 // 1. Editer le fichier "index.php" et modifier la 2onde ligne de façon à avoir require("conf_fr.php");
