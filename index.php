@@ -933,7 +933,11 @@ td.fdgris {
 }
 body {
 	background-color: <?php echo PAGE_COLOR; ?>;
+	color :  <?php echo TEXT_COLOR; ?>;
 	margin: 10px;
+}
+.bckgrd_color {
+	background-color: <?php echo PAGE_COLOR; ?>;
 }
 .imageborder {
 	border: 1px solid <?php echo DARK_COLOR; ?>;
@@ -1233,31 +1237,37 @@ case ('list'): //album thumb listing
 	?>
 	</div>
 <?php if(ZIP_DOWNLOAD_ACTIVATE){?>
-	<div id="zipPopup" class="popup color_light" style="display:none">
-		<div class="color_light" style="height:10%">Download images</div>
-		<div class="color_dark" style="height:80%">
+	<div id="zipPopup" class="popup main_color" style="display:none">
+		<div class="main_color" style="text-align:center"><?php echo DOWNLOAD_IMAGES;?></div>
+		<div class="bckgrd_color" style="height:80%">
 			<span class="Style2">
-Download the images from :<br/>
-<input type="radio" value="gallery" name="rDownload" id="rDownload_gallery" checked >All the gallery images</input><br/>
-<input type="radio" value="list" name="rDownload" id="rDownload_list">Specific image number :</input><input type="text" id="image_list" />(synthax:1,2,5)
+<?php echo DOWNLOAD_FROM;?> :<br/>
+<input type="radio" value="gallery" name="rDownload" id="rDownload_gallery" checked ><?php echo DOWNLOAD_GALLERY;?></input><br/>
+<input type="radio" value="list" name="rDownload" id="rDownload_list"><?php echo DOWNLOAD_LIST;?> :</input><input type="text" id="image_list" />(<?php echo DOWNLOAD_LIST_EX;?>)
 		</div>
-		<div class="color_light" align="center">
-			<input type="button" value="Close" onClick="javascript:closePopup('zipPopup');" />
-			<input type="button" value="Download!" onClick="javascript:download();" />
+		<div class="main_color" align="center">
+			<input type="button" value="<?php echo DOWNLOAD_CANCEL;?>" onClick="javascript:closePopup('zipPopup');" />
+			<input type="button" value="<?php echo DOWNLOAD_DOWNLOAD;?>" onClick="javascript:download();" />
 		</div>
 	</div>
 	<script>
 		function download() {
 		radio = document.getElementById("rDownload_gallery");
 		checked = radio.checked;
-		closePopup('zipPopup');
 		if(checked)
 		{
+			closePopup('zipPopup');
 			document.location += "&zip=gallery";
 		}
 		else
 		{
 			images = document.getElementById("image_list").value;
+			var re = new RegExp("^[1-9][1-9]*(,[1-9][1-9]*)*$");
+			if (images.length==0 || !images.match(re)) {
+				alert('<?php echo DOWNLOAD_LIST_ERROR;?>');return;
+			}
+			return; //for test!!!!!
+			closePopup('zipPopup');
 			document.getElementById("image_list").value = "";
 			document.location += "&zip="+ images;
 		}
@@ -1447,17 +1457,17 @@ case ('gallery_map'):
 break;
 }
 ?>
-<div id="copyright" class="popup color_light" style="display:none">
-	<div class="color_light" style="height:10%">About Facile Gallery</div>
-	<div class="color_dark" style="height:80%">
-		<span class="Style2"><a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery (on GitHub)</b></a> by Philippe Miossec<br/>
-		Based on the work of :<br/>
-		- Gallery : <a class="Style2" href="http://www.atelier-r.net/scripts.php" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Php Photo Module / Atelier R</a> (CECILL license) / <a class="Style2" href="http://www.jensen-siu.net/" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a><br/>
-		- Slideshow : <a class="Style2" href="http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/">PrettyPhoto</a> (CC-Attribution license) / <a class="Style2" href="http://www.no-margin-for-errors.com/" target="_blank">Stephane Caron</a><br/>
+<div id="copyright" class="popup main_color" style="display:none">
+	<div class="main_color" style="text-align:center"><?php echo INFO_ABOUT;?></div>
+	<div class="bckgrd_color" style="height:80%">
+		<span class="Style2"><a class="Style2" href="https://github.com/pmiossec/Facile-Gallery" target="_blank"><b>Facile Gallery (GitHub)</b></a> / Philippe Miossec<br/>
+		<?php echo INFO_WORK_BASED;?> :<br/>
+		- <?php echo INFO_GALLERY;?> : <a class="Style2" href="http://www.atelier-r.net/scripts.php" target="_blank" class="Style2" title="Annuaire cooperatif du graphisme et du multimedia">Php Photo Module / Atelier R</a> (CECILL license) / <a class="Style2" href="http://www.jensen-siu.net/" target="_blank" title="Graphiste - Concepteur multimedia">Jensen SIU</a><br/>
+		- <?php echo INFO_SLIDESHOW;?> : <a class="Style2" href="http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/">PrettyPhoto</a> (CC-Attribution license) / <a class="Style2" href="http://www.no-margin-for-errors.com/" target="_blank">Stephane Caron</a><br/>
 		</span>
 	</div>
-	<div class="color_light" align="center">
-		<input type="button" value="Close" onClick="javascript:closePopup('copyright');" />
+	<div class="main_color" align="center">
+		<input type="button" value="<?php echo INFO_CLOSE;?>" onClick="javascript:closePopup('copyright');" />
 	</div>
 </div>
 <script>

@@ -158,6 +158,19 @@ define('AUTH_REQUIRED', 'Enter a login/password to access a private gallery.');
 define('PRIVATE_GALLERY', 'Private Gallery');
 define('PUBLIC_GALLERY', 'Public Gallery');
 define('DOWNLOAD_ZIP', 'Download...');
+define('DOWNLOAD_IMAGES', 'Download photos');
+define('DOWNLOAD_FROM', 'Download the photos from');
+define('DOWNLOAD_GALLERY', 'All the gallery photos (could be long and failed by timeout depnding the number of photos.)');
+define('DOWNLOAD_LIST', 'Specific photo number');
+define('DOWNLOAD_LIST_EX', 'Example of synthax:1,2,5');
+define('DOWNLOAD_CANCEL', 'Cancel');
+define('DOWNLOAD_DOWNLOAD', 'Download!');
+define('DOWNLOAD_LIST_ERROR', 'Format error in the photos list string...');
+define('INFO_ABOUT', 'About Facile Gallery');
+define('INFO_WORK_BASED', 'Based on the work of');
+define('INFO_GALLERY', 'Gallery');
+define('INFO_SLIDESHOW', 'Slideshow');
+define('INFO_CLOSE', 'Close');
 
 ///File under Licence CECILL
 ?>

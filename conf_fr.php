@@ -162,6 +162,19 @@ define('AUTH_REQUIRED', 'Enterez un login/mot de passe pour accéder à une gale
 define('PRIVATE_GALLERY', 'Galerie privée');
 define('PUBLIC_GALLERY', 'Galerie publique');
 define('DOWNLOAD_ZIP', 'Télécharger...');
+define('DOWNLOAD_IMAGES', 'Télécharger les photos');
+define('DOWNLOAD_FROM', 'Télécharger les photos depuis');
+define('DOWNLOAD_GALLERY', 'Toutes les photos de la galerie (peut être long et échouer à cause d\'un timeout en fonction du nombre de photos.)');
+define('DOWNLOAD_LIST', 'Numéros specifiques de photos');
+define('DOWNLOAD_LIST_EX', 'Exemple de synthaxe:1,2,5');
+define('DOWNLOAD_CANCEL', 'Annuler');
+define('DOWNLOAD_DOWNLOAD', 'Télécharger!');
+define('DOWNLOAD_LIST_ERROR', 'Erreur de format de la chaine de liste des photos...');
+define('INFO_ABOUT', 'A propos de Facile Gallery');
+define('INFO_WORK_BASED', 'Basé sur le travail de');
+define('INFO_GALLERY', 'Galerie');
+define('INFO_SLIDESHOW', 'Diaporama');
+define('INFO_CLOSE', 'Fermer');
 
 ///File under Licence CECILL
 ?>
