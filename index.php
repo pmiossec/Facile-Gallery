@@ -469,7 +469,7 @@ function verify_directories(){
 	$album_dir = (isset($_GET['dir']) ? $_GET['dir'] : "");
 	if (!isset($_GET['dir']) || $_GET['dir'] == "") {//on vérifie que le répertoire photo existe bien
 		echo_message_with_history_back(PHOTO_DIR_NEEDED);
-		return array (false, '', '');
+		return array (false, '', '', '', '');
 	}
 	//on supprime les slash, antislash et points possibles pour éviter les failles de sécurité
 	$album_dir = preg_replace("/\\\\/", "", $album_dir);
@@ -745,6 +745,8 @@ function wordTruncate($str) {
 }
 
 //////////////////Zip
+if(isset($_GET['zip']))
+{
 	list($continue, $album_dir, $album_dir_path, $thumb_dir, $image_dir) = verify_directories();
 	if(!$continue) {break;}
 
@@ -783,6 +785,7 @@ function wordTruncate($str) {
 			}
 		}
 	}
+}
 //////////////////End Zip
 
 ?>
