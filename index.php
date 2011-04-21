@@ -448,16 +448,15 @@ function write_kml_file($kml_placemarks, $kml_path){
 	fclose($fh);
 }
 
-function add_map($url_kml_file){
+function add_map($lat, $long, $content){
 	//DOC : http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 	echo '<div id="map_canvas" style="width:95%; height:95%"></div><br/>
 	<script type="text/javascript">
 	function initialize() {
-		var myLatlng = new google.maps.LatLng(48.857798,2.296765);
+		var myLatlng = new google.maps.LatLng('.$lat.',' .$long.');
 		var myOptions = { zoom: 11, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID }
-		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-		var ctaLayer = new google.maps.KmlLayer("' . $url_kml_file . '");
-		ctaLayer.setMap(map);
+		var myMap = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+'. $content .'
 	}
 	</script>';
 }
@@ -1384,42 +1383,53 @@ case ('map'):
 			array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
 			$file_format_managed);
 
-	$kml_filname = str_replace('/', '_', $album_dir);
-	$kml_path =  "./" . CACHE_DIR . "/" . $kml_filname . ".kml";
-	if(!file_exists($kml_path) || $create_kml_file="true") {
 	$at_least_one = false;
+	$lat = 0;
+	$long = 0;
+	$content = "";
 	for ($i=0;$i < count($listFile); $i++) {
-	
+
 		$file_to_add = $listFile[$i];
 		list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_only_if_gps_exists($album_dir_path.'/'.$listFile[$i]);
 		if($succes)
 		{
+			//TODO TMP
+			$lat = $decimal_lat;
+			$long = $decimal_long;
 			$name= $file_to_add;
 			if($iptcs != null)
 			{
-				$html_code = "<a href=\"$url_path_datas$album_dir/$file_to_add\"><img src=\"$url_path_cache$album_dir/$file_to_add\"></a><br/>
-					<span class=\"legend\">" . my_nl2br($legend) . "</span><br/>\n $tags<br/>\n";
+				$bubble_content = "'<a href=\"$url_path_datas$album_dir/$file_to_add\"><img src=\"$url_path_cache$album_dir/$file_to_add\"></a><br/><span class=\"legend\">" . my_nl2br($legend) . "</span><br/> $tags<br/>'\n";
+				$options = "\nvar optionsMarker$i = { position: new google.maps.LatLng($decimal_lat,$decimal_long), map: myMap, title: \"$name\" };";
+				$marker = "var marker$i = new google.maps.Marker(optionsMarker$i);";
+				$click = "google.maps.event.addListener(marker$i, 'click', function() { new google.maps.InfoWindow({
+          content: $bubble_content
+     }).open(myMap, marker$i);
+     });\n";
+				$content = $content . $options . $marker . $click;
+
+				//$html_code = "<a href=\"$url_path_datas$album_dir/$file_to_add\"><img src=\"$url_path_cache$album_dir/$file_to_add\"></a><br/>
+				//	<span class=\"legend\">" . my_nl2br($legend) . "</span><br/>\n $tags<br/>\n";
 			}
-			$kml_file = $kml_file . "<Placemark><name>$name</name><description><![CDATA[$html_code]]></description><Point><coordinates>$decimal_long,$decimal_lat</coordinates></Point></Placemark>";
+			//$kml_file = $kml_file . "<Placemark><name>$name</name><description><![CDATA[$html_code]]></description><Point><coordinates>$decimal_long,$decimal_lat</coordinates></Point></Placemark>";
 			$at_least_one = true;
 		}
 	}
 
 	if($at_least_one){
-		write_kml_file($kml_file,$kml_path);
+		echo '</div>';
+		add_map($lat, $long, $content);
 	}
-}
+	else
+	{
+		echo '</div><div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
+	}
 //Afficher une carte google map
-if(file_exists($kml_path)) {
+/*if(file_exists($kml_path)) {
 	$kml_url = $url_path_cache. $album_dir.".kml";
 	echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span>';
 	echo "</div>";
-	add_map($kml_url);
-}
-else
-{
-	echo '</div><div style="text-align:center; margin: auto; height: 50px;">' . NO_PHOTO_WITH_GPS_DATA .'</div>';
-}
+}*/
 break;//map
 
 case ('gallery_map'):
