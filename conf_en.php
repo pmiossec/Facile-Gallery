@@ -22,9 +22,7 @@
 // 5. Visit your web site :) (It could be slower the first time due to the images gallery generation)
 
 ///IV Trick
-// 1. Even if all is automatic, if you add new files in a folder, you should regenerate the kml file if you have google map activated
-// To do that, just add the parameter to the url '&create=true'
-// 2. Configuration of the parameters of the slideshow are actually in the "index.php" file (look for the string "prettyPhoto(")
+// 1. Configuration of the parameters of the slideshow are actually in the "index.php" file (look for the string "prettyPhoto(")
 
 /// Configuration parameters
 //Global params

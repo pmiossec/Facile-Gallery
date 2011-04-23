@@ -24,9 +24,7 @@
 // 5. Allez visiter votre galerie :) (La 1ère consultation peut être lente du fait de la génération de la gallerie)
 
 ///IV Astuce
-// 1. Même si le fonctionnement de la galerie est automatique, lorsque vous ajoutez des images à une sous-gallerie existante,
-// les fichiers ne sont pas pris en compte dans google map. Il faut régénérer le fichier kml en ajoutant le paramètre '&create=true' à l'url'
-// 2. La configuration du panorama se trouve actuellement dans le fichier "index.php" ( cherchez la chaine "prettyPhoto(")
+// 1. La configuration du panorama se trouve actuellement dans le fichier "index.php" ( cherchez la chaine "prettyPhoto(")
 
 /// Paramètres de configuration
 //Paramètres principaux
