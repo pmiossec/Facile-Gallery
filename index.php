@@ -462,17 +462,11 @@ function add_map($minLat, $minLong, $maxLat, $maxLong, $content){
 
 	function initialize() {
 		//var myLatlng = new google.maps.LatLng('.$lat.',' .$long.');
-		var myOptions = { mapTypeId: google.maps.MapTypeId.HYBRID } //zoom: 11, center: myLatlng, 
+		var myOptions = { mapTypeId: google.maps.MapTypeId.HYBRID };
 		var myMap = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 		var latLngs = new Array();
-		latLngs.push(new google.maps.LatLng('.$minLat.','.$minLong.'), new google.maps.LatLng('.$maxLat.','.$maxLong.'))
+		latLngs.push(new google.maps.LatLng('.$minLat.','.$minLong.'), new google.maps.LatLng('.$maxLat.','.$maxLong.'));
 		myMap.fitBounds(getBoundsForLatLngs(latLngs));
-
-
-/*		var center = new GPoint( ('.$maxLong.'+'.$minLong.')/2, ('.$maxLat.'+'.$minLat.')/2 );
-		var delta = new GSize( '.$maxLong.'-'.$minLong.', '.$maxLat.'-'.$minLat.');
-		var minZoom = map.spec.getLowestZoomLevel(center, delta, map.viewSize);
-		map.centerAndZoom(center, minZoom);*/
 '. $content .'
 	}
 	</script>';
@@ -660,7 +654,7 @@ function create_album_icon($dir2iconize,$file_format_managed) {
 }
 
 ///fonction pour trouver une image ayant des données GPS
-function find_file_with_gps_data($dir_root, $dir2findgps, $url_path_script, $url_path_datas) {
+function find_file_with_gps_data($dir_root, $dir2findgps, $url_path_script, $url_path_datas, $iDir, $file_format_managed) {
 	$dir = $dir_root."/".$dir2findgps;
 	list($listDir, $listFile) = list_directory($dir, ALPHABETIC_ORDER,
 			array(".", ".."), $file_format_managed);
@@ -670,20 +664,26 @@ function find_file_with_gps_data($dir_root, $dir2findgps, $url_path_script, $url
 		$decimal_long = 0;
 		list($succes, $decimal_lat, $decimal_long) = get_file_metadata_only_gps($dir.'/'.$listFile[$i]);
 		if($succes){
-			$html_code = "<a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>";
-			$html_code = "<Placemark><name>$dir2findgps</name><description><![CDATA[$html_code]]></description><Point><coordinates>" . $decimal_long ."," . $decimal_lat . "</coordinates></Point></Placemark>";
-			return array(true, $html_code);
+			$name = $dir2findgps;
+			$bubble_content = "'<span class=\"legend\">$name<span><br/><a href=\"$url_path_script?here=list&amp;dir=$dir2findgps\"><img src=\"$url_path_datas$dir2findgps/". ICO_FILENAME ."\"></a><br/>'\n";
+			$options = "\nvar optionsMarker$iDir = { position: new google.maps.LatLng($decimal_lat,$decimal_long), map: myMap, title: \"$name\" };";
+			$marker = "var marker$iDir = new google.maps.Marker(optionsMarker$iDir);";
+			$click = "google.maps.event.addListener(marker$iDir, 'click', function() { new google.maps.InfoWindow({
+          content: $bubble_content
+     }).open(myMap, marker$iDir);
+     });\n";
+				$content = $content . $options . $marker . $click;
+			return array(true, $decimal_lat, $decimal_long, $content);
 		}
 	}
-	//try to find in subdirs
+/*	//try to find in subdirs
 	for($i=0;$i<count($listDir);$i++){
-		list($find_one, $html_code) = find_file_with_gps_data($dir, $listDir[$iDir], $url_path_script, $url_path_cache);
+		list($find_one,$decimal_lat, $decimal_long, $content) = find_file_with_gps_data($dir, $listDir[$iDir], $url_path_script, $url_path_cache, $iDir, $file_format_managed);
 		if($find_one)
 		{
-			return array(true, $html_code);
+			return array(true,$decimal_lat, $decimal_long, $content);
 		}
-	}
-	return array(false, "");
+	}*/
 }
 
 function create_thumbs_of_dir($album_dir_way, $file_format_managed)
@@ -965,11 +965,11 @@ body {
 }
 .legend{
 	color: black;
-	font-weight: normal;
+	font-size: normal;
 }
 .legend_complement{
 	color: black;
-	font-weight: small;
+	font-size: small;
 }
 /*Tooltip*/
 a.tooltip {
@@ -1399,7 +1399,6 @@ case ('map'):
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default<?php echo PRIVATE_PARAM; ?>" class="Style1"><?php echo HOME_NAME ?></a> &raquo; <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=list&amp;dir=<?php echo $album_dir; echo PRIVATE_PARAM ?>" class="Style1"><?php echo str_replace($separateurs, ' ', $album_dir); ?></a></span>
 <?php
 	$photo = (isset($_GET['photo']) ? $_GET['photo'] : "");
-	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
 
 	list($listDir, $listFile) = list_directory($album_dir_path, ALPHABETIC_ORDER,
 			array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
@@ -1419,17 +1418,14 @@ case ('map'):
 		list($succes,$exifs, $iptcs, $legend, $tags, $decimal_lat, $decimal_long) = get_file_metadata_only_if_gps_exists($album_dir_path.'/'.$listFile[$i]);
 		if($succes)
 		{
-			//TODO TMP
 			if($max_lat < $decimal_lat) $max_lat = $decimal_lat;
 			if($max_long < $decimal_long) $max_long = $decimal_long;
 			if($min_lat > $decimal_lat) $min_lat = $decimal_lat;
 			if($min_long > $decimal_long) $min_long = $decimal_long;
-			$lat = $decimal_lat;
-			$long = $decimal_long;
 			$name= $file_to_add;
 			if($iptcs != null)
 			{
-				$bubble_content = "'<a href=\"$url_path_datas$album_dir/$file_to_add\"><img src=\"$url_path_cache$album_dir/$file_to_add\"></a><br/><span class=\"legend\">" . my_nl2br($legend) . "</span><br/><span class=\"legend_complement\"> $tags</span><br/>'\n";
+				$bubble_content = "'<span class=\"legend\">$name<span><br/><a href=\"$url_path_datas$album_dir/$file_to_add\"><img src=\"$url_path_cache$album_dir/$file_to_add\"></a><br/><span class=\"legend\">" . my_nl2br($legend) . "</span><br/><span class=\"legend_complement\"> $tags</span><br/>'\n";
 				$options = "\nvar optionsMarker$i = { position: new google.maps.LatLng($decimal_lat,$decimal_long), map: myMap, title: \"$name\" };";
 				$marker = "var marker$i = new google.maps.Marker(optionsMarker$i);";
 				$click = "google.maps.event.addListener(marker$i, 'click', function() { new google.maps.InfoWindow({
@@ -1468,30 +1464,31 @@ case ('gallery_map'):
 ?>
 <div class="fdgris"><span class="Style1">// <a href="<?php echo $_SERVER["PHP_SELF"]; ?>?here=default<?php echo PRIVATE_PARAM; ?>" class="Style1"><?php echo HOME_NAME ?></a></span>
 <?php
-	$create_kml_file = (isset($_GET['create']) ? $_GET['create'] : "");
-	$kml_gallery_filename = "__gallery.kml";
-	$kml_path =  "./" . CACHE_DIR . "/" .$kml_gallery_filename ;
-	$placemarks = "";
-	if(!file_exists($kml_path) || $create_kml_file="true") {
-		$at_least_one = false;
-		list($listDir, $listFile) = list_directory(PHOTOS_DIR_ROOT, ALPHABETIC_ORDER,
-			array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
-			$file_format_managed);
-		for($iDir=0;$iDir< count($listDir); $iDir++){
-			list($find_one, $placemark) = find_file_with_gps_data(PHOTOS_DIR_ROOT, $listDir[$iDir], $url_path_script, $url_path_cache);
-			if($find_one)
-			{
-				$placemarks .= $placemark ;
-				$at_least_one = true;
-			}
-		}
-		if($at_least_one){
-			write_kml_file($placemarks,$kml_path);
+	$contents = "";
+	$max_lat = -1000;
+	$max_long = -1000;
+	$min_long = 1000;
+	$min_lat = 1000;
+	$at_least_one = false;
+	list($listDir, $listFile) = list_directory(PHOTOS_DIR_ROOT, ALPHABETIC_ORDER,
+		array(".", "..", IMAGE_STDDIM, ICO_FILENAME),
+		$file_format_managed);
+	for($iDir=0;$iDir< count($listDir); $iDir++){
+		list($find_one, $decimal_lat, $decimal_long, $content) = find_file_with_gps_data(PHOTOS_DIR_ROOT, $listDir[$iDir], $url_path_script, $url_path_cache,$iDir, $file_format_managed);
+		if($find_one)
+		{
+			if($max_lat < $decimal_lat) $max_lat = $decimal_lat;
+			if($max_long < $decimal_long) $max_long = $decimal_long;
+			if($min_lat > $decimal_lat) $min_lat = $decimal_lat;
+			if($min_long > $decimal_long) $min_long = $decimal_long;
+			$contents .= $content ;
+			$at_least_one = true;
 		}
 	}
-	if(file_exists($kml_path)) {
-		echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span></div>';
-		add_map($url_path_cache . $kml_gallery_filename);
+	if($at_least_one) {
+		//echo '<span class="Style2" style="float:right;"><a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=' . $kml_url . '" target="_blank" class="Style2">' . OPEN_IN_GOOGLE_MAP . '</a></span></div>';
+		echo '</div>';
+		add_map($min_lat, $min_long ,$max_lat, $max_long, $contents);
 	}
 	else
 	{
