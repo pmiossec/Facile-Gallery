@@ -448,14 +448,31 @@ function write_kml_file($kml_placemarks, $kml_path){
 	fclose($fh);
 }
 
-function add_map($lat, $long, $content){
+function add_map($minLat, $minLong, $maxLat, $maxLong, $content){
 	//DOC : http://www.touraineverte.com/aide-documentation-exemple-tutoriel-didacticiel/api-google-maps/kml-kmz/creer-creation-carte-map-mes-cartes/utiliser-fichier-kml-generer-creer-google-earth/importer-carte-via-api-google-maps-new-GGeoXml.htm
 	echo '<div id="map_canvas" style="width:95%; height:95%"></div><br/>
 	<script type="text/javascript">
+	function getBoundsForLatLngs(latLngs) {
+	var bounds = new google.maps.LatLngBounds;
+	for (var i = 0; i < latLngs.length ; i++)
+			bounds.extend(latLngs[i]);
+	return bounds;
+
+	}
+
 	function initialize() {
-		var myLatlng = new google.maps.LatLng('.$lat.',' .$long.');
-		var myOptions = { zoom: 11, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID }
+		//var myLatlng = new google.maps.LatLng('.$lat.',' .$long.');
+		var myOptions = { mapTypeId: google.maps.MapTypeId.HYBRID } //zoom: 11, center: myLatlng, 
 		var myMap = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+		var latLngs = new Array();
+		latLngs.push(new google.maps.LatLng('.$minLat.','.$minLong.'), new google.maps.LatLng('.$maxLat.','.$maxLong.'))
+		myMap.fitBounds(getBoundsForLatLngs(latLngs));
+
+
+/*		var center = new GPoint( ('.$maxLong.'+'.$minLong.')/2, ('.$maxLat.'+'.$minLat.')/2 );
+		var delta = new GSize( '.$maxLong.'-'.$minLong.', '.$maxLat.'-'.$minLat.');
+		var minZoom = map.spec.getLowestZoomLevel(center, delta, map.viewSize);
+		map.centerAndZoom(center, minZoom);*/
 '. $content .'
 	}
 	</script>';
@@ -1392,10 +1409,10 @@ case ('map'):
 	$lat = 0;
 	$long = 0;
 	$content = "";
-	$max_lat = 0;
-	$max_long = 0;
-	$min_long = 100;
-	$min_lat = 100;
+	$max_lat = -1000;
+	$max_long = -1000;
+	$min_long = 1000;
+	$min_lat = 1000;
 	for ($i=0;$i < count($listFile); $i++) {
 
 		$file_to_add = $listFile[$i];
@@ -1431,7 +1448,7 @@ case ('map'):
 
 	if($at_least_one){
 		echo '</div>';
-		add_map(($max_lat + $min_lat)/2, ($max_long + $min_long)/2, $content);
+		add_map($min_lat, $min_long ,$max_lat, $max_long, $content);
 	}
 	else
 	{
