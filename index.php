@@ -676,14 +676,15 @@ function find_file_with_gps_data($dir_root, $dir2findgps, $url_path_script, $url
 			return array(true, $decimal_lat, $decimal_long, $content);
 		}
 	}
-/*	//try to find in subdirs
-	for($i=0;$i<count($listDir);$i++){
+	//try to find in subdirs
+/*	for($i=0;$i<count($listDir);$i++){
 		list($find_one,$decimal_lat, $decimal_long, $content) = find_file_with_gps_data($dir, $listDir[$iDir], $url_path_script, $url_path_cache, $iDir, $file_format_managed);
 		if($find_one)
 		{
 			return array(true,$decimal_lat, $decimal_long, $content);
 		}
 	}*/
+	return array(false, 0, 0, "");
 }
 
 function create_thumbs_of_dir($album_dir_way, $file_format_managed)
