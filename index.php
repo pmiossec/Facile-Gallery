@@ -947,7 +947,12 @@ body {
 	margin: 0px;
 }
 .legend{
-	font-weight: bold;
+	color: black;
+	font-weight: normal;
+}
+.legend_complement{
+	color: black;
+	font-weight: small;
 }
 /*Tooltip*/
 a.tooltip {
@@ -1399,7 +1404,7 @@ case ('map'):
 			$name= $file_to_add;
 			if($iptcs != null)
 			{
-				$bubble_content = "'<a href=\"$url_path_datas$album_dir/$file_to_add\"><img src=\"$url_path_cache$album_dir/$file_to_add\"></a><br/><span class=\"legend\">" . my_nl2br($legend) . "</span><br/> $tags<br/>'\n";
+				$bubble_content = "'<a href=\"$url_path_datas$album_dir/$file_to_add\"><img src=\"$url_path_cache$album_dir/$file_to_add\"></a><br/><span class=\"legend\">" . my_nl2br($legend) . "</span><br/><span class=\"legend_complement\"> $tags</span><br/>'\n";
 				$options = "\nvar optionsMarker$i = { position: new google.maps.LatLng($decimal_lat,$decimal_long), map: myMap, title: \"$name\" };";
 				$marker = "var marker$i = new google.maps.Marker(optionsMarker$i);";
 				$click = "google.maps.event.addListener(marker$i, 'click', function() { new google.maps.InfoWindow({
