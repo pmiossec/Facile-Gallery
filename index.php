@@ -1392,6 +1392,10 @@ case ('map'):
 	$lat = 0;
 	$long = 0;
 	$content = "";
+	$max_lat = 0;
+	$max_long = 0;
+	$min_long = 100;
+	$min_lat = 100;
 	for ($i=0;$i < count($listFile); $i++) {
 
 		$file_to_add = $listFile[$i];
@@ -1399,6 +1403,10 @@ case ('map'):
 		if($succes)
 		{
 			//TODO TMP
+			if($max_lat < $decimal_lat) $max_lat = $decimal_lat;
+			if($max_long < $decimal_long) $max_long = $decimal_long;
+			if($min_lat > $decimal_lat) $min_lat = $decimal_lat;
+			if($min_long > $decimal_long) $min_long = $decimal_long;
 			$lat = $decimal_lat;
 			$long = $decimal_long;
 			$name= $file_to_add;
@@ -1423,7 +1431,7 @@ case ('map'):
 
 	if($at_least_one){
 		echo '</div>';
-		add_map($lat, $long, $content);
+		add_map(($max_lat + $min_lat)/2, ($max_long + $min_long)/2, $content);
 	}
 	else
 	{
